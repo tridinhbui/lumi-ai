@@ -171,14 +171,14 @@ const GeneralAssistantChat: React.FC = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">
+    <div className="h-screen flex flex-col bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 overflow-hidden">
       {/* Header */}
-      <header className="w-full bg-white border-b-2 border-[#1e3a8a] z-30 h-16 flex-shrink-0">
+      <header className="w-full bg-white/90 backdrop-blur-lg border-b-2 border-purple-200/50 shadow-lg z-30 h-16 flex-shrink-0">
         <div className="w-full h-full px-4 lg:px-6 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button
               onClick={() => navigate('/home')}
-              className="p-2 text-gray-600 hover:text-[#1e3a8a] transition-colors"
+              className="p-2 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-all"
               title="Trang chủ"
             >
               <ArrowLeft size={20} />
@@ -187,9 +187,9 @@ const GeneralAssistantChat: React.FC = () => {
             <BizCaseLogo size="sm" showText={false} />
             <div className="h-6 w-px bg-gray-200 mx-2"></div>
             <div className="flex items-center space-x-2">
-              <MessageSquare className="w-5 h-5 text-[#1e3a8a]" />
+              <MessageSquare className="w-5 h-5 text-purple-600" />
               <div>
-                <h1 className="font-semibold text-sm tracking-tight text-[#1e3a8a]">General Assistant Chat</h1>
+                <h1 className="font-semibold text-sm tracking-tight bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">General Assistant Chat</h1>
                 <p className="text-[10px] text-gray-500 uppercase tracking-wide">Lumi - BizCase Lab</p>
               </div>
             </div>
@@ -201,7 +201,7 @@ const GeneralAssistantChat: React.FC = () => {
       </header>
 
       {/* Chat Panel */}
-      <div className="flex-1 flex flex-col bg-white relative overflow-hidden">
+      <div className="flex-1 flex flex-col bg-white/50 backdrop-blur-sm relative overflow-hidden">
         {/* Messages */}
         <div 
           className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-6"
@@ -213,10 +213,10 @@ const GeneralAssistantChat: React.FC = () => {
           {isLoading && (
             <div className="flex w-full justify-start mb-6">
               <div className="flex max-w-[85%] flex-row">
-                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-[#1e3a8a] text-white mr-3 flex items-center justify-center text-[10px] font-bold">
+                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 text-white mr-3 flex items-center justify-center text-[10px] font-bold shadow-lg">
                   LUMI
                 </div>
-                <div className="bg-white border border-gray-100 py-4 px-5 rounded-2xl rounded-tl-none shadow-sm flex items-center">
+                <div className="bg-white/90 backdrop-blur-sm border border-gray-200/50 py-4 px-5 rounded-2xl rounded-tl-none shadow-lg flex items-center">
                   <span className="flex space-x-1.5">
                     <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
                     <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
@@ -250,7 +250,7 @@ const GeneralAssistantChat: React.FC = () => {
         )}
 
         {/* Input Area */}
-        <div className="w-full bg-white/90 backdrop-blur-md border-t border-gray-200 p-4 lg:p-6 absolute bottom-0 left-0 right-0 z-20">
+        <div className="w-full bg-white/90 backdrop-blur-md border-t border-gray-200/50 shadow-lg p-4 lg:p-6 absolute bottom-0 left-0 right-0 z-20">
           <div className="max-w-4xl mx-auto">
             <form onSubmit={handleSendMessage} className="relative flex items-end gap-2">
               <div className="flex-1 min-w-0">
@@ -267,14 +267,14 @@ const GeneralAssistantChat: React.FC = () => {
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
                   placeholder="Hỏi Lumi bất cứ điều gì..."
-                  className="w-full py-3 px-4 bg-gray-50 border border-gray-300 rounded-xl outline-none text-gray-800 placeholder-gray-400 text-sm lg:text-base focus:ring-2 focus:ring-[#1e3a8a]/50 focus:border-[#1e3a8a] transition-all"
+                  className="w-full py-3 px-4 bg-white/80 border-2 border-gray-200 rounded-xl outline-none text-gray-800 placeholder-gray-400 text-sm lg:text-base focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all shadow-sm"
                   disabled={isLoading}
                 />
               </div>
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="p-3 text-gray-600 hover:text-[#1e3a8a] hover:bg-blue-50 rounded-lg transition-colors flex-shrink-0"
+                className="p-3 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-all flex-shrink-0 shadow-sm hover:shadow-md"
                 title="Upload file"
               >
                 <Upload size={20} />
@@ -282,10 +282,10 @@ const GeneralAssistantChat: React.FC = () => {
               <button
                 type="submit"
                 disabled={(!inputText.trim() && uploadedFiles.length === 0) || isLoading}
-                className={`p-3 rounded-lg transition-colors flex-shrink-0 ${
+                className={`p-3 rounded-lg transition-all flex-shrink-0 shadow-lg hover:shadow-xl ${
                   (!inputText.trim() && uploadedFiles.length === 0) || isLoading
                     ? 'text-gray-300 bg-gray-100 cursor-not-allowed'
-                    : 'text-white bg-[#1e3a8a] hover:bg-[#1e40af]'
+                    : 'text-white bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700'
                 }`}
               >
                 <Send size={20} />
