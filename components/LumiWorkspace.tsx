@@ -277,8 +277,8 @@ const LumiWorkspace: React.FC = () => {
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Threads Sidebar */}
-        <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
-          <div className="p-4 border-b border-gray-200">
+        <aside className="w-64 bg-white border-r border-neutral-200 flex flex-col">
+          <div className="p-4 border-b border-neutral-200">
             <button
               onClick={createNewThread}
               className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-all text-sm font-medium shadow-sm hover:shadow-md"
@@ -292,7 +292,7 @@ const LumiWorkspace: React.FC = () => {
             {threads.map((thread) => (
               <div
                 key={thread.id}
-                className={`group relative mb-2 p-3 rounded-lg cursor-pointer transition-all ${
+                className={`group relative mb-2 p-3 rounded-xl cursor-pointer transition-all ${
                   activeThreadId === thread.id
                     ? 'bg-neutral-100 border border-neutral-300'
                     : 'bg-neutral-50 border border-transparent hover:bg-neutral-100'
@@ -340,11 +340,11 @@ const LumiWorkspace: React.FC = () => {
                   <div className="flex-shrink-0 h-8 w-8 rounded-full bg-neutral-900 text-white mr-3 flex items-center justify-center text-[10px] font-semibold">
                     LUMI
                   </div>
-                  <div className="bg-white border border-gray-100 py-4 px-5 rounded-2xl rounded-tl-none shadow-sm flex items-center">
+                  <div className="bg-white border border-neutral-200 py-4 px-5 rounded-2xl rounded-tl-none shadow-sm flex items-center">
                     <span className="flex space-x-1.5">
-                      <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                      <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                      <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                      <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                      <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                      <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
                     </span>
                   </div>
                 </div>
@@ -355,15 +355,15 @@ const LumiWorkspace: React.FC = () => {
 
           {/* Uploaded Files Preview */}
           {uploadedFiles.length > 0 && (
-            <div className="px-4 lg:px-6 py-2 bg-gray-50 border-t border-gray-200">
+            <div className="px-4 lg:px-6 py-2 bg-neutral-50 border-t border-neutral-200">
               <div className="flex flex-wrap gap-2">
                 {uploadedFiles.map((file, index) => (
-                  <div key={index} className="flex items-center space-x-2 bg-white border border-gray-200 rounded-lg px-3 py-2">
-                    <FileText className="w-4 h-4 text-gray-500" />
-                    <span className="text-xs text-gray-700 max-w-[150px] truncate">{file.name}</span>
+                  <div key={index} className="flex items-center space-x-2 bg-white border border-neutral-200 rounded-lg px-3 py-2 shadow-sm">
+                    <FileText className="w-4 h-4 text-neutral-500" />
+                    <span className="text-xs text-neutral-700 max-w-[150px] truncate">{file.name}</span>
                     <button
                       onClick={() => removeFile(index)}
-                      className="text-gray-400 hover:text-red-500"
+                      className="text-neutral-400 hover:text-neutral-600 transition-colors"
                     >
                       <X size={14} />
                     </button>
@@ -374,7 +374,7 @@ const LumiWorkspace: React.FC = () => {
           )}
 
           {/* Input Area */}
-          <div className="w-full bg-white border-t border-gray-200 p-4 lg:p-6 absolute bottom-0 left-0 right-0 z-20 shadow-lg">
+          <div className="w-full bg-white border-t border-neutral-200 p-4 lg:p-6 absolute bottom-0 left-0 right-0 z-20">
             <div className="max-w-4xl mx-auto">
               <form onSubmit={handleSendMessage} className="flex items-end gap-2">
                 <div className="flex-1 min-w-0">
@@ -390,7 +390,7 @@ const LumiWorkspace: React.FC = () => {
                     type="text"
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
-                    placeholder="Nhập câu hỏi hoặc upload file để phân tích..."
+                    placeholder="Ask a question or upload file to analyze..."
                     className="w-full py-3 px-4 bg-white border border-neutral-300 rounded-xl outline-none text-neutral-900 placeholder-neutral-400 text-sm lg:text-base focus:ring-2 focus:ring-neutral-100 focus:border-neutral-600 transition-all"
                     disabled={isLoading}
                   />
