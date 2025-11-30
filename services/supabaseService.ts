@@ -176,7 +176,7 @@ export const deleteThread = async (threadId: string): Promise<boolean> => {
 // Message operations
 export const saveMessage = async (threadId: string, message: Message): Promise<boolean> => {
   if (!supabase) {
-    console.warn('Supabase not configured. Saving to localStorage fallback.');
+    console.warn('⚠️ Supabase not configured. Saving to localStorage fallback.');
     // Fallback to localStorage
     try {
       const messages = JSON.parse(localStorage.getItem('chat_messages') || '[]');
@@ -190,10 +190,10 @@ export const saveMessage = async (threadId: string, message: Message): Promise<b
         created_at: new Date().toISOString(),
       });
       localStorage.setItem('chat_messages', JSON.stringify(messages));
-      console.log('Message saved to localStorage:', message.id);
+      console.log('✅ Message saved to localStorage:', message.id);
       return true;
     } catch (error) {
-      console.error('Error saving to localStorage:', error);
+      console.error('❌ Error saving to localStorage:', error);
       return false;
     }
   }
@@ -250,7 +250,8 @@ export const saveMessage = async (threadId: string, message: Message): Promise<b
         created_at: new Date().toISOString(),
       });
       localStorage.setItem('chat_messages', JSON.stringify(messages));
-      console.warn('Message saved to localStorage fallback due to Supabase error');
+      console.warn('⚠️ Message saved to localStorage fallback due to Supabase error');
+      console.warn('💡 Fix: Check Supabase URL in .env.local (should end with .co not .coo)');
       return true;
     } catch (fallbackError) {
       console.error('Fallback save also failed:', fallbackError);
@@ -324,7 +325,8 @@ export const getMessages = async (threadId: string): Promise<Message[]> => {
         .filter((m: ChatMessage) => m.thread_id === threadId)
         .sort((a: ChatMessage, b: ChatMessage) => a.timestamp - b.timestamp);
       
-      console.log('Loaded', threadMessages.length, 'messages from localStorage fallback');
+      console.log('✅ Loaded', threadMessages.length, 'messages from localStorage fallback');
+      console.warn('💡 Fix Supabase URL in .env.local to enable database storage');
       
       return threadMessages.map((m: ChatMessage) => ({
         id: m.id,
