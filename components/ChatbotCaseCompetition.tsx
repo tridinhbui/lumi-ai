@@ -202,20 +202,16 @@ const ChatbotCaseCompetition: React.FC = () => {
       <header className="w-full bg-white border-b border-gray-200 z-30 h-16 flex-shrink-0">
         <div className="w-full h-full px-4 lg:px-6 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <button
-              onClick={() => navigate('/case-interview')}
-              className="p-2 text-gray-600 hover:text-gray-900 transition-colors"
-              title="Quay lại Case Interview"
+            <div 
+              className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => navigate('/')}
             >
-              <ArrowLeft size={20} />
-            </button>
-            <div className="h-6 w-px bg-gray-200 mx-2"></div>
-            <div className="flex items-center space-x-2">
               <Brain className="w-6 h-6 text-green-600" />
-              <div>
-                <h1 className="font-semibold text-sm tracking-tight text-gray-900">Lumi</h1>
-                <p className="text-[10px] text-gray-500 uppercase tracking-wide">Strategic AI Assistant</p>
-              </div>
+              <h1 className="font-semibold text-lg tracking-tight text-gray-900">Lumi</h1>
+            </div>
+            <div className="h-6 w-px bg-gray-200 mx-2"></div>
+            <div>
+              <p className="text-sm text-gray-500 uppercase tracking-wide">Strategic AI Assistant</p>
             </div>
           </div>
           <div className="flex items-center space-x-4">

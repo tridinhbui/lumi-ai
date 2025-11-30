@@ -70,15 +70,16 @@ const LearningDashboard: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigate('/lumi')}
-                className="p-2 text-gray-600 hover:text-gray-900 transition-colors"
-                title="Quay lại Lumi"
+              <div 
+                className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
+                onClick={() => navigate('/')}
               >
-                <ArrowLeft size={20} />
-              </button>
+                <Brain className="w-6 h-6 text-green-600" />
+                <h1 className="text-2xl font-bold text-gray-900">Lumi</h1>
+              </div>
+              <div className="h-6 w-px bg-gray-200"></div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Learning Dashboard</h1>
+                <h2 className="text-xl font-semibold text-gray-700">Learning Dashboard</h2>
                 <p className="text-sm text-gray-500">Theo dõi lộ trình học và tư duy giải case</p>
               </div>
             </div>
