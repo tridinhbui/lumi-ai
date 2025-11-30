@@ -268,6 +268,7 @@ const GeneralAssistantChat: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center space-x-3">
+            <DatabaseStatus />
             <MinimalButton
               variant={showDashboard ? 'primary' : 'ghost'}
               size="sm"
