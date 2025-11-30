@@ -225,41 +225,41 @@ const HomePage: React.FC = () => {
         <CaseLibrary />
 
         {/* Recent Activity */}
-        <div className="mt-8 bg-white rounded-2xl shadow-lg border-2 border-[#1e3a8a] p-6">
-          <h3 className="text-2xl font-bold text-[#1e3a8a] mb-6 flex items-center">
-            <Clock className="w-6 h-6 mr-2" />
+        <div className="mt-12 bg-white border border-neutral-200 rounded-2xl shadow-sm p-6">
+          <h2 className="text-2xl font-semibold text-neutral-900 mb-6 flex items-center">
+            <Clock className="w-5 h-5 mr-2 text-neutral-600" />
             {t('recent_activity')}
-          </h3>
-          <div className="space-y-4">
-            <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-blue-50 to-[#1e3a8a]/10 rounded-xl border border-[#1e3a8a]/20">
-              <div className="p-2 bg-[#1e3a8a] rounded-lg">
-                <MessageSquare className="w-5 h-5 text-white" />
+          </h2>
+          <div className="space-y-3">
+            <div className="flex items-center space-x-4 p-4 bg-neutral-50 rounded-xl border border-neutral-200">
+              <div className="p-2 bg-neutral-900 rounded-lg">
+                <MessageSquare className="w-4 h-4 text-white" />
               </div>
               <div className="flex-1">
-                <p className="font-semibold text-[#1e3a8a]">{t('case_competition_thread')}</p>
-                <p className="text-sm text-gray-600">{t('last_active')} 2 {t('hours_ago')}</p>
+                <p className="font-semibold text-neutral-900">{t('case_competition_thread')}</p>
+                <p className="text-sm text-neutral-600">{t('last_active')} 2 {t('hours_ago')}</p>
               </div>
-              <span className="text-xs font-medium text-[#1e3a8a] bg-blue-50 px-3 py-1 rounded-full border border-[#1e3a8a]">Active</span>
+              <span className="text-xs font-medium text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full border border-neutral-200">Active</span>
             </div>
-            <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
-              <div className="p-2 bg-[#1e3a8a] rounded-lg">
-                <Target className="w-5 h-5 text-white" />
+            <div className="flex items-center space-x-4 p-4 bg-neutral-50 rounded-xl border border-neutral-200">
+              <div className="p-2 bg-neutral-900 rounded-lg">
+                <Target className="w-4 h-4 text-white" />
               </div>
               <div className="flex-1">
-                <p className="font-semibold text-[#1e3a8a]">Market Entry Case</p>
-                <p className="text-sm text-gray-600">{t('completed')} {t('yesterday')}</p>
+                <p className="font-semibold text-neutral-900">Market Entry Case</p>
+                <p className="text-sm text-neutral-600">{t('completed')} {t('yesterday')}</p>
               </div>
-              <span className="text-xs font-medium text-[#1e3a8a] bg-blue-50 px-3 py-1 rounded-full border border-[#1e3a8a]">{t('completed')}</span>
+              <span className="text-xs font-medium text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full border border-neutral-200">{t('completed')}</span>
             </div>
-            <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
-              <div className="p-2 bg-[#1e3a8a] rounded-lg">
-                <TrendingUp className="w-5 h-5 text-white" />
+            <div className="flex items-center space-x-4 p-4 bg-neutral-50 rounded-xl border border-neutral-200">
+              <div className="p-2 bg-neutral-900 rounded-lg">
+                <TrendingUp className="w-4 h-4 text-white" />
               </div>
               <div className="flex-1">
-                <p className="font-semibold text-[#1e3a8a]">{t('score_improved')} 12%</p>
-                <p className="text-sm text-gray-600">{t('this_week')}</p>
+                <p className="font-semibold text-neutral-900">{t('score_improved')} 12%</p>
+                <p className="text-sm text-neutral-600">{t('this_week')}</p>
               </div>
-              <span className="text-xs font-medium text-[#1e3a8a] bg-blue-50 px-3 py-1 rounded-full border border-[#1e3a8a]">+12%</span>
+              <span className="text-xs font-medium text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full border border-neutral-200">+12%</span>
             </div>
           </div>
         </div>

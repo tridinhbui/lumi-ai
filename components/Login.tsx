@@ -40,21 +40,21 @@ const Login: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="min-h-screen flex items-center justify-center bg-neutral-50">
       <div className="max-w-md w-full mx-4">
-        <div className="bg-white rounded-2xl shadow-xl border-2 border-[#1e3a8a] p-8">
+        <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-10">
           {/* Logo/Header */}
-          <div className="text-center mb-8">
-            <div className="flex justify-center mb-6">
+          <div className="text-center mb-10">
+            <div className="flex justify-center mb-8">
               <BizCaseLogo size="lg" showText={true} />
             </div>
-            <p className="text-gray-600 text-sm mb-4">Lumi - AI Assistant của BizCase Lab</p>
+            <p className="text-neutral-600 text-sm mb-6">Lumi - AI Assistant of BizCase Lab</p>
             
             {/* Language Toggle */}
-            <div className="flex justify-center mb-4">
+            <div className="flex justify-center mb-6">
               <button
                 onClick={() => setLanguage(language === 'vi' ? 'en' : 'vi')}
-                className="px-4 py-2 bg-[#1e3a8a] text-white rounded-lg hover:bg-[#1e40af] transition-colors text-sm font-medium"
+                className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-all text-sm font-medium shadow-sm hover:shadow-md"
               >
                 {language === 'vi' ? '🇻🇳 Tiếng Việt' : '🇬🇧 English'}
               </button>
@@ -64,7 +64,7 @@ const Login: React.FC = () => {
           {/* Login Button */}
           <button
             onClick={() => handleGoogleLogin()}
-            className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-300 hover:border-[#1e3a8a] text-gray-700 font-medium py-3.5 px-6 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md mb-6"
+            className="w-full flex items-center justify-center gap-3 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 font-medium py-3.5 px-6 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md mb-6"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -88,18 +88,18 @@ const Login: React.FC = () => {
           </button>
 
           {/* Features */}
-          <div className="space-y-3 mt-6 pt-6 border-t border-gray-200">
-            <div className="flex items-center space-x-3 text-sm text-gray-600">
-              <Sparkles className="w-4 h-4 text-[#1e3a8a]" />
-              <span>Phân tích Case Competition</span>
+          <div className="space-y-3 mt-8 pt-6 border-t border-neutral-200">
+            <div className="flex items-center space-x-3 text-sm text-neutral-600">
+              <Sparkles className="w-4 h-4 text-neutral-700" />
+              <span>Case Competition Analysis</span>
             </div>
-            <div className="flex items-center space-x-3 text-sm text-gray-600">
-              <Sparkles className="w-4 h-4 text-[#1e3a8a]" />
-              <span>Xử lý PDF & Tài liệu</span>
+            <div className="flex items-center space-x-3 text-sm text-neutral-600">
+              <Sparkles className="w-4 h-4 text-neutral-700" />
+              <span>PDF & Document Processing</span>
             </div>
-            <div className="flex items-center space-x-3 text-sm text-gray-600">
-              <Sparkles className="w-4 h-4 text-[#1e3a8a]" />
-              <span>Giao diện Chat đa luồng</span>
+            <div className="flex items-center space-x-3 text-sm text-neutral-600">
+              <Sparkles className="w-4 h-4 text-neutral-700" />
+              <span>Multi-thread Chat Interface</span>
             </div>
           </div>
         </div>
