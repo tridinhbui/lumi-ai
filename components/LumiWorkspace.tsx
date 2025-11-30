@@ -316,7 +316,7 @@ const LumiWorkspace: React.FC = () => {
                     </button>
                   )}
                 </div>
-                <div className="mt-1 text-xs text-gray-500">
+                <div className="mt-1 text-xs text-neutral-500">
                   {thread.messages.length} messages
                 </div>
               </div>
@@ -415,9 +415,9 @@ const LumiWorkspace: React.FC = () => {
                   <Send size={20} />
                 </button>
               </form>
-              <p className="text-xs text-gray-400 mt-2 ml-2">
-                Hỗ trợ: PDF, Slide, Hình ảnh • Phân tích tự động • Framework MECE
-              </p>
+                  <p className="text-xs text-neutral-400 mt-2 ml-2">
+                    Supports: PDF, Slides, Images • Automatic Analysis • MECE Framework
+                  </p>
             </div>
           </div>
         </div>
