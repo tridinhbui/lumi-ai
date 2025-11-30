@@ -11,6 +11,7 @@ import LearningDashboard from './components/LearningDashboard';
 import Settings from './components/Settings';
 import CaseCompetitionChat from './components/CaseCompetitionChat';
 import GeneralAssistantChat from './components/GeneralAssistantChat';
+import SubscriptionPage from './components/SubscriptionPage';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App: React.FC = () => {
@@ -88,6 +89,14 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <GeneralAssistantChat />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/subscription" 
+          element={
+            <ProtectedRoute>
+              <SubscriptionPage />
             </ProtectedRoute>
           } 
         />
