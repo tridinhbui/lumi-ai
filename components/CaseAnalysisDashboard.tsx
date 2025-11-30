@@ -189,9 +189,9 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
         </div>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
           {/* Left Column - Case Map */}
-          <div className="xl:col-span-1">
+          <div className="lg:col-span-1 xl:col-span-1">
             <CaseMap 
               activeNodeId={activeNodeId} 
               onNodeClick={(nodeId) => setActiveNodeId(nodeId)}
@@ -199,7 +199,7 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
           </div>
 
           {/* Middle Column - Progress & Hypothesis */}
-          <div className="xl:col-span-1 space-y-4 lg:space-y-6">
+          <div className="lg:col-span-1 xl:col-span-1 space-y-4 lg:space-y-6">
             <ProgressTracker steps={progressSteps.map((step, index) => ({
               ...step,
               status: index <= currentStep ? (index === currentStep ? 'in-progress' : 'completed') : 'pending'
@@ -214,7 +214,7 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
           </div>
 
           {/* Right Column - Data Charts & Recommendation */}
-          <div className="xl:col-span-1 space-y-4 lg:space-y-6">
+          <div className="lg:col-span-2 xl:col-span-1 space-y-4 lg:space-y-6">
             <DataChartsPanel 
               data={chartData.length > 0 ? chartData : undefined}
               chartType="bar"
