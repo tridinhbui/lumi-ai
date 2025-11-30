@@ -256,29 +256,50 @@ export const saveMessage = async (threadId: string, message: Message): Promise<b
 
 export const getMessages = async (threadId: string): Promise<Message[]> => {
   if (!supabase) {
+    console.log('Supabase not configured, loading from localStorage for thread:', threadId);
     // Fallback to localStorage
-    const messages = JSON.parse(localStorage.getItem('chat_messages') || '[]');
-    const threadMessages = messages
-      .filter((m: ChatMessage) => m.thread_id === threadId)
-      .sort((a: ChatMessage, b: ChatMessage) => a.timestamp - b.timestamp);
-    
-    return threadMessages.map((m: ChatMessage) => ({
-      id: m.id,
-      sender: m.sender as 'user' | 'bot',
-      type: m.message_type as any,
-      content: m.content,
-      timestamp: m.timestamp,
-    }));
+    try {
+      const messages = JSON.parse(localStorage.getItem('chat_messages') || '[]');
+      console.log('Total messages in localStorage:', messages.length);
+      const threadMessages = messages
+        .filter((m: ChatMessage) => m.thread_id === threadId)
+        .sort((a: ChatMessage, b: ChatMessage) => a.timestamp - b.timestamp);
+      
+      console.log('Messages for thread', threadId, ':', threadMessages.length);
+      
+      return threadMessages.map((m: ChatMessage) => ({
+        id: m.id,
+        sender: m.sender as 'user' | 'bot',
+        type: m.message_type as any,
+        content: m.content,
+        timestamp: m.timestamp,
+      }));
+    } catch (error) {
+      console.error('Error loading from localStorage:', error);
+      return [];
+    }
   }
 
   try {
+    console.log('Loading messages from Supabase for thread:', threadId);
     const { data, error } = await supabase
       .from('chat_messages')
       .select('*')
       .eq('thread_id', threadId)
       .order('timestamp', { ascending: true });
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase error fetching messages:', error);
+      console.error('Error details:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+      });
+      throw error;
+    }
+    
+    console.log('Loaded', data?.length || 0, 'messages from Supabase for thread:', threadId);
     
     return (data || []).map((m: ChatMessage) => ({
       id: m.id,
@@ -287,9 +308,30 @@ export const getMessages = async (threadId: string): Promise<Message[]> => {
       content: m.content,
       timestamp: m.timestamp,
     }));
-  } catch (error) {
-    console.error('Error fetching messages:', error);
-    return [];
+  } catch (error: any) {
+    console.error('Error fetching messages from Supabase:', error);
+    
+    // Try localStorage fallback if Supabase fails
+    console.log('Attempting localStorage fallback...');
+    try {
+      const messages = JSON.parse(localStorage.getItem('chat_messages') || '[]');
+      const threadMessages = messages
+        .filter((m: ChatMessage) => m.thread_id === threadId)
+        .sort((a: ChatMessage, b: ChatMessage) => a.timestamp - b.timestamp);
+      
+      console.log('Loaded', threadMessages.length, 'messages from localStorage fallback');
+      
+      return threadMessages.map((m: ChatMessage) => ({
+        id: m.id,
+        sender: m.sender as 'user' | 'bot',
+        type: m.message_type as any,
+        content: m.content,
+        timestamp: m.timestamp,
+      }));
+    } catch (fallbackError) {
+      console.error('Fallback also failed:', fallbackError);
+      return [];
+    }
   }
 };
 

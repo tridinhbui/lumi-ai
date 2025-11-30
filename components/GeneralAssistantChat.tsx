@@ -89,19 +89,24 @@ const GeneralAssistantChat: React.FC = () => {
     if (!user?.email) return;
     
     try {
+      console.log('Loading general thread for user:', user.email);
       const dbThreads = await getThreads(user.email);
       const existingThread = dbThreads.find(t => t.mode === 'general');
       
       if (existingThread) {
+        console.log('Found existing general thread:', existingThread.id);
         setThread({
           id: existingThread.id,
           name: existingThread.name,
           messages: [],
         });
       } else {
+        console.log('No general thread found, creating new one');
         const threadId = await createThread(user.email, 'General Assistant', 'general');
+        const newThreadId = threadId || Date.now().toString();
+        console.log('Created new general thread:', newThreadId);
         setThread({
-          id: threadId || Date.now().toString(),
+          id: newThreadId,
           name: 'General Assistant',
           messages: [],
         });
@@ -112,20 +117,28 @@ const GeneralAssistantChat: React.FC = () => {
   };
 
   const loadThreadMessages = async () => {
-    if (!thread) return;
+    if (!thread) {
+      console.log('No thread available to load messages');
+      return;
+    }
     
+    console.log('Loading messages for general thread:', thread.id);
     setIsLoading(true);
     try {
       const messages = await getMessages(thread.id);
+      console.log('Loaded messages from database:', messages.length, 'for thread:', thread.id);
       
       if (messages.length === 0) {
+        console.log('No messages found, initializing thread:', thread.id);
         await initializeThread();
       } else {
+        console.log('Restoring messages to UI:', messages.length);
         setThread(prev => prev ? { ...prev, messages } : null);
         setIsInitialized(true);
       }
     } catch (error) {
       console.error('Error loading messages:', error);
+      console.error('Error details:', error);
       await initializeThread();
     } finally {
       setIsLoading(false);

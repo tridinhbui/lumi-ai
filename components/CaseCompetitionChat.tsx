@@ -120,11 +120,14 @@ const CaseCompetitionChat: React.FC = () => {
     if (!user?.email) return;
     
     try {
+      console.log('Loading threads for user:', user.email);
       const dbThreads = await getThreads(user.email);
+      console.log('Loaded threads from database:', dbThreads.length);
       const caseThreads = dbThreads.filter(t => t.mode === 'case-competition');
       
       if (caseThreads.length === 0) {
         // Create default thread
+        console.log('No threads found, creating default thread');
         const threadId = await createThread(user.email, 'Case Competition 1', 'case-competition');
         const newThread = {
           id: threadId || Date.now().toString(),
@@ -133,6 +136,7 @@ const CaseCompetitionChat: React.FC = () => {
         };
         setThreads([newThread]);
         setActiveThreadId(newThread.id);
+        console.log('Created new thread:', newThread.id);
       } else {
         const formattedThreads = caseThreads.map(t => ({
           id: t.id,
@@ -140,7 +144,13 @@ const CaseCompetitionChat: React.FC = () => {
           messages: [],
         }));
         setThreads(formattedThreads);
-        setActiveThreadId(formattedThreads[0].id);
+        const firstThreadId = formattedThreads[0].id;
+        setActiveThreadId(firstThreadId);
+        console.log('Loaded threads, active thread:', firstThreadId);
+        // Immediately load messages for the first thread
+        if (firstThreadId) {
+          loadThreadMessages(firstThreadId);
+        }
       }
     } catch (error) {
       console.error('Error loading threads:', error);
@@ -148,15 +158,22 @@ const CaseCompetitionChat: React.FC = () => {
   };
 
   const loadThreadMessages = async (threadId: string) => {
-    if (isInitialized[threadId]) return;
+    if (isInitialized[threadId]) {
+      console.log('Thread already initialized:', threadId);
+      return;
+    }
     
+    console.log('Loading messages for thread:', threadId);
     setIsLoading(true);
     try {
       const messages = await getMessages(threadId);
+      console.log('Loaded messages from database:', messages.length, 'for thread:', threadId);
       
       if (messages.length === 0) {
+        console.log('No messages found, initializing thread:', threadId);
         await initializeThread(threadId);
       } else {
+        console.log('Restoring messages to UI:', messages.length);
         setThreads(prev => prev.map(t => 
           t.id === threadId ? { ...t, messages } : t
         ));
@@ -164,6 +181,7 @@ const CaseCompetitionChat: React.FC = () => {
       }
     } catch (error) {
       console.error('Error loading messages:', error);
+      console.error('Error details:', error);
       await initializeThread(threadId);
     } finally {
       setIsLoading(false);
