@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Send, Upload, FileText, X, ArrowLeft, MessageSquare, BarChart3, Plus, MoreVertical, Trash2, Edit2 } from 'lucide-react';
 import SettingsMenu from './SettingsMenu';
 import { startCaseChat, sendCaseMessage } from '../services/caseCompetitionService';
+import { needsSummarization } from '../services/memoryService';
 import { 
   createThread, getThreads, 
   saveMessage, getMessages, updateThreadTimestamp,
@@ -145,7 +146,8 @@ const CaseCompetitionChat: React.FC = () => {
   const initializeThread = async (threadId: string) => {
     setIsLoading(true);
     try {
-      const welcomeMessage = await startCaseChat();
+      // Pass threadId to startCaseChat for persistent session
+      const welcomeMessage = await startCaseChat(threadId);
       const botMessage: Message = {
         id: Date.now().toString(),
         sender: Sender.BOT,
@@ -243,7 +245,8 @@ const CaseCompetitionChat: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await sendCaseMessage(userMsg, uploadedFiles);
+      // Pass threadId to sendCaseMessage for persistent session with context
+      const response = await sendCaseMessage(userMsg, uploadedFiles, activeThreadId);
 
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),

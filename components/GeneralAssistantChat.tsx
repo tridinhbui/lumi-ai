@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Send, Upload, FileText, X, ArrowLeft, MessageSquare, BarChart3 } from 'lucide-react';
 import SettingsMenu from './SettingsMenu';
-import { sendCaseMessage } from '../services/caseCompetitionService';
+import { sendCaseMessage, startCaseChat } from '../services/caseCompetitionService';
 import { 
   createThread, getThreads, 
   saveMessage, getMessages, updateThreadTimestamp 
@@ -133,7 +133,8 @@ const GeneralAssistantChat: React.FC = () => {
     
     setIsLoading(true);
     try {
-      const welcomeMessage = 'Xin chào! Tôi là Lumi, trợ lý AI của BizCase Lab. Tôi có thể giúp bạn với:\n\n• Câu hỏi về case competition\n• Phân tích kinh doanh và chiến lược\n• Hướng dẫn sử dụng BizCase Lab\n• Và nhiều hơn nữa!\n\nHãy hỏi tôi bất cứ điều gì bạn muốn biết!';
+      // Use startCaseChat with threadId for persistent session
+      const welcomeMessage = await startCaseChat(thread.id);
       
       const botMessage: Message = {
         id: Date.now().toString(),
@@ -148,6 +149,18 @@ const GeneralAssistantChat: React.FC = () => {
       setIsInitialized(true);
     } catch (error) {
       console.error('Error initializing thread:', error);
+      // Fallback welcome message
+      const fallbackMessage = 'Xin chào! Tôi là Lumi, trợ lý AI của BizCase Lab. Tôi có thể giúp bạn với:\n\n• Câu hỏi về case competition\n• Phân tích kinh doanh và chiến lược\n• Hướng dẫn sử dụng BizCase Lab\n• Và nhiều hơn nữa!\n\nHãy hỏi tôi bất cứ điều gì bạn muốn biết!';
+      const botMessage: Message = {
+        id: Date.now().toString(),
+        sender: Sender.BOT,
+        type: MessageType.TEXT,
+        content: fallbackMessage,
+        timestamp: Date.now(),
+      };
+      await saveMessage(thread.id, botMessage);
+      setThread(prev => prev ? { ...prev, messages: [botMessage] } : null);
+      setIsInitialized(true);
     } finally {
       setIsLoading(false);
     }
@@ -182,7 +195,8 @@ const GeneralAssistantChat: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await sendCaseMessage(userMsg, uploadedFiles);
+      // Pass threadId for persistent session with context
+      const response = await sendCaseMessage(userMsg, uploadedFiles, thread.id);
 
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),

@@ -225,3 +225,97 @@ export const updateThreadTimestamp = async (threadId: string): Promise<void> => 
   }
 };
 
+// Session management operations
+export interface ChatSession {
+  id: string;
+  thread_id: string;
+  context_summary?: string;
+  last_message_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export const createOrUpdateSession = async (
+  threadId: string,
+  contextSummary?: string
+): Promise<ChatSession | null> => {
+  if (!supabase) {
+    // Fallback: return mock session
+    return {
+      id: Date.now().toString(),
+      thread_id: threadId,
+      context_summary: contextSummary,
+      last_message_count: 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+  }
+
+  try {
+    // Get current message count
+    const messages = await getMessages(threadId);
+    const messageCount = messages.length;
+
+    // Try to update existing session
+    const { data: existing } = await supabase
+      .from('chat_sessions')
+      .select('*')
+      .eq('thread_id', threadId)
+      .single();
+
+    if (existing) {
+      // Update existing session
+      const { data, error } = await supabase
+        .from('chat_sessions')
+        .update({
+          context_summary: contextSummary,
+          last_message_count: messageCount,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('thread_id', threadId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    } else {
+      // Create new session
+      const { data, error } = await supabase
+        .from('chat_sessions')
+        .insert({
+          thread_id: threadId,
+          context_summary: contextSummary,
+          last_message_count: messageCount,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    }
+  } catch (error) {
+    console.error('Error creating/updating session:', error);
+    return null;
+  }
+};
+
+export const getSession = async (threadId: string): Promise<ChatSession | null> => {
+  if (!supabase) return null;
+
+  try {
+    const { data, error } = await supabase
+      .from('chat_sessions')
+      .select('*')
+      .eq('thread_id', threadId)
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error;
+    return data;
+  } catch (error) {
+    console.error('Error fetching session:', error);
+    return null;
+  }
+};
+

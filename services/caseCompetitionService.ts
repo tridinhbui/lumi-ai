@@ -1,4 +1,6 @@
 import { GoogleGenAI, Chat, GenerateContentResponse } from "@google/genai";
+import { getConversationHistory, messagesToGeminiFormat } from './memoryService';
+import { getMessages } from './supabaseService';
 
 const CASE_COMPETITION_SYSTEM_INSTRUCTION = `You are Lumi, a strategic AI assistant for case competition. Your role is to analyze cases from CEO and consulting perspectives, and help users build structured case solutions.
 
@@ -46,7 +48,8 @@ Always structure responses with:
 
 Format your responses to include structured data that can be parsed for visualization.`;
 
-let caseChatSession: Chat | null = null;
+// Store sessions per thread
+const chatSessions: Map<string, Chat> = new Map();
 
 const getClient = () => {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
@@ -56,11 +59,23 @@ const getClient = () => {
   return new GoogleGenAI({ apiKey });
 };
 
-export const startCaseChat = async (): Promise<string> => {
+export const startCaseChat = async (threadId?: string): Promise<string> => {
   try {
     const ai = getClient();
     
-    caseChatSession = ai.chats.create({
+    // If threadId provided and session exists, return existing session
+    if (threadId && chatSessions.has(threadId)) {
+      const existingSession = chatSessions.get(threadId)!;
+      // Check if there are existing messages to restore context
+      const messages = await getMessages(threadId);
+      if (messages.length > 0) {
+        // Session already has context, just return welcome
+        return "Hello! I'm Lumi, your strategic AI assistant. I'm ready to continue helping you solve case competitions.";
+      }
+    }
+
+    // Create new session
+    const newSession = ai.chats.create({
       model: 'gemini-2.5-flash',
       config: {
         systemInstruction: CASE_COMPETITION_SYSTEM_INSTRUCTION,
@@ -68,7 +83,15 @@ export const startCaseChat = async (): Promise<string> => {
       },
     });
 
-    const response: GenerateContentResponse = await caseChatSession.sendMessage({ 
+    // Store session if threadId provided
+    if (threadId) {
+      chatSessions.set(threadId, newSession);
+    } else {
+      // Legacy: store in global variable for backward compatibility
+      (globalThis as any).caseChatSession = newSession;
+    }
+
+    const response: GenerateContentResponse = await newSession.sendMessage({ 
       message: "Introduce yourself as Lumi, a strategic AI assistant for case competition. Explain that you can help analyze cases, extract insights from uploaded documents, and create structured solutions with visualizations. Remember to use plain text only, no markdown formatting." 
     });
     const text = response.text || "Hello! I'm Lumi, your strategic AI assistant. I'm ready to help you solve case competitions.";
@@ -84,14 +107,88 @@ export const startCaseChat = async (): Promise<string> => {
   }
 };
 
-export const sendCaseMessage = async (userMessage: string, uploadedFiles?: File[]): Promise<string> => {
-  try {
-    if (!caseChatSession) {
-      await startCaseChat();
-    }
+/**
+ * Gets or creates a chat session for a specific thread
+ * Restores conversation history if available
+ * Note: Gemini API doesn't support history in config, so we'll send history as initial messages
+ */
+export const getOrCreateSession = async (threadId: string): Promise<Chat> => {
+  // Check if session exists
+  if (chatSessions.has(threadId)) {
+    return chatSessions.get(threadId)!;
+  }
 
-    if (!caseChatSession) {
-      return "Session invalid. Please refresh the page.";
+  // Create new session
+  const ai = getClient();
+  const session = ai.chats.create({
+    model: 'gemini-2.5-flash',
+    config: {
+      systemInstruction: CASE_COMPETITION_SYSTEM_INSTRUCTION,
+      temperature: 0.7,
+    },
+  });
+
+  // Restore conversation history by sending it as initial messages
+  const { summary, recentMessages } = await getConversationHistory(threadId);
+  
+  if (summary) {
+    // Send summary as context
+    await session.sendMessage({
+      message: `Context from previous conversation: ${summary}`
+    });
+    // Get acknowledgment
+    await session.sendMessage({
+      message: "Understood. I have the context from the previous conversation."
+    });
+  }
+
+  // Send recent messages to restore full context
+  // We'll send them in batches to avoid token limits
+  if (recentMessages.length > 0) {
+    // Only send last 10 messages to avoid token limits
+    const messagesToRestore = recentMessages.slice(-10);
+    for (const msg of messagesToRestore) {
+      try {
+        await session.sendMessage({
+          message: msg.content
+        });
+      } catch (error) {
+        console.warn('Error restoring message context:', error);
+        // Continue with other messages
+      }
+    }
+  }
+
+  chatSessions.set(threadId, session);
+  return session;
+};
+
+export const sendCaseMessage = async (
+  userMessage: string, 
+  uploadedFiles?: File[],
+  threadId?: string
+): Promise<string> => {
+  try {
+    let session: Chat;
+
+    if (threadId) {
+      // Use thread-specific session with persistent history
+      session = await getOrCreateSession(threadId);
+    } else {
+      // Legacy: use global session
+      if (!chatSessions.has('legacy')) {
+        const ai = getClient();
+        session = ai.chats.create({
+          model: 'gemini-2.5-flash',
+          config: {
+            systemInstruction: CASE_COMPETITION_SYSTEM_INSTRUCTION,
+            temperature: 0.7,
+          },
+        });
+        chatSessions.set('legacy', session);
+      } else {
+        session = chatSessions.get('legacy')!;
+      }
     }
 
     // If files are uploaded, process them
@@ -102,7 +199,7 @@ export const sendCaseMessage = async (userMessage: string, uploadedFiles?: File[
       userMessage = `${userMessage}\n\nUploaded files:\n${fileInfo}`;
     }
 
-    const response: GenerateContentResponse = await caseChatSession.sendMessage({ 
+    const response: GenerateContentResponse = await session.sendMessage({ 
       message: userMessage 
     });
     const text = response.text || "I didn't catch that. Could you rephrase?";
