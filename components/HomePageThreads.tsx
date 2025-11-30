@@ -251,14 +251,14 @@ const HomePageThreads: React.FC = () => {
           {caseLoading && (
             <div className="flex w-full justify-start">
               <div className="flex max-w-[85%] flex-row">
-                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-[#1e3a8a] text-white mr-3 flex items-center justify-center text-[10px] font-bold">
+                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-neutral-900 text-white mr-3 flex items-center justify-center text-[10px] font-semibold">
                   LUMI
                 </div>
-                <div className="bg-white border border-gray-100 py-3 px-4 rounded-2xl rounded-tl-none shadow-sm flex items-center">
+                <div className="bg-white border border-neutral-200 py-3 px-4 rounded-2xl rounded-tl-none shadow-sm flex items-center">
                   <span className="flex space-x-1.5">
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                    <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                    <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                    <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
                   </span>
                 </div>
               </div>
@@ -267,7 +267,7 @@ const HomePageThreads: React.FC = () => {
           <div ref={caseMessagesEndRef} className="h-1" />
         </div>
         
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-neutral-200">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -323,14 +323,14 @@ const HomePageThreads: React.FC = () => {
           {generalLoading && (
             <div className="flex w-full justify-start">
               <div className="flex max-w-[85%] flex-row">
-                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-[#1e3a8a] text-white mr-3 flex items-center justify-center text-[10px] font-bold">
+                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-neutral-900 text-white mr-3 flex items-center justify-center text-[10px] font-semibold">
                   LUMI
                 </div>
-                <div className="bg-white border border-gray-100 py-3 px-4 rounded-2xl rounded-tl-none shadow-sm flex items-center">
+                <div className="bg-white border border-neutral-200 py-3 px-4 rounded-2xl rounded-tl-none shadow-sm flex items-center">
                   <span className="flex space-x-1.5">
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                    <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                    <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                    <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
                   </span>
                 </div>
               </div>
@@ -339,7 +339,7 @@ const HomePageThreads: React.FC = () => {
           <div ref={generalMessagesEndRef} className="h-1" />
         </div>
         
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-neutral-200">
           <form
             onSubmit={(e) => {
               e.preventDefault();
