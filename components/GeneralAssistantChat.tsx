@@ -291,22 +291,7 @@ const GeneralAssistantChat: React.FC = () => {
                 }}
               />
             ))}
-          {isLoading && (
-            <div className="flex w-full justify-start mb-6">
-              <div className="flex max-w-[85%] flex-row">
-                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-[#1F4AA8] text-white mr-3 flex items-center justify-center text-[10px] font-semibold">
-                  LUMI
-                </div>
-                <div className="bg-white border border-[#E6E9EF] py-4 px-5 rounded-2xl rounded-tl-none shadow-sm flex items-center">
-                  <span className="flex space-x-1.5">
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
+          {isLoading && <MessageSkeleton isBot={true} />}
           <div ref={messagesEndRef} className="h-1" />
         </div>
 
