@@ -235,8 +235,9 @@ const HomePageThreads: React.FC = () => {
               <h3 className="font-semibold">Case Competition</h3>
             </div>
             <button
-              onClick={() => navigate('/lumi')}
+              onClick={() => navigate('/case-competition')}
               className="p-1 hover:bg-white/20 rounded transition-colors"
+              title="Mở toàn màn hình"
             >
               <ArrowRight className="w-4 h-4" />
             </button>
