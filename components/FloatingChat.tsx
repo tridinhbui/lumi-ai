@@ -96,7 +96,7 @@ const FloatingChat: React.FC = () => {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 w-16 h-16 bg-neutral-900 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 hover:scale-105 z-50 group"
+        className="fixed bottom-6 right-6 w-16 h-16 bg-[#1F4AA8] text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 hover:scale-105 z-50 group"
         aria-label="Open Lumi Chat"
       >
         <MessageCircle className="w-7 h-7 group-hover:scale-110 transition-transform" />
@@ -106,11 +106,11 @@ const FloatingChat: React.FC = () => {
   }
 
   return (
-    <div className={`fixed bottom-6 right-6 w-96 bg-white rounded-2xl shadow-xl border border-neutral-200 flex flex-col z-50 transition-all duration-200 ${
+    <div className={`fixed bottom-6 right-6 w-96 bg-white rounded-2xl shadow-xl border border-[#E6E9EF] flex flex-col z-50 transition-all duration-200 ${
       isMinimized ? 'h-16' : 'h-[600px]'
     }`}>
       {/* Header */}
-      <div className="bg-neutral-900 text-white p-4 rounded-t-2xl flex items-center justify-between">
+      <div className="bg-[#1F4AA8] text-white p-4 rounded-t-2xl flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
             <span className="font-semibold">Lumi - BizCase Lab</span>
@@ -146,10 +146,10 @@ const FloatingChat: React.FC = () => {
             {isLoading && (
               <div className="flex w-full justify-start">
                 <div className="flex max-w-[85%] flex-row">
-                  <div className="flex-shrink-0 h-8 w-8 rounded-full bg-neutral-900 text-white mr-3 flex items-center justify-center text-[10px] font-semibold">
+                  <div className="flex-shrink-0 h-8 w-8 rounded-full bg-[#1F4AA8] text-white mr-3 flex items-center justify-center text-[10px] font-semibold">
                     LUMI
                   </div>
-                  <div className="bg-white border border-neutral-200 py-3 px-4 rounded-2xl rounded-tl-none shadow-sm flex items-center">
+                  <div className="bg-white border border-[#E6E9EF] py-3 px-4 rounded-2xl rounded-tl-none shadow-sm flex items-center">
                     <span className="flex space-x-1.5">
                       <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
                       <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
@@ -171,7 +171,7 @@ const FloatingChat: React.FC = () => {
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                     placeholder="Hỏi Lumi bất cứ điều gì..."
-                className="flex-1 py-2.5 px-4 bg-white border border-neutral-300 rounded-xl outline-none text-sm focus:ring-2 focus:ring-neutral-100 focus:border-neutral-600 transition-all"
+                className="flex-1 py-2.5 px-4 bg-white border border-[#E6E9EF] rounded-xl outline-none text-sm focus:ring-2 focus:ring-[#E6F0FF] focus:border-[#1F4AA8] transition-all"
                 disabled={isLoading}
               />
               <button
@@ -179,8 +179,8 @@ const FloatingChat: React.FC = () => {
                 disabled={!inputText.trim() || isLoading}
                 className={`p-2.5 rounded-xl transition-all ${
                   !inputText.trim() || isLoading
-                    ? 'text-neutral-300 bg-neutral-100 cursor-not-allowed'
-                    : 'text-white bg-neutral-900 hover:bg-neutral-800 shadow-sm hover:shadow-md'
+                    ? 'text-[#a3a3a3] bg-[#F8F9FB] cursor-not-allowed'
+                    : 'text-white bg-[#1F4AA8] hover:bg-[#153A73] shadow-sm hover:shadow-md'
                 }`}
               >
                 <Send size={18} />

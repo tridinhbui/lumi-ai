@@ -173,9 +173,9 @@ const GeneralAssistantChat: React.FC = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-neutral-50 overflow-hidden">
+    <div className="h-screen flex flex-col bg-[#F8F9FB] overflow-hidden">
       {/* Minimal Header */}
-      <header className="w-full bg-white border-b border-neutral-200 z-30 h-16 flex-shrink-0">
+      <header className="w-full bg-white border-b border-[#E6E9EF] z-30 h-16 flex-shrink-0">
         <div className="w-full h-full px-6 flex items-center justify-between max-w-[1920px] mx-auto">
           <div className="flex items-center space-x-4">
             <MinimalButton
@@ -186,14 +186,14 @@ const GeneralAssistantChat: React.FC = () => {
             >
               <span className="sr-only">Back</span>
             </MinimalButton>
-            <div className="h-6 w-px bg-neutral-200"></div>
+            <div className="h-6 w-px bg-[#E6E9EF]"></div>
             <BizCaseLogo size="sm" showText={false} />
-            <div className="h-6 w-px bg-neutral-200"></div>
+            <div className="h-6 w-px bg-[#E6E9EF]"></div>
             <div className="flex items-center space-x-2">
-              <MessageSquare className="w-5 h-5 text-neutral-600" />
+              <MessageSquare className="w-5 h-5 text-[#1F4AA8]" />
               <div>
-                <h1 className="text-sm font-semibold text-neutral-900">General Assistant</h1>
-                <p className="text-xs text-neutral-500">Lumi Assistant</p>
+                <h1 className="text-sm font-semibold text-[#1F4AA8]">General Assistant</h1>
+                <p className="text-xs text-[#737373]">Lumi Assistant</p>
               </div>
             </div>
           </div>
@@ -216,10 +216,10 @@ const GeneralAssistantChat: React.FC = () => {
           {isLoading && (
             <div className="flex w-full justify-start mb-6">
               <div className="flex max-w-[85%] flex-row">
-                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-neutral-900 text-white mr-3 flex items-center justify-center text-[10px] font-semibold">
+                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-[#1F4AA8] text-white mr-3 flex items-center justify-center text-[10px] font-semibold">
                   LUMI
                 </div>
-                <div className="bg-white border border-neutral-200 py-4 px-5 rounded-2xl rounded-tl-none shadow-sm flex items-center">
+                <div className="bg-white border border-[#E6E9EF] py-4 px-5 rounded-2xl rounded-tl-none shadow-sm flex items-center">
                   <span className="flex space-x-1.5">
                     <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
                     <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
@@ -253,7 +253,7 @@ const GeneralAssistantChat: React.FC = () => {
         )}
 
         {/* Input Area */}
-        <div className="w-full bg-white border-t border-neutral-200 p-6 absolute bottom-0 left-0 right-0 z-20">
+        <div className="w-full bg-white border-t border-[#E6E9EF] p-6 absolute bottom-0 left-0 right-0 z-20">
           <div className="max-w-4xl mx-auto">
             <form onSubmit={handleSendMessage} className="flex items-end gap-3">
               <div className="flex-1 min-w-0">
@@ -290,7 +290,7 @@ const GeneralAssistantChat: React.FC = () => {
                 <span className="sr-only">Send</span>
               </MinimalButton>
             </form>
-            <p className="text-xs text-neutral-400 mt-3 ml-1">
+            <p className="text-xs text-[#737373] mt-3 ml-1">
               Supports: PDF, Slides, Images • General Assistant • Detailed Answers
             </p>
           </div>

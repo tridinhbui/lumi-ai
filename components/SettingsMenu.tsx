@@ -51,11 +51,11 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ user }) => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-neutral-200 py-2 z-50 animate-fade-in">
+        <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-[#E6E9EF] py-2 z-50 animate-fade-in">
           {/* User Info */}
-          <div className="px-4 py-3 border-b border-neutral-200">
-            <p className="text-sm font-semibold text-neutral-900">{user.name}</p>
-            <p className="text-xs text-neutral-600 truncate">{user.email}</p>
+          <div className="px-4 py-3 border-b border-[#E6E9EF]">
+            <p className="text-sm font-semibold text-[#2E2E2E]">{user.name}</p>
+            <p className="text-xs text-[#737373] truncate">{user.email}</p>
           </div>
 
           {/* Menu Items */}
@@ -65,7 +65,7 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ user }) => {
                 navigate('/dashboard');
                 setIsOpen(false);
               }}
-              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 transition-colors"
+              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-[#2E2E2E] hover:bg-[#F8F9FB] transition-colors"
             >
               <User className="w-4 h-4" />
               <span>{t('dashboard')}</span>
@@ -75,21 +75,21 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ user }) => {
                 navigate('/settings');
                 setIsOpen(false);
               }}
-              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 transition-colors"
+              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-[#2E2E2E] hover:bg-[#F8F9FB] transition-colors"
             >
               <Settings className="w-4 h-4" />
               <span>{t('settings')}</span>
             </button>
             <button
               onClick={() => setIsOpen(false)}
-              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 transition-colors"
+              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-[#2E2E2E] hover:bg-[#F8F9FB] transition-colors"
             >
               <Bell className="w-4 h-4" />
               <span>Notifications</span>
             </button>
             <button
               onClick={() => setIsOpen(false)}
-              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 transition-colors"
+              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-[#2E2E2E] hover:bg-[#F8F9FB] transition-colors"
             >
               <HelpCircle className="w-4 h-4" />
               <span>Help</span>
@@ -97,10 +97,10 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ user }) => {
           </div>
 
           {/* Logout */}
-          <div className="border-t border-neutral-200 pt-1">
+          <div className="border-t border-[#E6E9EF] pt-1">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 transition-colors"
+              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-[#2E2E2E] hover:bg-[#F8F9FB] transition-colors"
             >
               <LogOut className="w-4 h-4" />
               <span>{t('logout')}</span>

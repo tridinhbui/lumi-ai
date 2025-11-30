@@ -254,18 +254,18 @@ const LumiWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-neutral-50 overflow-hidden">
+    <div className="h-screen flex flex-col bg-[#F8F9FB] overflow-hidden">
       {/* Minimal Header */}
-      <header className="w-full bg-white border-b border-neutral-200 z-30 h-16 flex-shrink-0">
+      <header className="w-full bg-white border-b border-[#E6E9EF] z-30 h-16 flex-shrink-0">
         <div className="w-full h-full px-4 lg:px-6 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div 
               className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
               onClick={() => navigate('/')}
             >
-              <Brain className="w-6 h-6 text-neutral-600" />
-              <h1 className="font-semibold text-lg tracking-tight text-neutral-900">Lumi</h1>
-              <span className="text-xs text-neutral-500">- BizCase Lab</span>
+              <Brain className="w-6 h-6 text-[#1F4AA8]" />
+              <h1 className="font-semibold text-lg tracking-tight text-[#1F4AA8]">Lumi</h1>
+              <span className="text-xs text-[#737373]">- BizCase Lab</span>
             </div>
           </div>
           <div className="flex items-center space-x-4">
@@ -277,11 +277,11 @@ const LumiWorkspace: React.FC = () => {
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Threads Sidebar */}
-        <aside className="w-64 bg-white border-r border-neutral-200 flex flex-col">
-          <div className="p-4 border-b border-neutral-200">
+        <aside className="w-64 bg-white border-r border-[#E6E9EF] flex flex-col">
+          <div className="p-4 border-b border-[#E6E9EF]">
             <button
               onClick={createNewThread}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-all text-sm font-medium shadow-sm hover:shadow-md"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-[#1F4AA8] text-white rounded-xl hover:bg-[#153A73] transition-all text-sm font-medium shadow-sm hover:shadow-md"
             >
               <Plus size={16} />
               <span>New Thread</span>
@@ -294,8 +294,8 @@ const LumiWorkspace: React.FC = () => {
                 key={thread.id}
                 className={`group relative mb-2 p-3 rounded-xl cursor-pointer transition-all ${
                   activeThreadId === thread.id
-                    ? 'bg-neutral-100 border border-neutral-300'
-                    : 'bg-neutral-50 border border-transparent hover:bg-neutral-100'
+                    ? 'bg-[#E6F0FF] border border-[#1F4AA8]'
+                    : 'bg-[#F8F9FB] border border-transparent hover:bg-[#E6F0FF]'
                 }`}
                 onClick={() => setActiveThreadId(thread.id)}
               >
@@ -337,10 +337,10 @@ const LumiWorkspace: React.FC = () => {
             {isLoading && (
               <div className="flex w-full justify-start mb-6">
                 <div className="flex max-w-[85%] flex-row">
-                  <div className="flex-shrink-0 h-8 w-8 rounded-full bg-neutral-900 text-white mr-3 flex items-center justify-center text-[10px] font-semibold">
+                  <div className="flex-shrink-0 h-8 w-8 rounded-full bg-[#1F4AA8] text-white mr-3 flex items-center justify-center text-[10px] font-semibold">
                     LUMI
                   </div>
-                  <div className="bg-white border border-neutral-200 py-4 px-5 rounded-2xl rounded-tl-none shadow-sm flex items-center">
+                  <div className="bg-white border border-[#E6E9EF] py-4 px-5 rounded-2xl rounded-tl-none shadow-sm flex items-center">
                     <span className="flex space-x-1.5">
                       <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
                       <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
@@ -391,14 +391,14 @@ const LumiWorkspace: React.FC = () => {
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     placeholder="Ask a question or upload file to analyze..."
-                    className="w-full py-3 px-4 bg-white border border-neutral-300 rounded-xl outline-none text-neutral-900 placeholder-neutral-400 text-sm lg:text-base focus:ring-2 focus:ring-neutral-100 focus:border-neutral-600 transition-all"
+                    className="w-full py-3 px-4 bg-white border border-[#E6E9EF] rounded-xl outline-none text-[#2E2E2E] placeholder-[#737373] text-sm lg:text-base focus:ring-2 focus:ring-[#E6F0FF] focus:border-[#1F4AA8] transition-all"
                     disabled={isLoading}
                   />
                 </div>
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex-shrink-0 p-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-lg transition-colors"
+                  className="flex-shrink-0 p-3 text-[#1F4AA8] hover:text-[#153A73] hover:bg-[#E6F0FF] rounded-lg transition-colors"
                   title="Upload file"
                 >
                   <Upload size={20} />
@@ -408,14 +408,14 @@ const LumiWorkspace: React.FC = () => {
                   disabled={(!inputText.trim() && uploadedFiles.length === 0) || isLoading}
                   className={`flex-shrink-0 p-3 rounded-lg transition-colors ${
                     (!inputText.trim() && uploadedFiles.length === 0) || isLoading
-                      ? 'text-neutral-300 bg-neutral-100 cursor-not-allowed'
-                      : 'text-white bg-neutral-900 hover:bg-neutral-800 shadow-sm hover:shadow-md'
+                      ? 'text-[#a3a3a3] bg-[#F8F9FB] cursor-not-allowed'
+                      : 'text-white bg-[#1F4AA8] hover:bg-[#153A73] shadow-sm hover:shadow-md'
                   }`}
                 >
                   <Send size={20} />
                 </button>
               </form>
-                  <p className="text-xs text-neutral-400 mt-2 ml-2">
+                  <p className="text-xs text-[#737373] mt-2 ml-2">
                     Supports: PDF, Slides, Images • Automatic Analysis • MECE Framework
                   </p>
             </div>

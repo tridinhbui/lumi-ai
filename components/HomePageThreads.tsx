@@ -227,8 +227,8 @@ const HomePageThreads: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
       {/* Case Competition Thread */}
-      <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm flex flex-col" style={{ height: '600px' }}>
-        <div className="p-4 border-b border-neutral-200 bg-neutral-900 text-white rounded-t-2xl">
+      <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm flex flex-col" style={{ height: '600px' }}>
+        <div className="p-4 border-b border-[#E6E9EF] bg-[#1F4AA8] text-white rounded-t-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <MessageSquare className="w-5 h-5" />
@@ -267,7 +267,7 @@ const HomePageThreads: React.FC = () => {
           <div ref={caseMessagesEndRef} className="h-1" />
         </div>
         
-        <div className="p-4 border-t border-neutral-200">
+        <div className="p-4 border-t border-[#E6E9EF]">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -280,7 +280,7 @@ const HomePageThreads: React.FC = () => {
               value={caseInput}
               onChange={(e) => setCaseInput(e.target.value)}
                     placeholder="Ask about case competition..."
-                    className="flex-1 py-2 px-3 bg-white border border-neutral-300 rounded-xl outline-none text-sm focus:ring-2 focus:ring-neutral-100 focus:border-neutral-600 transition-all"
+                    className="flex-1 py-2 px-3 bg-white border border-[#E6E9EF] rounded-xl outline-none text-sm focus:ring-2 focus:ring-[#E6F0FF] focus:border-[#1F4AA8] transition-all"
               disabled={caseLoading}
             />
             <button
@@ -288,8 +288,8 @@ const HomePageThreads: React.FC = () => {
               disabled={!caseInput.trim() || caseLoading}
                 className={`p-2 rounded-xl transition-all ${
                   !caseInput.trim() || caseLoading
-                    ? 'text-neutral-300 bg-neutral-100 cursor-not-allowed'
-                    : 'text-white bg-neutral-900 hover:bg-neutral-800 shadow-sm hover:shadow-md'
+                    ? 'text-[#a3a3a3] bg-[#F8F9FB] cursor-not-allowed'
+                    : 'text-white bg-[#1F4AA8] hover:bg-[#153A73] shadow-sm hover:shadow-md'
                 }`}
             >
               <Send size={18} />
@@ -299,8 +299,8 @@ const HomePageThreads: React.FC = () => {
       </div>
 
       {/* General Assistant Thread */}
-      <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm flex flex-col" style={{ height: '600px' }}>
-        <div className="p-4 border-b border-neutral-200 bg-neutral-900 text-white rounded-t-2xl">
+      <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm flex flex-col" style={{ height: '600px' }}>
+        <div className="p-4 border-b border-[#E6E9EF] bg-[#1F4AA8] text-white rounded-t-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <MessageSquare className="w-5 h-5" />
@@ -339,7 +339,7 @@ const HomePageThreads: React.FC = () => {
           <div ref={generalMessagesEndRef} className="h-1" />
         </div>
         
-        <div className="p-4 border-t border-neutral-200">
+        <div className="p-4 border-t border-[#E6E9EF]">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -352,7 +352,7 @@ const HomePageThreads: React.FC = () => {
               value={generalInput}
               onChange={(e) => setGeneralInput(e.target.value)}
                     placeholder="Ask Lumi anything..."
-                    className="flex-1 py-2 px-3 bg-white border border-neutral-300 rounded-xl outline-none text-sm focus:ring-2 focus:ring-neutral-100 focus:border-neutral-600 transition-all"
+                    className="flex-1 py-2 px-3 bg-white border border-[#E6E9EF] rounded-xl outline-none text-sm focus:ring-2 focus:ring-[#E6F0FF] focus:border-[#1F4AA8] transition-all"
               disabled={generalLoading}
             />
             <button
@@ -360,8 +360,8 @@ const HomePageThreads: React.FC = () => {
               disabled={!generalInput.trim() || generalLoading}
                 className={`p-2 rounded-xl transition-all ${
                   !generalInput.trim() || generalLoading
-                    ? 'text-neutral-300 bg-neutral-100 cursor-not-allowed'
-                    : 'text-white bg-neutral-900 hover:bg-neutral-800 shadow-sm hover:shadow-md'
+                    ? 'text-[#a3a3a3] bg-[#F8F9FB] cursor-not-allowed'
+                    : 'text-white bg-[#1F4AA8] hover:bg-[#153A73] shadow-sm hover:shadow-md'
                 }`}
             >
               <Send size={18} />

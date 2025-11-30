@@ -26,11 +26,11 @@ const LearningDashboard: React.FC = () => {
   ];
 
   const caseTypes = [
-    { name: 'Market Entry', completed: 8, total: 10, color: '#171717' },
-    { name: 'Pricing Strategy', completed: 6, total: 10, color: '#404040' },
-    { name: 'Growth Strategy', completed: 7, total: 10, color: '#525252' },
-    { name: 'Operations', completed: 5, total: 10, color: '#737373' },
-    { name: 'M&A', completed: 4, total: 10, color: '#a3a3a3' },
+    { name: 'Market Entry', completed: 8, total: 10, color: '#1F4AA8' },
+    { name: 'Pricing Strategy', completed: 6, total: 10, color: '#4C86FF' },
+    { name: 'Growth Strategy', completed: 7, total: 10, color: '#0057E7' },
+    { name: 'Operations', completed: 5, total: 10, color: '#153A73' },
+    { name: 'M&A', completed: 4, total: 10, color: '#1F4AA8' },
   ];
 
   const skillBreakdown = [
@@ -65,9 +65,9 @@ const LearningDashboard: React.FC = () => {
   const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'];
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-[#F8F9FB]">
       {/* Minimal Header */}
-      <header className="w-full bg-white border-b border-neutral-200">
+      <header className="w-full bg-white border-b border-[#E6E9EF]">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -77,10 +77,10 @@ const LearningDashboard: React.FC = () => {
               >
                 <BizCaseLogo size="md" showText={false} />
               </div>
-              <div className="h-6 w-px bg-neutral-200"></div>
+              <div className="h-6 w-px bg-[#E6E9EF]"></div>
               <div>
-                <h2 className="text-xl font-semibold text-neutral-900">Learning Dashboard</h2>
-                <p className="text-sm text-neutral-600">Track learning progress and case-solving mindset</p>
+                <h2 className="text-xl font-semibold text-[#1F4AA8]">Learning Dashboard</h2>
+                <p className="text-sm text-[#737373]">Track learning progress and case-solving mindset</p>
               </div>
             </div>
             {user && (
@@ -205,8 +205,8 @@ const LearningDashboard: React.FC = () => {
                     contentStyle={{ backgroundColor: '#fff', borderColor: '#e5e7eb', borderRadius: '8px' }}
                   />
                   <Legend />
-                  <Line type="monotone" dataKey="cases" stroke="#171717" strokeWidth={2} name="Cases Completed" />
-                  <Line type="monotone" dataKey="score" stroke="#525252" strokeWidth={2} name="Average Score" />
+                  <Line type="monotone" dataKey="cases" stroke="#1F4AA8" strokeWidth={2} name="Cases Completed" />
+                  <Line type="monotone" dataKey="score" stroke="#4C86FF" strokeWidth={2} name="Average Score" />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -256,7 +256,7 @@ const LearningDashboard: React.FC = () => {
                   <Tooltip 
                     contentStyle={{ backgroundColor: '#fff', borderColor: '#e5e7eb', borderRadius: '8px' }}
                   />
-                  <Bar dataKey="score" fill="#171717" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="score" fill="#1F4AA8" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -286,7 +286,7 @@ const LearningDashboard: React.FC = () => {
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {insights.map((insight, index) => (
-                <div key={index} className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <div key={index} className="bg-white rounded-xl shadow-sm p-6 border border-[#E6E9EF]">
                   <div className="flex items-start space-x-3">
                     {insight.icon}
                     <div className="flex-1">

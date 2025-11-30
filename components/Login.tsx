@@ -40,9 +40,9 @@ const Login: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-50">
+    <div className="min-h-screen flex items-center justify-center bg-[#F8F9FB]">
       <div className="max-w-md w-full mx-4">
-        <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-10">
+        <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-10">
           {/* Logo/Header */}
           <div className="text-center mb-10">
             <div className="flex justify-center mb-8">
@@ -88,17 +88,17 @@ const Login: React.FC = () => {
           </button>
 
           {/* Features */}
-          <div className="space-y-3 mt-8 pt-6 border-t border-neutral-200">
-            <div className="flex items-center space-x-3 text-sm text-neutral-600">
-              <Sparkles className="w-4 h-4 text-neutral-700" />
+          <div className="space-y-3 mt-8 pt-6 border-t border-[#E6E9EF]">
+            <div className="flex items-center space-x-3 text-sm text-[#737373]">
+              <Sparkles className="w-4 h-4 text-[#1F4AA8]" />
               <span>Case Competition Analysis</span>
             </div>
-            <div className="flex items-center space-x-3 text-sm text-neutral-600">
-              <Sparkles className="w-4 h-4 text-neutral-700" />
+            <div className="flex items-center space-x-3 text-sm text-[#737373]">
+              <Sparkles className="w-4 h-4 text-[#1F4AA8]" />
               <span>PDF & Document Processing</span>
             </div>
-            <div className="flex items-center space-x-3 text-sm text-neutral-600">
-              <Sparkles className="w-4 h-4 text-neutral-700" />
+            <div className="flex items-center space-x-3 text-sm text-[#737373]">
+              <Sparkles className="w-4 h-4 text-[#1F4AA8]" />
               <span>Multi-thread Chat Interface</span>
             </div>
           </div>
