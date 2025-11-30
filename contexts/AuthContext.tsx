@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { SubscriptionInfo } from '../types/permissions';
 
 interface User {
   name: string;
   email: string;
-  picture: string;
+  picture?: string;
+  subscription?: SubscriptionInfo;
 }
 
 interface AuthContextType {
