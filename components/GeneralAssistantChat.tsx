@@ -10,6 +10,8 @@ import {
 } from '../services/supabaseService';
 import MessageBubble from './MessageBubble';
 import BizCaseLogo from './BizCaseLogo';
+import MinimalButton from './MinimalButton';
+import MinimalInput from './MinimalInput';
 import { Message, Sender, MessageType } from '../types';
 
 const GeneralAssistantChat: React.FC = () => {
@@ -171,37 +173,38 @@ const GeneralAssistantChat: React.FC = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 overflow-hidden">
-      {/* Header */}
-      <header className="w-full bg-white/90 backdrop-blur-lg border-b-2 border-purple-200/50 shadow-lg z-30 h-16 flex-shrink-0">
-        <div className="w-full h-full px-4 lg:px-6 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <button
+    <div className="h-screen flex flex-col bg-neutral-50 overflow-hidden">
+      {/* Minimal Header */}
+      <header className="w-full bg-white border-b border-neutral-200 z-30 h-16 flex-shrink-0">
+        <div className="w-full h-full px-6 flex items-center justify-between max-w-[1920px] mx-auto">
+          <div className="flex items-center space-x-4">
+            <MinimalButton
+              variant="ghost"
+              size="sm"
               onClick={() => navigate('/home')}
-              className="p-2 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-all"
-              title="Trang chủ"
+              icon={ArrowLeft}
             >
-              <ArrowLeft size={20} />
-            </button>
-            <div className="h-6 w-px bg-gray-200 mx-2"></div>
+              <span className="sr-only">Back</span>
+            </MinimalButton>
+            <div className="h-6 w-px bg-neutral-200"></div>
             <BizCaseLogo size="sm" showText={false} />
-            <div className="h-6 w-px bg-gray-200 mx-2"></div>
+            <div className="h-6 w-px bg-neutral-200"></div>
             <div className="flex items-center space-x-2">
-              <MessageSquare className="w-5 h-5 text-purple-600" />
+              <MessageSquare className="w-5 h-5 text-neutral-600" />
               <div>
-                <h1 className="font-semibold text-sm tracking-tight bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">General Assistant Chat</h1>
-                <p className="text-[10px] text-gray-500 uppercase tracking-wide">Lumi - BizCase Lab</p>
+                <h1 className="text-sm font-semibold text-neutral-900">General Assistant</h1>
+                <p className="text-xs text-neutral-500">Lumi Assistant</p>
               </div>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             {user && <SettingsMenu user={user} />}
           </div>
         </div>
       </header>
 
       {/* Chat Panel */}
-      <div className="flex-1 flex flex-col bg-white/50 backdrop-blur-sm relative overflow-hidden">
+      <div className="flex-1 flex flex-col bg-white relative overflow-hidden">
         {/* Messages */}
         <div 
           className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-6"
@@ -213,10 +216,10 @@ const GeneralAssistantChat: React.FC = () => {
           {isLoading && (
             <div className="flex w-full justify-start mb-6">
               <div className="flex max-w-[85%] flex-row">
-                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 text-white mr-3 flex items-center justify-center text-[10px] font-bold shadow-lg">
+                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-neutral-900 text-white mr-3 flex items-center justify-center text-[10px] font-semibold">
                   LUMI
                 </div>
-                <div className="bg-white/90 backdrop-blur-sm border border-gray-200/50 py-4 px-5 rounded-2xl rounded-tl-none shadow-lg flex items-center">
+                <div className="bg-white border border-neutral-200 py-4 px-5 rounded-2xl rounded-tl-none shadow-sm flex items-center">
                   <span className="flex space-x-1.5">
                     <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
                     <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
@@ -250,9 +253,9 @@ const GeneralAssistantChat: React.FC = () => {
         )}
 
         {/* Input Area */}
-        <div className="w-full bg-white/90 backdrop-blur-md border-t border-gray-200/50 shadow-lg p-4 lg:p-6 absolute bottom-0 left-0 right-0 z-20">
+        <div className="w-full bg-white border-t border-neutral-200 p-6 absolute bottom-0 left-0 right-0 z-20">
           <div className="max-w-4xl mx-auto">
-            <form onSubmit={handleSendMessage} className="relative flex items-end gap-2">
+            <form onSubmit={handleSendMessage} className="flex items-end gap-3">
               <div className="flex-1 min-w-0">
                 <input
                   type="file"
@@ -262,37 +265,33 @@ const GeneralAssistantChat: React.FC = () => {
                   accept=".pdf,.png,.jpg,.jpeg,.ppt,.pptx"
                   className="hidden"
                 />
-                <input
-                  type="text"
+                <MinimalInput
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  placeholder="Hỏi Lumi bất cứ điều gì..."
-                  className="w-full py-3 px-4 bg-white/80 border-2 border-gray-200 rounded-xl outline-none text-gray-800 placeholder-gray-400 text-sm lg:text-base focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all shadow-sm"
+                  placeholder="Ask Lumi anything..."
                   disabled={isLoading}
                 />
               </div>
-              <button
-                type="button"
+              <MinimalButton
+                variant="ghost"
+                size="md"
                 onClick={() => fileInputRef.current?.click()}
-                className="p-3 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-all flex-shrink-0 shadow-sm hover:shadow-md"
-                title="Upload file"
+                icon={Upload}
               >
-                <Upload size={20} />
-              </button>
-              <button
+                <span className="sr-only">Upload</span>
+              </MinimalButton>
+              <MinimalButton
                 type="submit"
+                variant="primary"
+                size="md"
                 disabled={(!inputText.trim() && uploadedFiles.length === 0) || isLoading}
-                className={`p-3 rounded-lg transition-all flex-shrink-0 shadow-lg hover:shadow-xl ${
-                  (!inputText.trim() && uploadedFiles.length === 0) || isLoading
-                    ? 'text-gray-300 bg-gray-100 cursor-not-allowed'
-                    : 'text-white bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700'
-                }`}
+                icon={Send}
               >
-                <Send size={20} />
-              </button>
+                <span className="sr-only">Send</span>
+              </MinimalButton>
             </form>
-            <p className="text-xs text-gray-400 mt-2 ml-2">
-              Hỗ trợ: PDF, Slide, Hình ảnh • Trợ lý đa năng • Câu trả lời chi tiết
+            <p className="text-xs text-neutral-400 mt-3 ml-1">
+              Supports: PDF, Slides, Images • General Assistant • Detailed Answers
             </p>
           </div>
         </div>
