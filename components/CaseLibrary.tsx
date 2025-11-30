@@ -100,29 +100,29 @@ const CaseLibrary: React.FC = () => {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'Beginner': return 'bg-blue-100 text-[#1e3a8a]';
-      case 'Intermediate': return 'bg-[#1e40af]/20 text-[#1e40af]';
-      case 'Advanced': return 'bg-[#1e3a8a] text-white';
-      default: return 'bg-gray-100 text-gray-700';
+      case 'Beginner': return 'bg-neutral-100 text-neutral-700';
+      case 'Intermediate': return 'bg-neutral-200 text-neutral-800';
+      case 'Advanced': return 'bg-neutral-900 text-white';
+      default: return 'bg-neutral-100 text-neutral-700';
     }
   };
 
   const caseTypes = ['all', 'Market Entry', 'Pricing', 'Growth', 'Operations', 'M&A', 'Digital'];
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+    <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-[#1e3a8a] flex items-center">
-            <BookOpen className="w-6 h-6 mr-2 text-[#1e3a8a]" />
+          <h2 className="text-2xl font-semibold text-neutral-900 flex items-center">
+            <BookOpen className="w-5 h-5 mr-2 text-neutral-600" />
             {t('cases')}
           </h2>
-          <p className="text-sm text-gray-500 mt-1">Thực hành với các case kinh doanh thực tế</p>
+          <p className="text-sm text-neutral-600 mt-1">Practice with real-world business cases</p>
         </div>
-          <div className="text-right">
-            <p className="text-2xl font-bold text-[#1e3a8a]">{filteredCases.length}</p>
-            <p className="text-xs text-gray-500">Case có sẵn</p>
-          </div>
+        <div className="text-right">
+          <p className="text-2xl font-semibold text-neutral-900">{filteredCases.length}</p>
+          <p className="text-xs text-neutral-600">Available Cases</p>
+        </div>
       </div>
 
       {/* Search and Filters */}
@@ -134,7 +134,7 @@ const CaseLibrary: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Tìm kiếm case theo tiêu đề, mô tả hoặc tags..."
-            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#1e3a8a]/50 focus:border-[#1e3a8a] transition-all"
+            className="w-full pl-12 pr-4 py-3 bg-white border border-neutral-300 rounded-xl outline-none focus:ring-2 focus:ring-neutral-100 focus:border-neutral-600 transition-all"
           />
         </div>
 
@@ -144,7 +144,7 @@ const CaseLibrary: React.FC = () => {
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-[#1e3a8a]/50 text-sm"
+              className="px-4 py-2 bg-white border border-neutral-300 rounded-lg outline-none focus:ring-2 focus:ring-neutral-100 focus:border-neutral-600 text-sm transition-all"
             >
               {caseTypes.map(type => (
                 <option key={type} value={type}>
@@ -171,11 +171,11 @@ const CaseLibrary: React.FC = () => {
         {filteredCases.map((caseItem) => (
           <div
             key={caseItem.id}
-            className="bg-gradient-to-br from-white to-gray-50 rounded-xl border border-gray-200 p-5 hover:shadow-lg transition-all duration-300 hover:border-[#1e3a8a] cursor-pointer group"
+            className="bg-white rounded-xl border border-neutral-200 p-5 hover:shadow-md transition-all duration-200 hover:border-neutral-300 cursor-pointer group"
           >
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-[#1e3a8a] transition-colors">
+                <h3 className="font-semibold text-neutral-900 mb-1 group-hover:text-neutral-700 transition-colors">
                   {caseItem.title}
                 </h3>
                 <div className="flex items-center space-x-2 mb-2">
