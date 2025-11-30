@@ -97,17 +97,17 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
   }));
 
   const skillData = [
-    { name: 'Structuring', value: 85, color: '#3b82f6' },
-    { name: 'Quantitative', value: 78, color: '#8b5cf6' },
-    { name: 'Creativity', value: 82, color: '#ec4899' },
-    { name: 'Communication', value: 80, color: '#10b981' },
+    { name: 'Structuring', value: 85, color: '#171717' },
+    { name: 'Quantitative', value: 78, color: '#404040' },
+    { name: 'Creativity', value: 82, color: '#525252' },
+    { name: 'Communication', value: 80, color: '#737373' },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-emerald-500';
-      case 'in-progress': return 'bg-amber-500';
-      default: return 'bg-gray-300';
+      case 'completed': return 'bg-neutral-900';
+      case 'in-progress': return 'bg-neutral-600';
+      default: return 'bg-neutral-300';
     }
   };
 
@@ -120,27 +120,27 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
   };
 
   return (
-    <div className="h-full overflow-y-auto bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4">
+    <div className="h-full overflow-y-auto bg-neutral-50 p-6">
       <div className="space-y-6">
         {/* Header */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Case Analysis Dashboard
+        <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-6">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xl font-semibold text-neutral-900">
+              Case Analysis
             </h2>
-            <div className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-xl shadow-lg">
-              <Star className="w-5 h-5" />
-              <span className="font-bold text-lg">{overallScore}%</span>
+            <div className="flex items-center space-x-2 bg-neutral-900 text-white px-4 py-2 rounded-xl">
+              <Star className="w-4 h-4" />
+              <span className="font-semibold text-base">{overallScore}%</span>
             </div>
           </div>
-          <p className="text-sm text-gray-600">Theo dõi tiến độ và phân tích từng bước giải case</p>
+          <p className="text-sm text-neutral-600">Track progress and analyze each case-solving step</p>
         </div>
 
         {/* Overall Progress */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <TrendingUp className="w-5 h-5 mr-2 text-blue-600" />
-            Tiến độ tổng thể
+        <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-6">
+          <h3 className="text-base font-semibold text-neutral-900 mb-5 flex items-center">
+            <TrendingUp className="w-4 h-4 mr-2 text-neutral-600" />
+            Overall Progress
           </h3>
           <div className="space-y-3">
             {stages.map((stage, idx) => (
@@ -151,21 +151,21 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
                       {getStatusIcon(stage.status)}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-800">{stage.name}</p>
-                      <p className="text-xs text-gray-500">{stage.feedback}</p>
+                      <p className="font-medium text-neutral-900">{stage.name}</p>
+                      <p className="text-xs text-neutral-500">{stage.feedback}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-blue-600">{stage.score}%</p>
+                    <p className="font-semibold text-neutral-700">{stage.score}%</p>
                   </div>
                 </div>
                 <div className="ml-11">
                   <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                     <div
                       className={`h-full transition-all duration-500 rounded-full ${
-                        stage.status === 'completed' ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' :
-                        stage.status === 'in-progress' ? 'bg-gradient-to-r from-amber-400 to-amber-600' :
-                        'bg-gray-300'
+                        stage.status === 'completed'                       ? 'bg-neutral-900' :
+                        stage.status === 'in-progress' ? 'bg-neutral-600' :
+                        'bg-neutral-300'
                       }`}
                       style={{ width: `${stage.score}%` }}
                     />
@@ -177,10 +177,10 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
         </div>
 
         {/* Stage Performance Chart */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <BarChart3 className="w-5 h-5 mr-2 text-purple-600" />
-            Biểu đồ hiệu suất từng giai đoạn
+        <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-6">
+          <h3 className="text-base font-semibold text-neutral-900 mb-5 flex items-center">
+            <BarChart3 className="w-4 h-4 mr-2 text-neutral-600" />
+            Stage Performance
           </h3>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={stageData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
@@ -199,9 +199,9 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
                   <Cell 
                     key={`cell-${index}`} 
                     fill={
-                      entry.status === 'completed' ? '#10b981' :
-                      entry.status === 'in-progress' ? '#f59e0b' :
-                      '#d1d5db'
+                      entry.status === 'completed' ? '#171717' :
+                      entry.status === 'in-progress' ? '#525252' :
+                      '#d4d4d4'
                     } 
                   />
                 ))}
@@ -211,10 +211,10 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
         </div>
 
         {/* Skill Breakdown */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <Zap className="w-5 h-5 mr-2 text-pink-600" />
-            Phân tích kỹ năng
+        <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-6">
+          <h3 className="text-base font-semibold text-neutral-900 mb-5 flex items-center">
+            <Zap className="w-4 h-4 mr-2 text-neutral-600" />
+            Skill Breakdown
           </h3>
           <ResponsiveContainer width="100%" height={250}>
             <RechartsPieChart>
@@ -238,24 +238,24 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
         </div>
 
         {/* Answer Analysis */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <Lightbulb className="w-5 h-5 mr-2 text-yellow-600" />
-            Phân tích câu trả lời
+        <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-6">
+          <h3 className="text-base font-semibold text-neutral-900 mb-5 flex items-center">
+            <Lightbulb className="w-4 h-4 mr-2 text-neutral-600" />
+            Answer Analysis
           </h3>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {messages.filter(m => m.sender === Sender.USER).slice(-3).map((msg, idx) => (
-              <div key={idx} className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
+              <div key={idx} className="bg-neutral-50 rounded-xl p-4 border border-neutral-200">
                 <div className="flex items-start justify-between mb-2">
-                  <p className="text-sm font-medium text-gray-700 line-clamp-2">{msg.content.substring(0, 100)}...</p>
-                  <div className="flex items-center space-x-1 bg-white px-2 py-1 rounded-lg shadow-sm">
-                    <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                    <span className="text-xs font-bold text-gray-700">{(85 - idx * 5)}%</span>
+                  <p className="text-sm font-medium text-neutral-700 line-clamp-2">{msg.content.substring(0, 100)}...</p>
+                  <div className="flex items-center space-x-1 bg-white px-2 py-1 rounded-lg border border-neutral-200">
+                    <Star className="w-3 h-3 text-neutral-600 fill-current" />
+                    <span className="text-xs font-semibold text-neutral-700">{(85 - idx * 5)}%</span>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2 text-xs text-gray-500">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                  <span>Phân tích logic và có cấu trúc</span>
+                <div className="flex items-center space-x-2 text-xs text-neutral-500">
+                  <CheckCircle2 className="w-3 h-3 text-neutral-600" />
+                  <span>Logical and structured analysis</span>
                 </div>
               </div>
             ))}
@@ -263,23 +263,23 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
         </div>
 
         {/* Recommendations */}
-        <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-xl p-6 text-white">
-          <h3 className="text-lg font-semibold mb-4 flex items-center">
-            <BookOpen className="w-5 h-5 mr-2" />
-            Khuyến nghị cải thiện
+        <div className="bg-neutral-900 rounded-2xl shadow-sm p-6 text-white">
+          <h3 className="text-base font-semibold mb-4 flex items-center">
+            <BookOpen className="w-4 h-4 mr-2" />
+            Recommendations
           </h3>
-          <ul className="space-y-2 text-sm">
+          <ul className="space-y-2.5 text-sm text-neutral-300">
             <li className="flex items-start space-x-2">
               <ArrowRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-              <span>Tập trung vào phân tích định lượng sâu hơn</span>
+              <span>Focus on deeper quantitative analysis</span>
             </li>
             <li className="flex items-start space-x-2">
               <ArrowRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-              <span>Phát triển framework MECE hoàn chỉnh hơn</span>
+              <span>Develop more complete MECE frameworks</span>
             </li>
             <li className="flex items-start space-x-2">
               <ArrowRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-              <span>Đưa ra giải pháp cụ thể và có thể thực thi</span>
+              <span>Provide specific and actionable solutions</span>
             </li>
           </ul>
         </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Send, Upload, FileText, X, ArrowLeft, MessageSquare, BarChart3, X as CloseIcon } from 'lucide-react';
+import { Send, Upload, FileText, X, ArrowLeft, MessageSquare, BarChart3 } from 'lucide-react';
 import SettingsMenu from './SettingsMenu';
 import { startCaseChat, sendCaseMessage } from '../services/caseCompetitionService';
 import { 
@@ -11,6 +11,8 @@ import {
 import MessageBubble from './MessageBubble';
 import BizCaseLogo from './BizCaseLogo';
 import CaseAnalysisDashboard from './CaseAnalysisDashboard';
+import MinimalButton from './MinimalButton';
+import MinimalInput from './MinimalInput';
 import { Message, Sender, MessageType } from '../types';
 
 const CaseCompetitionChat: React.FC = () => {
@@ -172,41 +174,39 @@ const CaseCompetitionChat: React.FC = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 overflow-hidden">
-      {/* Header */}
-      <header className="w-full bg-white/90 backdrop-blur-lg border-b-2 border-blue-200/50 shadow-lg z-30 h-16 flex-shrink-0">
-        <div className="w-full h-full px-4 lg:px-6 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <button
+    <div className="h-screen flex flex-col bg-neutral-50 overflow-hidden">
+      {/* Minimal Header */}
+      <header className="w-full bg-white border-b border-neutral-200 z-30 h-16 flex-shrink-0">
+        <div className="w-full h-full px-6 flex items-center justify-between max-w-[1920px] mx-auto">
+          <div className="flex items-center space-x-4">
+            <MinimalButton
+              variant="ghost"
+              size="sm"
               onClick={() => navigate('/home')}
-              className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
-              title="Trang chủ"
+              icon={ArrowLeft}
             >
-              <ArrowLeft size={20} />
-            </button>
-            <div className="h-6 w-px bg-gray-200 mx-2"></div>
+              <span className="sr-only">Back</span>
+            </MinimalButton>
+            <div className="h-6 w-px bg-neutral-200"></div>
             <BizCaseLogo size="sm" showText={false} />
-            <div className="h-6 w-px bg-gray-200 mx-2"></div>
+            <div className="h-6 w-px bg-neutral-200"></div>
             <div className="flex items-center space-x-2">
-              <MessageSquare className="w-5 h-5 text-blue-600" />
+              <MessageSquare className="w-5 h-5 text-neutral-600" />
               <div>
-                <h1 className="font-semibold text-sm tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Case Competition Chat</h1>
-                <p className="text-[10px] text-gray-500 uppercase tracking-wide">Lumi - BizCase Lab</p>
+                <h1 className="text-sm font-semibold text-neutral-900">Case Competition</h1>
+                <p className="text-xs text-neutral-500">Lumi Assistant</p>
               </div>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <button
+          <div className="flex items-center space-x-3">
+            <MinimalButton
+              variant={showDashboard ? 'accent' : 'ghost'}
+              size="sm"
               onClick={() => setShowDashboard(!showDashboard)}
-              className={`p-2 rounded-lg transition-all ${
-                showDashboard 
-                  ? 'bg-blue-100 text-blue-600' 
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-              title={showDashboard ? "Ẩn Dashboard" : "Hiện Dashboard"}
+              icon={BarChart3}
             >
-              <BarChart3 size={20} />
-            </button>
+              <span className="sr-only">Toggle Dashboard</span>
+            </MinimalButton>
             {user && <SettingsMenu user={user} />}
           </div>
         </div>
@@ -215,117 +215,115 @@ const CaseCompetitionChat: React.FC = () => {
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Chat Panel */}
-        <div className={`flex-1 flex flex-col bg-white/50 backdrop-blur-sm relative overflow-hidden transition-all duration-300 ${showDashboard ? 'mr-0' : ''}`}>
-        {/* Messages */}
-        <div 
-          className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-6"
-          style={{ paddingBottom: uploadedFiles.length > 0 ? '180px' : '120px' }}
-        >
-          {thread?.messages.map((msg) => (
-            <MessageBubble key={msg.id} message={msg} />
-          ))}
-          {isLoading && (
-            <div className="flex w-full justify-start mb-6">
-              <div className="flex max-w-[85%] flex-row">
-                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white mr-3 flex items-center justify-center text-[10px] font-bold shadow-lg">
-                  LUMI
+        <div className={`flex-1 flex flex-col bg-white relative overflow-hidden transition-all duration-300 ${showDashboard ? 'mr-0' : ''}`}>
+          {/* Messages */}
+          <div 
+            className="flex-1 overflow-y-auto px-6 py-8 space-y-6"
+            style={{ paddingBottom: uploadedFiles.length > 0 ? '180px' : '140px' }}
+          >
+            {thread?.messages.map((msg) => (
+              <MessageBubble key={msg.id} message={msg} />
+            ))}
+            {isLoading && (
+              <div className="flex w-full justify-start mb-6">
+                <div className="flex max-w-[85%] flex-row">
+                  <div className="flex-shrink-0 h-8 w-8 rounded-full bg-neutral-900 text-white mr-3 flex items-center justify-center text-[10px] font-semibold">
+                    LUMI
+                  </div>
+                  <div className="bg-white border border-neutral-200 py-4 px-5 rounded-2xl rounded-tl-none shadow-sm flex items-center">
+                    <span className="flex space-x-1.5">
+                      <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                      <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                      <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                    </span>
+                  </div>
                 </div>
-                <div className="bg-white/90 backdrop-blur-sm border border-gray-200/50 py-4 px-5 rounded-2xl rounded-tl-none shadow-lg flex items-center">
-                  <span className="flex space-x-1.5">
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
-                  </span>
-                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} className="h-1" />
+          </div>
+
+          {/* Uploaded Files Preview */}
+          {uploadedFiles.length > 0 && (
+            <div className="px-6 py-3 bg-neutral-50 border-t border-neutral-200 absolute bottom-[140px] left-0 right-0 z-20">
+              <div className="flex flex-wrap gap-2">
+                {uploadedFiles.map((file, index) => (
+                  <div key={index} className="flex items-center gap-2 bg-white border border-neutral-200 rounded-lg px-3 py-2 flex-shrink-0 shadow-sm">
+                    <FileText className="w-4 h-4 text-neutral-500" />
+                    <span className="text-xs text-neutral-700 max-w-[150px] truncate min-w-0">{file.name}</span>
+                    <button
+                      onClick={() => removeFile(index)}
+                      className="text-neutral-400 hover:text-neutral-600 transition-colors flex-shrink-0"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
           )}
-          <div ref={messagesEndRef} className="h-1" />
-        </div>
 
-        {/* Uploaded Files Preview */}
-        {uploadedFiles.length > 0 && (
-          <div className="px-4 lg:px-6 py-2 bg-gray-50 border-t border-gray-200 absolute bottom-[120px] left-0 right-0 z-20">
-            <div className="flex flex-wrap gap-2">
-              {uploadedFiles.map((file, index) => (
-                <div key={index} className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2 flex-shrink-0">
-                  <FileText className="w-4 h-4 text-gray-500" />
-                  <span className="text-xs text-gray-700 max-w-[150px] truncate min-w-0">{file.name}</span>
-                  <button
-                    onClick={() => removeFile(index)}
-                    className="text-gray-400 hover:text-red-500 flex-shrink-0"
-                  >
-                    <X size={14} />
-                  </button>
+          {/* Input Area */}
+          <div className="w-full bg-white border-t border-neutral-200 p-6 absolute bottom-0 left-0 right-0 z-20">
+            <div className="max-w-4xl mx-auto">
+              <form onSubmit={handleSendMessage} className="flex items-end gap-3">
+                <div className="flex-1 min-w-0">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    multiple
+                    accept=".pdf,.png,.jpg,.jpeg,.ppt,.pptx"
+                    className="hidden"
+                  />
+                  <MinimalInput
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
+                    placeholder="Ask about case competition, upload files to analyze..."
+                    disabled={isLoading}
+                  />
                 </div>
-              ))}
+                <MinimalButton
+                  variant="ghost"
+                  size="md"
+                  onClick={() => fileInputRef.current?.click()}
+                  icon={Upload}
+                >
+                  <span className="sr-only">Upload</span>
+                </MinimalButton>
+                <MinimalButton
+                  type="submit"
+                  variant="primary"
+                  size="md"
+                  disabled={(!inputText.trim() && uploadedFiles.length === 0) || isLoading}
+                  icon={Send}
+                >
+                  <span className="sr-only">Send</span>
+                </MinimalButton>
+              </form>
+              <p className="text-xs text-neutral-400 mt-3 ml-1">
+                Supports: PDF, Slides, Images • Automatic Analysis • MECE Framework
+              </p>
             </div>
           </div>
-        )}
-
-        {/* Input Area */}
-        <div className="w-full bg-white/90 backdrop-blur-md border-t border-gray-200/50 shadow-lg p-4 lg:p-6 absolute bottom-0 left-0 right-0 z-20">
-          <div className="max-w-4xl mx-auto">
-            <form onSubmit={handleSendMessage} className="relative flex items-end gap-2">
-              <div className="flex-1 min-w-0">
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileUpload}
-                  multiple
-                  accept=".pdf,.png,.jpg,.jpeg,.ppt,.pptx"
-                  className="hidden"
-                />
-                <input
-                  type="text"
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  placeholder="Nhập câu hỏi về case, upload slide/PDF để phân tích..."
-                  className="w-full py-3 px-4 bg-white/80 border-2 border-gray-200 rounded-xl outline-none text-gray-800 placeholder-gray-400 text-sm lg:text-base focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all shadow-sm"
-                  disabled={isLoading}
-                />
-              </div>
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="p-3 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all flex-shrink-0 shadow-sm hover:shadow-md"
-                title="Upload file"
-              >
-                <Upload size={20} />
-              </button>
-              <button
-                type="submit"
-                disabled={(!inputText.trim() && uploadedFiles.length === 0) || isLoading}
-                className={`p-3 rounded-lg transition-all flex-shrink-0 shadow-lg hover:shadow-xl ${
-                  (!inputText.trim() && uploadedFiles.length === 0) || isLoading
-                    ? 'text-gray-300 bg-gray-100 cursor-not-allowed'
-                    : 'text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700'
-                }`}
-              >
-                <Send size={20} />
-              </button>
-            </form>
-            <p className="text-xs text-gray-400 mt-2 ml-2">
-              Hỗ trợ: PDF, Slide, Hình ảnh • Phân tích tự động • Framework MECE
-            </p>
-          </div>
-        </div>
         </div>
 
         {/* Dashboard Panel */}
         {showDashboard && (
-          <div className="w-96 border-l border-gray-200/50 bg-white/80 backdrop-blur-sm shadow-2xl flex flex-col">
-            <div className="p-4 border-b border-gray-200/50 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-between">
-              <h3 className="text-white font-semibold flex items-center">
-                <BarChart3 className="w-5 h-5 mr-2" />
+          <div className="w-96 border-l border-neutral-200 bg-white flex flex-col">
+            <div className="p-4 border-b border-neutral-200 bg-neutral-50 flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-neutral-900 flex items-center gap-2">
+                <BarChart3 className="w-4 h-4" />
                 Analysis Dashboard
               </h3>
-              <button
+              <MinimalButton
+                variant="ghost"
+                size="sm"
                 onClick={() => setShowDashboard(false)}
-                className="p-1 hover:bg-white/20 rounded transition-colors"
+                icon={X}
               >
-                <CloseIcon className="w-4 h-4 text-white" />
-              </button>
+                <span className="sr-only">Close</span>
+              </MinimalButton>
             </div>
             <div className="flex-1 overflow-hidden">
               <CaseAnalysisDashboard messages={thread?.messages || []} threadName={thread?.name || ''} />
@@ -338,4 +336,3 @@ const CaseCompetitionChat: React.FC = () => {
 };
 
 export default CaseCompetitionChat;
-
