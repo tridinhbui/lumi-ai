@@ -71,10 +71,17 @@ const FloatingChat: React.FC = () => {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    
+    // Save user message to database if thread exists
+    if (threadId) {
+      await saveMessage(threadId, userMessage);
+      await updateThreadTimestamp(threadId);
+    }
+    
     setIsLoading(true);
 
     try {
-      const response = await sendCaseMessage(userMsg);
+      const response = await sendCaseMessage(userMsg, undefined, threadId || undefined);
       
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -85,6 +92,12 @@ const FloatingChat: React.FC = () => {
       };
       
       setMessages((prev) => [...prev, botMessage]);
+      
+      // Save bot message to database if thread exists
+      if (threadId) {
+        await saveMessage(threadId, botMessage);
+        await updateThreadTimestamp(threadId);
+      }
     } catch (error) {
       console.error('Error sending message:', error);
     } finally {

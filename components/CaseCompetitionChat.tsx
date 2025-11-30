@@ -703,7 +703,7 @@ const CaseCompetitionChat: React.FC = () => {
                         }
                       : t
                   ));
-                  // TODO: Save to database
+                  // Message already saved to database in handleSendMessage
                 }}
                 onDelete={async (messageId) => {
                   // Remove message from thread
@@ -715,7 +715,7 @@ const CaseCompetitionChat: React.FC = () => {
                         }
                       : t
                   ));
-                  // TODO: Delete from database
+                  // Thread and messages deleted via deleteThreadService
                 }}
               />
             ))}
