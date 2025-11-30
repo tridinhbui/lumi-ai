@@ -16,7 +16,7 @@ const MessageBubble: React.FC<Props> = ({ message }) => {
         
         {/* Avatar */}
         <div className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center text-xs font-semibold ${
-          isBot ? 'bg-neutral-900 text-white mr-3' : 'bg-neutral-200 text-neutral-600 ml-3'
+          isBot ? 'bg-[#1F4AA8] text-white mr-3' : 'bg-[#E6E9EF] text-[#2E2E2E] ml-3'
         }`}>
           {isBot ? 'LUMI' : 'YOU'}
         </div>
@@ -25,8 +25,8 @@ const MessageBubble: React.FC<Props> = ({ message }) => {
         <div className="flex flex-col">
           <div className={`py-3 px-4 rounded-2xl text-sm md:text-base shadow-sm ${
             isBot 
-              ? 'bg-white text-neutral-800 border border-neutral-200 rounded-tl-none' 
-              : 'bg-neutral-900 text-white rounded-tr-none'
+              ? 'bg-white text-[#2E2E2E] border border-[#E6E9EF] rounded-tl-none' 
+              : 'bg-[#1F4AA8] text-white rounded-tr-none'
           }`}>
             <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
           </div>
@@ -43,7 +43,7 @@ const MessageBubble: React.FC<Props> = ({ message }) => {
             </div>
           )}
           
-          <span className={`text-[10px] text-neutral-400 mt-1.5 ${isBot ? 'text-left' : 'text-right'}`}>
+          <span className={`text-[10px] text-[#737373] mt-1.5 ${isBot ? 'text-left' : 'text-right'}`}>
             {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </span>
         </div>

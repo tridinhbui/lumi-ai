@@ -34,11 +34,11 @@ const MinimalInput: React.FC<MinimalInputProps> = ({
         placeholder={placeholder}
         disabled={disabled}
         className={`
-          w-full bg-white border border-neutral-300 rounded-xl
-          px-4 py-3 text-base text-neutral-900 placeholder-neutral-400
+          w-full bg-white border border-[#E6E9EF] rounded-xl
+          px-4 py-3 text-base text-[#2E2E2E] placeholder-[#737373]
           transition-all duration-200
-          focus:outline-none focus:border-neutral-600 focus:ring-2 focus:ring-neutral-100
-          disabled:bg-neutral-50 disabled:text-neutral-500 disabled:cursor-not-allowed
+          focus:outline-none focus:border-[#1F4AA8] focus:ring-2 focus:ring-[#E6F0FF]
+          disabled:bg-[#F8F9FB] disabled:text-[#a3a3a3] disabled:cursor-not-allowed
           ${Icon ? 'pl-12' : ''}
           ${className}
         `}

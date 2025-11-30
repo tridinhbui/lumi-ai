@@ -27,7 +27,7 @@ const MinimalCard: React.FC<MinimalCardProps> = ({
   return (
     <div
       className={`
-        bg-white border border-neutral-200 rounded-2xl shadow-sm
+        bg-white border border-[#E6E9EF] rounded-2xl shadow-sm
         ${paddingStyles[padding]}
         ${hoverStyles}
         ${className}

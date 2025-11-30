@@ -97,17 +97,17 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
   }));
 
   const skillData = [
-    { name: 'Structuring', value: 85, color: '#171717' },
-    { name: 'Quantitative', value: 78, color: '#404040' },
-    { name: 'Creativity', value: 82, color: '#525252' },
-    { name: 'Communication', value: 80, color: '#737373' },
+    { name: 'Structuring', value: 85, color: '#1F4AA8' },
+    { name: 'Quantitative', value: 78, color: '#4C86FF' },
+    { name: 'Creativity', value: 82, color: '#0057E7' },
+    { name: 'Communication', value: 80, color: '#153A73' },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-neutral-900';
-      case 'in-progress': return 'bg-neutral-600';
-      default: return 'bg-neutral-300';
+      case 'completed': return 'bg-[#1F4AA8]';
+      case 'in-progress': return 'bg-[#4C86FF]';
+      default: return 'bg-[#E6E9EF]';
     }
   };
 
@@ -120,26 +120,26 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
   };
 
   return (
-    <div className="h-full overflow-y-auto bg-neutral-50 p-6">
+    <div className="h-full overflow-y-auto bg-[#F8F9FB] p-6">
       <div className="space-y-6">
         {/* Header */}
-        <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-6">
+        <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl font-semibold text-neutral-900">
+            <h2 className="text-xl font-semibold text-[#1F4AA8]">
               Case Analysis
             </h2>
-            <div className="flex items-center space-x-2 bg-neutral-900 text-white px-4 py-2 rounded-xl">
+            <div className="flex items-center space-x-2 bg-[#1F4AA8] text-white px-4 py-2 rounded-xl">
               <Star className="w-4 h-4" />
               <span className="font-semibold text-base">{overallScore}%</span>
             </div>
           </div>
-          <p className="text-sm text-neutral-600">Track progress and analyze each case-solving step</p>
+          <p className="text-sm text-[#737373]">Track progress and analyze each case-solving step</p>
         </div>
 
         {/* Overall Progress */}
-        <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-6">
-          <h3 className="text-base font-semibold text-neutral-900 mb-5 flex items-center">
-            <TrendingUp className="w-4 h-4 mr-2 text-neutral-600" />
+        <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
+          <h3 className="text-base font-semibold text-[#1F4AA8] mb-5 flex items-center">
+            <TrendingUp className="w-4 h-4 mr-2 text-[#4C86FF]" />
             Overall Progress
           </h3>
           <div className="space-y-3">
@@ -151,21 +151,21 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
                       {getStatusIcon(stage.status)}
                     </div>
                     <div>
-                      <p className="font-medium text-neutral-900">{stage.name}</p>
-                      <p className="text-xs text-neutral-500">{stage.feedback}</p>
+                      <p className="font-medium text-[#2E2E2E]">{stage.name}</p>
+                      <p className="text-xs text-[#737373]">{stage.feedback}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold text-neutral-700">{stage.score}%</p>
+                    <p className="font-semibold text-[#1F4AA8]">{stage.score}%</p>
                   </div>
                 </div>
                 <div className="ml-11">
                   <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                     <div
                       className={`h-full transition-all duration-500 rounded-full ${
-                        stage.status === 'completed'                       ? 'bg-neutral-900' :
-                        stage.status === 'in-progress' ? 'bg-neutral-600' :
-                        'bg-neutral-300'
+                        stage.status === 'completed'                       ? 'bg-[#1F4AA8]' :
+                        stage.status === 'in-progress' ? 'bg-[#4C86FF]' :
+                        'bg-[#E6E9EF]'
                       }`}
                       style={{ width: `${stage.score}%` }}
                     />
@@ -177,9 +177,9 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
         </div>
 
         {/* Stage Performance Chart */}
-        <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-6">
-          <h3 className="text-base font-semibold text-neutral-900 mb-5 flex items-center">
-            <BarChart3 className="w-4 h-4 mr-2 text-neutral-600" />
+        <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
+          <h3 className="text-base font-semibold text-[#1F4AA8] mb-5 flex items-center">
+            <BarChart3 className="w-4 h-4 mr-2 text-[#4C86FF]" />
             Stage Performance
           </h3>
           <ResponsiveContainer width="100%" height={250}>
@@ -199,9 +199,9 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
                   <Cell 
                     key={`cell-${index}`} 
                     fill={
-                      entry.status === 'completed' ? '#171717' :
-                      entry.status === 'in-progress' ? '#525252' :
-                      '#d4d4d4'
+                      entry.status === 'completed' ? '#1F4AA8' :
+                      entry.status === 'in-progress' ? '#4C86FF' :
+                      '#E6E9EF'
                     } 
                   />
                 ))}
@@ -211,9 +211,9 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
         </div>
 
         {/* Skill Breakdown */}
-        <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-6">
-          <h3 className="text-base font-semibold text-neutral-900 mb-5 flex items-center">
-            <Zap className="w-4 h-4 mr-2 text-neutral-600" />
+        <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
+          <h3 className="text-base font-semibold text-[#1F4AA8] mb-5 flex items-center">
+            <Zap className="w-4 h-4 mr-2 text-[#4C86FF]" />
             Skill Breakdown
           </h3>
           <ResponsiveContainer width="100%" height={250}>
@@ -238,23 +238,23 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
         </div>
 
         {/* Answer Analysis */}
-        <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-6">
-          <h3 className="text-base font-semibold text-neutral-900 mb-5 flex items-center">
-            <Lightbulb className="w-4 h-4 mr-2 text-neutral-600" />
+        <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
+          <h3 className="text-base font-semibold text-[#1F4AA8] mb-5 flex items-center">
+            <Lightbulb className="w-4 h-4 mr-2 text-[#4C86FF]" />
             Answer Analysis
           </h3>
           <div className="space-y-3">
             {messages.filter(m => m.sender === Sender.USER).slice(-3).map((msg, idx) => (
-              <div key={idx} className="bg-neutral-50 rounded-xl p-4 border border-neutral-200">
+              <div key={idx} className="bg-[#F8F9FB] rounded-xl p-4 border border-[#E6E9EF]">
                 <div className="flex items-start justify-between mb-2">
-                  <p className="text-sm font-medium text-neutral-700 line-clamp-2">{msg.content.substring(0, 100)}...</p>
-                  <div className="flex items-center space-x-1 bg-white px-2 py-1 rounded-lg border border-neutral-200">
-                    <Star className="w-3 h-3 text-neutral-600 fill-current" />
-                    <span className="text-xs font-semibold text-neutral-700">{(85 - idx * 5)}%</span>
+                  <p className="text-sm font-medium text-[#2E2E2E] line-clamp-2">{msg.content.substring(0, 100)}...</p>
+                  <div className="flex items-center space-x-1 bg-white px-2 py-1 rounded-lg border border-[#E6E9EF]">
+                    <Star className="w-3 h-3 text-[#1F4AA8] fill-current" />
+                    <span className="text-xs font-semibold text-[#2E2E2E]">{(85 - idx * 5)}%</span>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2 text-xs text-neutral-500">
-                  <CheckCircle2 className="w-3 h-3 text-neutral-600" />
+                <div className="flex items-center space-x-2 text-xs text-[#737373]">
+                  <CheckCircle2 className="w-3 h-3 text-[#1F4AA8]" />
                   <span>Logical and structured analysis</span>
                 </div>
               </div>
@@ -263,12 +263,12 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
         </div>
 
         {/* Recommendations */}
-        <div className="bg-neutral-900 rounded-2xl shadow-sm p-6 text-white">
+        <div className="bg-[#1F4AA8] rounded-2xl shadow-sm p-6 text-white">
           <h3 className="text-base font-semibold mb-4 flex items-center">
             <BookOpen className="w-4 h-4 mr-2" />
             Recommendations
           </h3>
-          <ul className="space-y-2.5 text-sm text-neutral-300">
+          <ul className="space-y-2.5 text-sm text-white/90">
             <li className="flex items-start space-x-2">
               <ArrowRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
               <span>Focus on deeper quantitative analysis</span>

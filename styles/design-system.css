@@ -1,23 +1,37 @@
 /* Modern Minimalist Design System */
 
 :root {
-  /* Neutral Color Palette */
-  --color-neutral-50: #fafafa;
-  --color-neutral-100: #f5f5f5;
-  --color-neutral-200: #e5e5e5;
+  /* BizCase Lab Color Palette */
+  /* Primary */
+  --color-primary-blue: #1F4AA8;
+  --color-primary-blue-hover: #153A73;
+  --color-primary-blue-light: #E6F0FF;
+  
+  /* Secondary */
+  --color-sky-blue: #4C86FF;
+  --color-soft-navy: #153A73;
+  
+  /* Neutral */
+  --color-charcoal: #2E2E2E;
+  --color-light-gray: #E6E9EF;
+  --color-off-white: #F8F9FB;
+  --color-white: #FFFFFF;
+  
+  /* Accent */
+  --color-cobalt: #0057E7;
+  --color-mint-soft: #A7F3D0;
+  
+  /* Legacy Neutral (for compatibility) */
+  --color-neutral-50: #F8F9FB;
+  --color-neutral-100: #E6E9EF;
+  --color-neutral-200: #E6E9EF;
   --color-neutral-300: #d4d4d4;
   --color-neutral-400: #a3a3a3;
   --color-neutral-500: #737373;
   --color-neutral-600: #525252;
   --color-neutral-700: #404040;
-  --color-neutral-800: #262626;
-  --color-neutral-900: #171717;
-  
-  /* Subtle Accent Colors */
-  --color-accent-blue: #3b82f6;
-  --color-accent-blue-light: #eff6ff;
-  --color-accent-indigo: #6366f1;
-  --color-accent-indigo-light: #eef2ff;
+  --color-neutral-800: #2E2E2E;
+  --color-neutral-900: #2E2E2E;
   
   /* Semantic Colors */
   --color-success: #10b981;
@@ -103,8 +117,8 @@ body {
   font-family: var(--font-sans);
   font-size: var(--text-base);
   line-height: var(--leading-normal);
-  color: var(--color-neutral-900);
-  background-color: var(--color-neutral-50);
+  color: var(--color-charcoal);
+  background-color: var(--color-off-white);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -113,7 +127,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-weight: var(--font-semibold);
   line-height: var(--leading-tight);
-  color: var(--color-neutral-900);
+  color: var(--color-primary-blue);
   letter-spacing: -0.025em;
 }
 
@@ -146,13 +160,13 @@ h6 { font-size: var(--text-base); }
 }
 
 .minimal-button-primary {
-  background: var(--color-neutral-900);
+  background: var(--color-primary-blue);
   color: white;
   box-shadow: var(--shadow-sm);
 }
 
 .minimal-button-primary:hover {
-  background: var(--color-neutral-800);
+  background: var(--color-soft-navy);
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }

@@ -54,9 +54,9 @@ const HomePage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-[#F8F9FB]">
       {/* Minimal Header */}
-      <header className="w-full bg-white border-b border-neutral-200 sticky top-0 z-40">
+      <header className="w-full bg-white border-b border-[#E6E9EF] sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div 
@@ -69,7 +69,7 @@ const HomePage: React.FC = () => {
               {/* Language Toggle */}
               <button
                 onClick={() => setLanguage(language === 'vi' ? 'en' : 'vi')}
-                className="flex items-center space-x-2 px-3 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-all text-sm font-medium shadow-sm hover:shadow-md"
+                className="flex items-center space-x-2 px-3 py-2 bg-[#1F4AA8] text-white rounded-xl hover:bg-[#153A73] transition-all text-sm font-medium shadow-sm hover:shadow-md"
               >
                 <Globe className="w-4 h-4" />
                 <span>{language === 'vi' ? 'VI' : 'EN'}</span>
@@ -84,13 +84,13 @@ const HomePage: React.FC = () => {
       <main className="max-w-7xl mx-auto px-6 py-12">
         {/* Welcome Section */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-neutral-900 rounded-2xl mb-6 shadow-sm">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-[#1F4AA8] rounded-2xl mb-6 shadow-sm">
             <Sparkles className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-5xl font-semibold text-neutral-900 mb-4 tracking-tight">
-            {t('welcome_back')}, <span className="text-neutral-600">{user?.name?.split(' ')[0] || 'User'}</span>
+          <h1 className="text-5xl font-semibold text-[#1F4AA8] mb-4 tracking-tight">
+            {t('welcome_back')}, <span className="text-[#2E2E2E]">{user?.name?.split(' ')[0] || 'User'}</span>
           </h1>
-          <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+          <p className="text-lg text-[#737373] max-w-2xl mx-auto">
             {t('strategic_ai')} - Lumi, part of BizCase Lab
           </p>
         </div>
@@ -125,19 +125,19 @@ const HomePage: React.FC = () => {
           {quickStats.map((stat, index) => (
             <div 
               key={index} 
-              className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-6 hover:shadow-md transition-all duration-200"
+              className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6 hover:shadow-md transition-all duration-200"
             >
               <div className="flex items-center justify-between mb-4">
-                <div className="p-3 bg-neutral-100 rounded-xl">
-                  <stat.icon className="w-5 h-5 text-neutral-700" />
+                <div className="p-3 bg-[#E6F0FF] rounded-xl">
+                  <stat.icon className="w-5 h-5 text-[#1F4AA8]" />
                 </div>
-                <span className="text-xs font-semibold text-neutral-600 bg-neutral-100 px-2 py-1 rounded-lg">
+                <span className="text-xs font-semibold text-[#1F4AA8] bg-[#E6F0FF] px-2 py-1 rounded-lg">
                   {stat.change}
                 </span>
               </div>
               <div>
-                <p className="text-sm text-neutral-600 mb-1">{stat.label}</p>
-                <p className="text-3xl font-semibold text-neutral-900">{stat.value}</p>
+                <p className="text-sm text-[#737373] mb-1">{stat.label}</p>
+                <p className="text-3xl font-semibold text-[#1F4AA8]">{stat.value}</p>
               </div>
             </div>
           ))}
@@ -154,8 +154,8 @@ const HomePage: React.FC = () => {
 
         {/* Quick Actions */}
         <div className="mb-12">
-          <h2 className="text-2xl font-semibold text-neutral-900 mb-6 flex items-center">
-            <Zap className="w-5 h-5 mr-2 text-neutral-600" />
+          <h2 className="text-2xl font-semibold text-[#1F4AA8] mb-6 flex items-center">
+            <Zap className="w-5 h-5 mr-2 text-[#4C86FF]" />
             Quick Actions
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -163,16 +163,16 @@ const HomePage: React.FC = () => {
               <button
                 key={index}
                 onClick={action.action}
-                className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-6 text-left hover:shadow-md transition-all duration-200 group"
+                className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6 text-left hover:shadow-md transition-all duration-200 group"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <div className="p-3 bg-neutral-100 rounded-xl group-hover:bg-neutral-900 group-hover:text-white transition-colors">
-                    <action.icon className="w-5 h-5 text-neutral-700 group-hover:text-white" />
+                  <div className="p-3 bg-[#E6F0FF] rounded-xl group-hover:bg-[#1F4AA8] group-hover:text-white transition-colors">
+                    <action.icon className="w-5 h-5 text-[#1F4AA8] group-hover:text-white" />
                   </div>
-                  <ArrowRight className="w-5 h-5 text-neutral-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                  <ArrowRight className="w-5 h-5 text-[#737373] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                 </div>
-                <h3 className="text-lg font-semibold text-neutral-900 mb-2">{action.title}</h3>
-                <p className="text-sm text-neutral-600">{action.description}</p>
+                <h3 className="text-lg font-semibold text-[#1F4AA8] mb-2">{action.title}</h3>
+                <p className="text-sm text-[#737373]">{action.description}</p>
               </button>
             ))}
           </div>
@@ -225,41 +225,41 @@ const HomePage: React.FC = () => {
         <CaseLibrary />
 
         {/* Recent Activity */}
-        <div className="mt-12 bg-white border border-neutral-200 rounded-2xl shadow-sm p-6">
-          <h2 className="text-2xl font-semibold text-neutral-900 mb-6 flex items-center">
-            <Clock className="w-5 h-5 mr-2 text-neutral-600" />
+        <div className="mt-12 bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
+          <h2 className="text-2xl font-semibold text-[#1F4AA8] mb-6 flex items-center">
+            <Clock className="w-5 h-5 mr-2 text-[#4C86FF]" />
             {t('recent_activity')}
           </h2>
           <div className="space-y-3">
-            <div className="flex items-center space-x-4 p-4 bg-neutral-50 rounded-xl border border-neutral-200">
-              <div className="p-2 bg-neutral-900 rounded-lg">
+            <div className="flex items-center space-x-4 p-4 bg-[#F8F9FB] rounded-xl border border-[#E6E9EF]">
+              <div className="p-2 bg-[#1F4AA8] rounded-lg">
                 <MessageSquare className="w-4 h-4 text-white" />
               </div>
               <div className="flex-1">
-                <p className="font-semibold text-neutral-900">{t('case_competition_thread')}</p>
-                <p className="text-sm text-neutral-600">{t('last_active')} 2 {t('hours_ago')}</p>
+                <p className="font-semibold text-[#1F4AA8]">{t('case_competition_thread')}</p>
+                <p className="text-sm text-[#737373]">{t('last_active')} 2 {t('hours_ago')}</p>
               </div>
-              <span className="text-xs font-medium text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full border border-neutral-200">Active</span>
+              <span className="text-xs font-medium text-[#1F4AA8] bg-[#E6F0FF] px-3 py-1 rounded-full border border-[#E6E9EF]">Active</span>
             </div>
-            <div className="flex items-center space-x-4 p-4 bg-neutral-50 rounded-xl border border-neutral-200">
-              <div className="p-2 bg-neutral-900 rounded-lg">
+            <div className="flex items-center space-x-4 p-4 bg-[#F8F9FB] rounded-xl border border-[#E6E9EF]">
+              <div className="p-2 bg-[#1F4AA8] rounded-lg">
                 <Target className="w-4 h-4 text-white" />
               </div>
               <div className="flex-1">
-                <p className="font-semibold text-neutral-900">Market Entry Case</p>
-                <p className="text-sm text-neutral-600">{t('completed')} {t('yesterday')}</p>
+                <p className="font-semibold text-[#1F4AA8]">Market Entry Case</p>
+                <p className="text-sm text-[#737373]">{t('completed')} {t('yesterday')}</p>
               </div>
-              <span className="text-xs font-medium text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full border border-neutral-200">{t('completed')}</span>
+              <span className="text-xs font-medium text-[#1F4AA8] bg-[#E6F0FF] px-3 py-1 rounded-full border border-[#E6E9EF]">{t('completed')}</span>
             </div>
-            <div className="flex items-center space-x-4 p-4 bg-neutral-50 rounded-xl border border-neutral-200">
-              <div className="p-2 bg-neutral-900 rounded-lg">
+            <div className="flex items-center space-x-4 p-4 bg-[#F8F9FB] rounded-xl border border-[#E6E9EF]">
+              <div className="p-2 bg-[#1F4AA8] rounded-lg">
                 <TrendingUp className="w-4 h-4 text-white" />
               </div>
               <div className="flex-1">
-                <p className="font-semibold text-neutral-900">{t('score_improved')} 12%</p>
-                <p className="text-sm text-neutral-600">{t('this_week')}</p>
+                <p className="font-semibold text-[#1F4AA8]">{t('score_improved')} 12%</p>
+                <p className="text-sm text-[#737373]">{t('this_week')}</p>
               </div>
-              <span className="text-xs font-medium text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full border border-neutral-200">+12%</span>
+              <span className="text-xs font-medium text-[#1F4AA8] bg-[#E6F0FF] px-3 py-1 rounded-full border border-[#E6E9EF]">+12%</span>
             </div>
           </div>
         </div>
