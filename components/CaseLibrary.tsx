@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, Filter, BookOpen, Target, TrendingUp, Users, DollarSign, FileText, Clock, Star } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface Case {
   id: string;
@@ -14,6 +15,7 @@ interface Case {
 }
 
 const CaseLibrary: React.FC = () => {
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
@@ -98,9 +100,9 @@ const CaseLibrary: React.FC = () => {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'Beginner': return 'bg-green-100 text-green-700';
-      case 'Intermediate': return 'bg-yellow-100 text-yellow-700';
-      case 'Advanced': return 'bg-red-100 text-red-700';
+      case 'Beginner': return 'bg-blue-100 text-[#1e3a8a]';
+      case 'Intermediate': return 'bg-[#1e40af]/20 text-[#1e40af]';
+      case 'Advanced': return 'bg-[#1e3a8a] text-white';
       default: return 'bg-gray-100 text-gray-700';
     }
   };
@@ -113,14 +115,14 @@ const CaseLibrary: React.FC = () => {
         <div>
           <h2 className="text-2xl font-bold text-[#1e3a8a] flex items-center">
             <BookOpen className="w-6 h-6 mr-2 text-[#1e3a8a]" />
-            Case Library
+            {t('cases')}
           </h2>
-          <p className="text-sm text-gray-500 mt-1">Practice with real-world business cases</p>
+          <p className="text-sm text-gray-500 mt-1">Thực hành với các case kinh doanh thực tế</p>
         </div>
-        <div className="text-right">
-          <p className="text-2xl font-bold text-gray-900">{filteredCases.length}</p>
-          <p className="text-xs text-gray-500">Available Cases</p>
-        </div>
+          <div className="text-right">
+            <p className="text-2xl font-bold text-[#1e3a8a]">{filteredCases.length}</p>
+            <p className="text-xs text-gray-500">Case có sẵn</p>
+          </div>
       </div>
 
       {/* Search and Filters */}
@@ -131,7 +133,7 @@ const CaseLibrary: React.FC = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search cases by title, description, or tags..."
+            placeholder="Tìm kiếm case theo tiêu đề, mô tả hoặc tags..."
             className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#1e3a8a]/50 focus:border-[#1e3a8a] transition-all"
           />
         </div>
@@ -146,7 +148,7 @@ const CaseLibrary: React.FC = () => {
             >
               {caseTypes.map(type => (
                 <option key={type} value={type}>
-                  {type === 'all' ? 'All Types' : type}
+                  {type === 'all' ? 'Tất cả loại' : type}
                 </option>
               ))}
             </select>
@@ -156,10 +158,10 @@ const CaseLibrary: React.FC = () => {
             onChange={(e) => setSelectedDifficulty(e.target.value)}
             className="px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-500/50 text-sm"
           >
-            <option value="all">All Difficulties</option>
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advanced">Advanced</option>
+            <option value="all">Tất cả độ khó</option>
+            <option value="Beginner">Cơ bản</option>
+            <option value="Intermediate">Trung bình</option>
+            <option value="Advanced">Nâng cao</option>
           </select>
         </div>
       </div>
@@ -215,7 +217,7 @@ const CaseLibrary: React.FC = () => {
       {filteredCases.length === 0 && (
         <div className="text-center py-12">
           <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <p className="text-gray-500">No cases found matching your criteria</p>
+          <p className="text-gray-500">Không tìm thấy case nào phù hợp</p>
         </div>
       )}
     </div>
