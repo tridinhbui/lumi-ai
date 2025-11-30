@@ -111,8 +111,8 @@ const CaseLibrary: React.FC = () => {
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 flex items-center">
-            <BookOpen className="w-6 h-6 mr-2 text-green-600" />
+          <h2 className="text-2xl font-bold text-[#1e3a8a] flex items-center">
+            <BookOpen className="w-6 h-6 mr-2 text-[#1e3a8a]" />
             Case Library
           </h2>
           <p className="text-sm text-gray-500 mt-1">Practice with real-world business cases</p>
@@ -132,7 +132,7 @@ const CaseLibrary: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search cases by title, description, or tags..."
-            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all"
+            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#1e3a8a]/50 focus:border-[#1e3a8a] transition-all"
           />
         </div>
 
@@ -142,7 +142,7 @@ const CaseLibrary: React.FC = () => {
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-500/50 text-sm"
+              className="px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-[#1e3a8a]/50 text-sm"
             >
               {caseTypes.map(type => (
                 <option key={type} value={type}>
@@ -169,11 +169,11 @@ const CaseLibrary: React.FC = () => {
         {filteredCases.map((caseItem) => (
           <div
             key={caseItem.id}
-            className="bg-gradient-to-br from-white to-gray-50 rounded-xl border border-gray-200 p-5 hover:shadow-lg transition-all duration-300 hover:border-green-300 cursor-pointer group"
+            className="bg-gradient-to-br from-white to-gray-50 rounded-xl border border-gray-200 p-5 hover:shadow-lg transition-all duration-300 hover:border-[#1e3a8a] cursor-pointer group"
           >
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-green-600 transition-colors">
+                <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-[#1e3a8a] transition-colors">
                   {caseItem.title}
                 </h3>
                 <div className="flex items-center space-x-2 mb-2">

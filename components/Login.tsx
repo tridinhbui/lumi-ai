@@ -2,11 +2,14 @@ import React from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Brain, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
+import BizCaseLogo from './BizCaseLogo';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Login: React.FC = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { language, setLanguage, t } = useLanguage();
 
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -37,22 +40,31 @@ const Login: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-blue-50">
+    <div className="min-h-screen flex items-center justify-center bg-white">
       <div className="max-w-md w-full mx-4">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-xl border-2 border-[#1e3a8a] p-8">
           {/* Logo/Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-400 to-blue-500 rounded-full mb-4">
-              <Brain className="w-10 h-10 text-white" />
+            <div className="flex justify-center mb-6">
+              <BizCaseLogo size="lg" showText={true} />
             </div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">Lumi</h1>
-            <p className="text-gray-500 text-sm">Strategic AI Assistant</p>
+            <p className="text-gray-600 text-sm mb-4">Lumi - AI Assistant của BizCase Lab</p>
+            
+            {/* Language Toggle */}
+            <div className="flex justify-center mb-4">
+              <button
+                onClick={() => setLanguage(language === 'vi' ? 'en' : 'vi')}
+                className="px-4 py-2 bg-[#1e3a8a] text-white rounded-lg hover:bg-[#1e40af] transition-colors text-sm font-medium"
+              >
+                {language === 'vi' ? '🇻🇳 Tiếng Việt' : '🇬🇧 English'}
+              </button>
+            </div>
           </div>
 
           {/* Login Button */}
           <button
             onClick={() => handleGoogleLogin()}
-            className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-300 hover:border-green-500 text-gray-700 font-medium py-3.5 px-6 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md mb-6"
+            className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-300 hover:border-[#1e3a8a] text-gray-700 font-medium py-3.5 px-6 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md mb-6"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -78,16 +90,16 @@ const Login: React.FC = () => {
           {/* Features */}
           <div className="space-y-3 mt-6 pt-6 border-t border-gray-200">
             <div className="flex items-center space-x-3 text-sm text-gray-600">
-              <Sparkles className="w-4 h-4 text-green-600" />
-              <span>Case Competition Analysis</span>
+              <Sparkles className="w-4 h-4 text-[#1e3a8a]" />
+              <span>Phân tích Case Competition</span>
             </div>
             <div className="flex items-center space-x-3 text-sm text-gray-600">
-              <Sparkles className="w-4 h-4 text-green-600" />
-              <span>PDF & Document Processing</span>
+              <Sparkles className="w-4 h-4 text-[#1e3a8a]" />
+              <span>Xử lý PDF & Tài liệu</span>
             </div>
             <div className="flex items-center space-x-3 text-sm text-gray-600">
-              <Sparkles className="w-4 h-4 text-green-600" />
-              <span>Multi-thread Chat Interface</span>
+              <Sparkles className="w-4 h-4 text-[#1e3a8a]" />
+              <span>Giao diện Chat đa luồng</span>
             </div>
           </div>
         </div>

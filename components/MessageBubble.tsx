@@ -16,7 +16,7 @@ const MessageBubble: React.FC<Props> = ({ message }) => {
         
         {/* Avatar */}
         <div className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold ${
-          isBot ? 'bg-green-700 text-white mr-3' : 'bg-gray-200 text-gray-600 ml-3'
+          isBot ? 'bg-[#1e3a8a] text-white mr-3' : 'bg-gray-200 text-gray-600 ml-3'
         }`}>
           {isBot ? 'LUMI' : 'YOU'}
         </div>
@@ -26,7 +26,7 @@ const MessageBubble: React.FC<Props> = ({ message }) => {
           <div className={`py-3 px-4 rounded-2xl text-sm md:text-base shadow-sm ${
             isBot 
               ? 'bg-white text-gray-800 border border-gray-100 rounded-tl-none' 
-              : 'bg-green-600 text-white rounded-tr-none'
+              : 'bg-[#1e3a8a] text-white rounded-tr-none'
           }`}>
             <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
           </div>

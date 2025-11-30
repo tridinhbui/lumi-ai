@@ -263,8 +263,9 @@ const LumiWorkspace: React.FC = () => {
               className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
               onClick={() => navigate('/')}
             >
-              <Brain className="w-6 h-6 text-green-600" />
-              <h1 className="font-semibold text-lg tracking-tight text-gray-900">Lumi</h1>
+              <Brain className="w-6 h-6 text-[#1e3a8a]" />
+              <h1 className="font-semibold text-lg tracking-tight text-[#1e3a8a]">Lumi</h1>
+              <span className="text-xs text-gray-500">- BizCase Lab</span>
             </div>
           </div>
           <div className="flex items-center space-x-4">
@@ -280,7 +281,7 @@ const LumiWorkspace: React.FC = () => {
           <div className="p-4 border-b border-gray-200">
             <button
               onClick={createNewThread}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-[#1e3a8a] text-white rounded-lg hover:bg-[#1e40af] transition-colors text-sm font-medium"
             >
               <Plus size={16} />
               <span>New Thread</span>
@@ -293,14 +294,14 @@ const LumiWorkspace: React.FC = () => {
                 key={thread.id}
                 className={`group relative mb-2 p-3 rounded-lg cursor-pointer transition-all ${
                   activeThreadId === thread.id
-                    ? 'bg-green-50 border-2 border-green-500'
+                    ? 'bg-blue-50 border-2 border-[#1e3a8a]'
                     : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
                 }`}
                 onClick={() => setActiveThreadId(thread.id)}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2 flex-1 min-w-0">
-                    <MessageSquare className="w-4 h-4 text-green-600 flex-shrink-0" />
+                    <MessageSquare className="w-4 h-4 text-[#1e3a8a] flex-shrink-0" />
                     <span className="text-sm font-medium text-gray-900 truncate">{thread.name}</span>
                   </div>
                   {threads.length > 1 && (
@@ -336,7 +337,7 @@ const LumiWorkspace: React.FC = () => {
             {isLoading && (
               <div className="flex w-full justify-start mb-6">
                 <div className="flex max-w-[85%] flex-row">
-                  <div className="flex-shrink-0 h-8 w-8 rounded-full bg-green-800 text-white mr-3 flex items-center justify-center text-[10px] font-bold">
+                  <div className="flex-shrink-0 h-8 w-8 rounded-full bg-[#1e3a8a] text-white mr-3 flex items-center justify-center text-[10px] font-bold">
                     LUMI
                   </div>
                   <div className="bg-white border border-gray-100 py-4 px-5 rounded-2xl rounded-tl-none shadow-sm flex items-center">
@@ -390,14 +391,14 @@ const LumiWorkspace: React.FC = () => {
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     placeholder="Nhập câu hỏi hoặc upload file để phân tích..."
-                    className="w-full py-3 px-4 bg-gray-50 border border-gray-300 rounded-xl outline-none text-gray-800 placeholder-gray-400 text-sm lg:text-base focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all"
+                    className="w-full py-3 px-4 bg-gray-50 border border-gray-300 rounded-xl outline-none text-gray-800 placeholder-gray-400 text-sm lg:text-base focus:ring-2 focus:ring-[#1e3a8a]/50 focus:border-[#1e3a8a] transition-all"
                     disabled={isLoading}
                   />
                 </div>
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex-shrink-0 p-3 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                  className="flex-shrink-0 p-3 text-gray-600 hover:text-[#1e3a8a] hover:bg-blue-50 rounded-lg transition-colors"
                   title="Upload file"
                 >
                   <Upload size={20} />
@@ -408,7 +409,7 @@ const LumiWorkspace: React.FC = () => {
                   className={`flex-shrink-0 p-3 rounded-lg transition-colors ${
                     (!inputText.trim() && uploadedFiles.length === 0) || isLoading
                       ? 'text-gray-300 bg-gray-100 cursor-not-allowed'
-                      : 'text-white bg-green-600 hover:bg-green-700'
+                      : 'text-white bg-[#1e3a8a] hover:bg-[#1e40af]'
                   }`}
                 >
                   <Send size={20} />

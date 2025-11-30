@@ -94,7 +94,7 @@ const FloatingChat: React.FC = () => {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-full shadow-2xl hover:shadow-green-500/50 flex items-center justify-center transition-all duration-300 hover:scale-110 z-50 group"
+        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-[#1e3a8a] to-[#1e40af] text-white rounded-full shadow-2xl hover:shadow-[#1e3a8a]/50 flex items-center justify-center transition-all duration-300 hover:scale-110 z-50 group"
         aria-label="Open Lumi Chat"
       >
         <MessageCircle className="w-7 h-7 group-hover:scale-110 transition-transform" />
@@ -108,7 +108,7 @@ const FloatingChat: React.FC = () => {
       isMinimized ? 'h-16' : 'h-[600px]'
     }`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-t-2xl flex items-center justify-between">
+      <div className="bg-gradient-to-r from-[#1e3a8a] to-[#1e40af] text-white p-4 rounded-t-2xl flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
           <span className="font-semibold">Lumi Assistant</span>
@@ -144,7 +144,7 @@ const FloatingChat: React.FC = () => {
             {isLoading && (
               <div className="flex w-full justify-start">
                 <div className="flex max-w-[85%] flex-row">
-                  <div className="flex-shrink-0 h-8 w-8 rounded-full bg-green-800 text-white mr-3 flex items-center justify-center text-[10px] font-bold">
+                  <div className="flex-shrink-0 h-8 w-8 rounded-full bg-[#1e3a8a] text-white mr-3 flex items-center justify-center text-[10px] font-bold">
                     LUMI
                   </div>
                   <div className="bg-white border border-gray-100 py-3 px-4 rounded-2xl rounded-tl-none shadow-sm flex items-center">
@@ -169,7 +169,7 @@ const FloatingChat: React.FC = () => {
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Ask Lumi anything..."
-                className="flex-1 py-2.5 px-4 bg-gray-50 border border-gray-300 rounded-xl outline-none text-sm focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all"
+                className="flex-1 py-2.5 px-4 bg-gray-50 border border-gray-300 rounded-xl outline-none text-sm focus:ring-2 focus:ring-[#1e3a8a]/50 focus:border-[#1e3a8a] transition-all"
                 disabled={isLoading}
               />
               <button
@@ -178,7 +178,7 @@ const FloatingChat: React.FC = () => {
                 className={`p-2.5 rounded-xl transition-colors ${
                   !inputText.trim() || isLoading
                     ? 'text-gray-300 bg-gray-100'
-                    : 'text-white bg-green-600 hover:bg-green-700'
+                    : 'text-white bg-[#1e3a8a] hover:bg-[#1e40af]'
                 }`}
               >
                 <Send size={18} />
