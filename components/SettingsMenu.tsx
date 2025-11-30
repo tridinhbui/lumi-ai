@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Settings, User, LogOut, Moon, Sun, Bell, HelpCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface SettingsMenuProps {
   user: {
@@ -14,6 +15,7 @@ interface SettingsMenuProps {
 const SettingsMenu: React.FC<SettingsMenuProps> = ({ user }) => {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -63,31 +65,31 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ user }) => {
                 navigate('/dashboard');
                 setIsOpen(false);
               }}
-              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
             >
               <User className="w-4 h-4" />
-              <span>Dashboard</span>
+              <span>{t('dashboard')}</span>
             </button>
             <button
               onClick={() => setIsOpen(false)}
-              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
             >
               <Settings className="w-4 h-4" />
-              <span>Settings</span>
+              <span>{t('settings')}</span>
             </button>
             <button
               onClick={() => setIsOpen(false)}
-              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
             >
               <Bell className="w-4 h-4" />
-              <span>Notifications</span>
+              <span>Thông báo</span>
             </button>
             <button
               onClick={() => setIsOpen(false)}
-              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
             >
               <HelpCircle className="w-4 h-4" />
-              <span>Help & Support</span>
+              <span>Trợ giúp</span>
             </button>
           </div>
 
@@ -98,7 +100,7 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ user }) => {
               className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
             >
               <LogOut className="w-4 h-4" />
-              <span>Logout</span>
+              <span>{t('logout')}</span>
             </button>
           </div>
         </div>

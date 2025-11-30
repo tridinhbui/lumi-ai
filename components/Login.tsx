@@ -26,8 +26,8 @@ const Login: React.FC = () => {
           picture: userData.picture,
         });
 
-        // Navigate to Lumi workspace
-        navigate('/lumi');
+        // Navigate to home
+        navigate('/home');
       } catch (error) {
         console.error('Error fetching user info:', error);
         alert('Đăng nhập thất bại. Vui lòng thử lại.');
