@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Send, Upload, FileText, X, ArrowLeft, MessageSquare, BarChart3 } from 'lucide-react';
+import { Send, Upload, FileText, X, ArrowLeft, MessageSquare, BarChart3, Plus, MoreVertical, Trash2, Edit2 } from 'lucide-react';
 import SettingsMenu from './SettingsMenu';
 import { startCaseChat, sendCaseMessage } from '../services/caseCompetitionService';
 import { 
   createThread, getThreads, 
-  saveMessage, getMessages, updateThreadTimestamp 
+  saveMessage, getMessages, updateThreadTimestamp,
+  deleteThread as deleteThreadService
 } from '../services/supabaseService';
 import MessageBubble from './MessageBubble';
 import BizCaseLogo from './BizCaseLogo';
@@ -19,32 +20,38 @@ const CaseCompetitionChat: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   
-  const [thread, setThread] = useState<{ id: string; name: string; messages: Message[] } | null>(null);
+  const [threads, setThreads] = useState<{ id: string; name: string; messages: Message[] }[]>([]);
+  const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isInitialized, setIsInitialized] = useState<Record<string, boolean>>({});
   const [showDashboard, setShowDashboard] = useState(true);
   const [dashboardWidth, setDashboardWidth] = useState(800);
   const [isResizing, setIsResizing] = useState(false);
+  const [showThreadMenu, setShowThreadMenu] = useState<string | null>(null);
+  const [editingThreadId, setEditingThreadId] = useState<string | null>(null);
+  const [newThreadName, setNewThreadName] = useState('');
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dashboardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    loadThread();
+    loadThreads();
   }, [user]);
 
   useEffect(() => {
-    if (thread && !isInitialized) {
-      loadThreadMessages();
+    if (activeThreadId && !isInitialized[activeThreadId]) {
+      loadThreadMessages(activeThreadId);
     }
-  }, [thread]);
+  }, [activeThreadId]);
+
+  const activeThread = threads.find(t => t.id === activeThreadId);
 
   useEffect(() => {
     scrollToBottom();
-  }, [thread?.messages, isLoading]);
+  }, [activeThread?.messages, isLoading]);
 
   // Handle dashboard resize
   useEffect(() => {
@@ -81,56 +88,61 @@ const CaseCompetitionChat: React.FC = () => {
     }, 100);
   };
 
-  const loadThread = async () => {
+  const loadThreads = async () => {
     if (!user?.email) return;
     
     try {
       const dbThreads = await getThreads(user.email);
-      const existingThread = dbThreads.find(t => t.mode === 'case-competition');
+      const caseThreads = dbThreads.filter(t => t.mode === 'case-competition');
       
-      if (existingThread) {
-        setThread({
-          id: existingThread.id,
-          name: existingThread.name,
-          messages: [],
-        });
-      } else {
-        const threadId = await createThread(user.email, 'Case Competition', 'case-competition');
-        setThread({
+      if (caseThreads.length === 0) {
+        // Create default thread
+        const threadId = await createThread(user.email, 'Case Competition 1', 'case-competition');
+        const newThread = {
           id: threadId || Date.now().toString(),
-          name: 'Case Competition',
+          name: 'Case Competition 1',
           messages: [],
-        });
+        };
+        setThreads([newThread]);
+        setActiveThreadId(newThread.id);
+      } else {
+        const formattedThreads = caseThreads.map(t => ({
+          id: t.id,
+          name: t.name,
+          messages: [],
+        }));
+        setThreads(formattedThreads);
+        setActiveThreadId(formattedThreads[0].id);
       }
     } catch (error) {
-      console.error('Error loading thread:', error);
+      console.error('Error loading threads:', error);
     }
   };
 
-  const loadThreadMessages = async () => {
-    if (!thread) return;
+  const loadThreadMessages = async (threadId: string) => {
+    if (isInitialized[threadId]) return;
     
     setIsLoading(true);
     try {
-      const messages = await getMessages(thread.id);
+      const messages = await getMessages(threadId);
       
       if (messages.length === 0) {
-        await initializeThread();
+        await initializeThread(threadId);
       } else {
-        setThread(prev => prev ? { ...prev, messages } : null);
-        setIsInitialized(true);
+        setThreads(prev => prev.map(t => 
+          t.id === threadId ? { ...t, messages } : t
+        ));
+        setIsInitialized(prev => ({ ...prev, [threadId]: true }));
       }
     } catch (error) {
       console.error('Error loading messages:', error);
-      await initializeThread();
+      await initializeThread(threadId);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const initializeThread = async () => {
-    if (!thread) return;
-    
+  const initializeThread = async (threadId: string) => {
     setIsLoading(true);
     try {
       const welcomeMessage = await startCaseChat();
@@ -142,14 +154,62 @@ const CaseCompetitionChat: React.FC = () => {
         timestamp: Date.now(),
       };
       
-      await saveMessage(thread.id, botMessage);
-      setThread(prev => prev ? { ...prev, messages: [botMessage] } : null);
-      setIsInitialized(true);
+      await saveMessage(threadId, botMessage);
+      setThreads(prev => prev.map(t => 
+        t.id === threadId ? { ...t, messages: [botMessage] } : t
+      ));
+      setIsInitialized(prev => ({ ...prev, [threadId]: true }));
     } catch (error) {
       console.error('Error initializing thread:', error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const createNewThread = async () => {
+    if (!user?.email) return;
+    
+    const threadNumber = threads.length + 1;
+    const threadId = await createThread(user.email, `Case Competition ${threadNumber}`, 'case-competition');
+    const newThread = {
+      id: threadId || Date.now().toString(),
+      name: `Case Competition ${threadNumber}`,
+      messages: [],
+    };
+    setThreads(prev => [...prev, newThread]);
+    setActiveThreadId(newThread.id);
+  };
+
+  const handleDeleteThread = async (threadId: string) => {
+    if (!user?.email) return;
+    
+    try {
+      const success = await deleteThreadService(threadId);
+      if (success) {
+        setThreads(prev => {
+          const filtered = prev.filter(t => t.id !== threadId);
+          if (activeThreadId === threadId && filtered.length > 0) {
+            setActiveThreadId(filtered[0].id);
+          } else if (filtered.length === 0) {
+            setActiveThreadId(null);
+          }
+          return filtered;
+        });
+      }
+      setShowThreadMenu(null);
+    } catch (error) {
+      console.error('Error deleting thread:', error);
+    }
+  };
+
+  const updateThreadName = async (threadId: string, newName: string) => {
+    if (!newName.trim()) return;
+    
+    setThreads(prev => prev.map(t => 
+      t.id === threadId ? { ...t, name: newName.trim() } : t
+    ));
+    setEditingThreadId(null);
+    setNewThreadName('');
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,7 +223,7 @@ const CaseCompetitionChat: React.FC = () => {
 
   const handleSendMessage = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if ((!inputText.trim() && uploadedFiles.length === 0) || isLoading || !thread) return;
+    if ((!inputText.trim() && uploadedFiles.length === 0) || isLoading || !activeThreadId) return;
 
     const userMsg = inputText.trim();
     setInputText('');
@@ -176,8 +236,10 @@ const CaseCompetitionChat: React.FC = () => {
       timestamp: Date.now(),
     };
 
-    setThread(prev => prev ? { ...prev, messages: [...prev.messages, userMessage] } : null);
-    await saveMessage(thread.id, userMessage);
+    setThreads(prev => prev.map(t => 
+      t.id === activeThreadId ? { ...t, messages: [...t.messages, userMessage] } : t
+    ));
+    await saveMessage(activeThreadId, userMessage);
     setIsLoading(true);
 
     try {
@@ -191,9 +253,11 @@ const CaseCompetitionChat: React.FC = () => {
         timestamp: Date.now(),
       };
 
-      setThread(prev => prev ? { ...prev, messages: [...prev.messages, botMessage] } : null);
-      await saveMessage(thread.id, botMessage);
-      await updateThreadTimestamp(thread.id);
+      setThreads(prev => prev.map(t => 
+        t.id === activeThreadId ? { ...t, messages: [...t.messages, botMessage] } : t
+      ));
+      await saveMessage(activeThreadId, botMessage);
+      await updateThreadTimestamp(activeThreadId);
 
       if (uploadedFiles.length > 0) {
         setUploadedFiles([]);
@@ -246,6 +310,112 @@ const CaseCompetitionChat: React.FC = () => {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        {/* Threads Sidebar */}
+        <div className="w-64 bg-white dark:bg-[#1e293b] border-r border-[#E6E9EF] dark:border-[#334155] flex flex-col flex-shrink-0">
+          <div className="p-4 border-b border-[#E6E9EF] dark:border-[#334155]">
+            <button
+              onClick={createNewThread}
+              className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-[#1F4AA8] dark:bg-[#4C86FF] text-white rounded-lg hover:bg-[#153A73] dark:hover:bg-[#1F4AA8] transition-colors text-sm font-medium"
+            >
+              <Plus className="w-4 h-4" />
+              <span>New Thread</span>
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto p-2">
+            {threads.map((t) => (
+              <div
+                key={t.id}
+                className={`
+                  relative group mb-2 p-3 rounded-lg cursor-pointer transition-all
+                  ${activeThreadId === t.id
+                    ? 'bg-[#E6F0FF] dark:bg-[#153A73] border border-[#1F4AA8] dark:border-[#4C86FF]'
+                    : 'bg-[#F8F9FB] dark:bg-[#0f172a] hover:bg-[#E6E9EF] dark:hover:bg-[#334155]'
+                  }
+                `}
+                onClick={() => {
+                  setActiveThreadId(t.id);
+                  setShowThreadMenu(null);
+                }}
+              >
+                {editingThreadId === t.id ? (
+                  <input
+                    type="text"
+                    value={newThreadName}
+                    onChange={(e) => setNewThreadName(e.target.value)}
+                    onBlur={() => {
+                      if (newThreadName.trim()) {
+                        updateThreadName(t.id, newThreadName);
+                      } else {
+                        setEditingThreadId(null);
+                        setNewThreadName('');
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        if (newThreadName.trim()) {
+                          updateThreadName(t.id, newThreadName);
+                        }
+                      } else if (e.key === 'Escape') {
+                        setEditingThreadId(null);
+                        setNewThreadName('');
+                      }
+                    }}
+                    className="w-full px-2 py-1 text-sm bg-white dark:bg-[#1e293b] border border-[#1F4AA8] dark:border-[#4C86FF] rounded focus:outline-none"
+                    autoFocus
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                ) : (
+                  <>
+                    <div className="flex items-center justify-between">
+                      <p className={`text-sm font-medium truncate flex-1 ${activeThreadId === t.id ? 'text-[#1F4AA8] dark:text-[#4C86FF]' : 'text-[#2E2E2E] dark:text-[#e2e8f0]'}`}>
+                        {t.name}
+                      </p>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowThreadMenu(showThreadMenu === t.id ? null : t.id);
+                        }}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white dark:hover:bg-[#0f172a] rounded"
+                      >
+                        <MoreVertical className="w-4 h-4 text-[#737373] dark:text-[#94a3b8]" />
+                      </button>
+                    </div>
+                    {showThreadMenu === t.id && (
+                      <div className="absolute right-0 top-full mt-1 bg-white dark:bg-[#1e293b] border border-[#E6E9EF] dark:border-[#334155] rounded-lg shadow-lg z-50 min-w-[120px]">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEditingThreadId(t.id);
+                            setNewThreadName(t.name);
+                            setShowThreadMenu(null);
+                          }}
+                          className="w-full px-3 py-2 text-left text-sm text-[#2E2E2E] dark:text-[#e2e8f0] hover:bg-[#F8F9FB] dark:hover:bg-[#0f172a] flex items-center space-x-2"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                          <span>Rename</span>
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteThread(t.id);
+                          }}
+                          className="w-full px-3 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-[#F8F9FB] dark:hover:bg-[#0f172a] flex items-center space-x-2"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          <span>Delete</span>
+                        </button>
+                      </div>
+                    )}
+                    <p className="text-xs text-[#737373] dark:text-[#94a3b8] mt-1">
+                      {t.messages.length} messages
+                    </p>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Chat Panel */}
         <div className={`flex-1 flex flex-col bg-white relative overflow-hidden transition-all duration-300 ${showDashboard ? 'lg:mr-0' : ''}`}>
           {/* Messages */}
@@ -253,7 +423,7 @@ const CaseCompetitionChat: React.FC = () => {
             className="flex-1 overflow-y-auto px-6 py-8 space-y-6"
             style={{ paddingBottom: uploadedFiles.length > 0 ? '180px' : '140px' }}
           >
-            {thread?.messages.map((msg) => (
+            {activeThread?.messages.map((msg) => (
               <MessageBubble key={msg.id} message={msg} />
             ))}
             {isLoading && (
@@ -373,8 +543,8 @@ const CaseCompetitionChat: React.FC = () => {
               </div>
               <div className="flex-1 overflow-hidden">
                 <CaseAnalysisDashboard 
-                  messages={thread?.messages || []} 
-                  threadName={thread?.name || ''}
+                  messages={activeThread?.messages || []} 
+                  threadName={activeThread?.name || ''}
                   uploadedFiles={uploadedFiles}
                 />
               </div>

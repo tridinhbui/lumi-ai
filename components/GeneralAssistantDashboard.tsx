@@ -4,6 +4,7 @@ import DataChartsPanel from './DataChartsPanel';
 import HypothesisInsights from './HypothesisInsights';
 import FinalRecommendation from './FinalRecommendation';
 import PDFViewer from './PDFViewer';
+import { LayoutDashboard, BarChart3, Lightbulb, CheckCircle2 } from 'lucide-react';
 
 interface GeneralAssistantDashboardProps {
   messages: Message[];
@@ -26,6 +27,7 @@ interface Recommendation {
 }
 
 const GeneralAssistantDashboard: React.FC<GeneralAssistantDashboardProps> = ({ messages, threadName, uploadedFiles = [] }) => {
+  const [activeTab, setActiveTab] = useState<'overview' | 'data' | 'insights' | 'recommendation'>('overview');
   const [hypotheses, setHypotheses] = useState<Hypothesis[]>([]);
   const [recommendation, setRecommendation] = useState<Recommendation>({});
   const [chartData, setChartData] = useState<any[]>([]);
@@ -126,31 +128,91 @@ const GeneralAssistantDashboard: React.FC<GeneralAssistantDashboardProps> = ({ m
 
   const pdfFile = uploadedFiles.find(file => file.type === 'application/pdf');
 
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+    { id: 'data', label: 'Data & Charts', icon: BarChart3 },
+    { id: 'insights', label: 'Insights', icon: Lightbulb },
+    { id: 'recommendation', label: 'Recommendation', icon: CheckCircle2 },
+  ];
+
   return (
-    <div className="h-full overflow-hidden bg-[#F8F9FB] flex flex-col">
+    <div className="h-full overflow-hidden bg-[#F8F9FB] dark:bg-[#0f172a] flex flex-col">
       {/* PDF Viewer if PDF uploaded */}
       {pdfFile && (
-        <div className="flex-1 min-h-0 border-b border-[#E6E9EF]">
+        <div className="flex-1 min-h-0 border-b border-[#E6E9EF] dark:border-[#334155]">
           <PDFViewer file={pdfFile} />
         </div>
       )}
 
-      {/* Dashboard Content */}
-      <div className={`overflow-y-auto ${pdfFile ? 'h-96' : 'flex-1'} p-4 lg:p-6`}>
-        <div className="space-y-4 lg:space-y-6">
-          {/* Header */}
-          <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-4 lg:p-6">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg lg:text-xl font-semibold text-[#1F4AA8]">
+      {/* Dashboard Content with Tabs */}
+      <div className={`overflow-hidden flex flex-col ${pdfFile ? 'h-96' : 'flex-1'}`}>
+        {/* Header with Tabs */}
+        <div className="bg-white dark:bg-[#1e293b] border-b border-[#E6E9EF] dark:border-[#334155] px-4 lg:px-6 pt-4">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-lg lg:text-xl font-semibold text-[#1F4AA8] dark:text-[#4C86FF]">
                 Assistant Dashboard
               </h2>
+              <p className="text-xs lg:text-sm text-[#737373] dark:text-[#94a3b8] mt-1">
+                Track insights and key information from your conversation
+              </p>
             </div>
-            <p className="text-xs lg:text-sm text-[#737373]">Track insights and key information from your conversation</p>
           </div>
 
-          {/* Main Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
-            {/* Left Column - Hypothesis & Insights */}
+          {/* Tab Navigation */}
+          <div className="flex items-center space-x-1 overflow-x-auto pb-2 -mb-px">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`
+                    flex items-center space-x-2 px-3 lg:px-4 py-2 rounded-t-lg text-sm font-medium transition-all whitespace-nowrap
+                    ${isActive
+                      ? 'bg-[#F8F9FB] dark:bg-[#0f172a] text-[#1F4AA8] dark:text-[#4C86FF] border-b-2 border-[#1F4AA8] dark:border-[#4C86FF]'
+                      : 'text-[#737373] dark:text-[#94a3b8] hover:text-[#1F4AA8] dark:hover:text-[#4C86FF] hover:bg-[#F8F9FB] dark:hover:bg-[#0f172a]'
+                    }
+                  `}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Tab Content */}
+        <div className="flex-1 overflow-y-auto p-4 lg:p-6">
+          {activeTab === 'overview' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+              <HypothesisInsights
+                hypotheses={hypotheses}
+                onAddHypothesis={handleAddHypothesis}
+                onTogglePin={handleTogglePin}
+                onRemove={handleRemoveHypothesis}
+              />
+              <DataChartsPanel 
+                data={chartData.length > 0 ? chartData : undefined}
+                chartType="bar"
+                title="Data & Charts"
+              />
+            </div>
+          )}
+
+          {activeTab === 'data' && (
+            <div className="space-y-4 lg:space-y-6">
+              <DataChartsPanel 
+                data={chartData.length > 0 ? chartData : undefined}
+                chartType="bar"
+                title="Data & Charts"
+              />
+            </div>
+          )}
+
+          {activeTab === 'insights' && (
             <div className="space-y-4 lg:space-y-6">
               <HypothesisInsights
                 hypotheses={hypotheses}
@@ -158,19 +220,14 @@ const GeneralAssistantDashboard: React.FC<GeneralAssistantDashboardProps> = ({ m
                 onTogglePin={handleTogglePin}
                 onRemove={handleRemoveHypothesis}
               />
-              
+            </div>
+          )}
+
+          {activeTab === 'recommendation' && (
+            <div className="space-y-4 lg:space-y-6">
               <FinalRecommendation recommendation={recommendation} />
             </div>
-
-            {/* Right Column - Data Charts */}
-            <div>
-              <DataChartsPanel 
-                data={chartData.length > 0 ? chartData : undefined}
-                chartType="bar"
-                title="Data & Charts"
-              />
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
