@@ -11,6 +11,8 @@ import {
   deleteThread as deleteThreadService
 } from '../services/supabaseService';
 import MessageBubble from './MessageBubble';
+import MessageSkeleton from './MessageSkeleton';
+import ThreadSkeleton from './ThreadSkeleton';
 import BizCaseLogo from './BizCaseLogo';
 import CaseAnalysisDashboard from './CaseAnalysisDashboard';
 import ThreadSummaryCard from './ThreadSummaryCard';
@@ -351,109 +353,286 @@ const CaseCompetitionChat: React.FC = () => {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-        {/* Threads Sidebar */}
-        <div className="w-64 bg-white dark:bg-[#1e293b] border-r border-[#E6E9EF] dark:border-[#334155] flex flex-col flex-shrink-0">
+        {/* Mobile Threads Toggle Button */}
+        <div className="lg:hidden fixed bottom-20 right-4 z-40">
+          <button
+            onClick={() => setShowMobileThreads(true)}
+            className="p-3 bg-[#1F4AA8] text-white rounded-full shadow-lg hover:bg-[#153A73] transition-colors active:scale-95"
+            title="View threads"
+          >
+            <MessageSquare className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Mobile Threads Sidebar (Bottom Sheet) */}
+        <div className={`lg:hidden fixed inset-x-0 bottom-0 bg-white dark:bg-[#1e293b] border-t border-[#E6E9EF] dark:border-[#334155] rounded-t-2xl shadow-2xl z-50 transition-transform duration-300 ${
+          showMobileThreads ? 'translate-y-0' : 'translate-y-full'
+        }`} style={{ maxHeight: '70vh' }}>
+          <div className="p-4 border-b border-[#E6E9EF] dark:border-[#334155] flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-[#1F4AA8] dark:text-[#4C86FF]">Threads</h3>
+            <button
+              onClick={() => setShowMobileThreads(false)}
+              className="p-2 hover:bg-[#F8F9FB] dark:hover:bg-[#0f172a] rounded-lg active:scale-95"
+            >
+              <X className="w-5 h-5 text-[#737373] dark:text-[#94a3b8]" />
+            </button>
+          </div>
           <div className="p-4 border-b border-[#E6E9EF] dark:border-[#334155]">
             <button
               onClick={createNewThread}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-[#1F4AA8] dark:bg-[#4C86FF] text-white rounded-lg hover:bg-[#153A73] dark:hover:bg-[#1F4AA8] transition-colors text-sm font-medium"
+              className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-[#1F4AA8] dark:bg-[#4C86FF] text-white rounded-lg hover:bg-[#153A73] dark:hover:bg-[#1F4AA8] transition-colors text-sm font-medium shadow-sm"
             >
               <Plus className="w-4 h-4" />
               <span>New Thread</span>
             </button>
           </div>
           <div className="flex-1 overflow-y-auto p-2">
-            {threads.map((t) => (
-              <div
-                key={t.id}
-                className={`
-                  relative group mb-2 p-3 rounded-lg cursor-pointer transition-all
-                  ${activeThreadId === t.id
-                    ? 'bg-[#E6F0FF] dark:bg-[#153A73] border border-[#1F4AA8] dark:border-[#4C86FF]'
-                    : 'bg-[#F8F9FB] dark:bg-[#0f172a] hover:bg-[#E6E9EF] dark:hover:bg-[#334155]'
-                  }
-                `}
-                onClick={() => {
-                  setActiveThreadId(t.id);
-                  setShowThreadMenu(null);
-                }}
-              >
-                {editingThreadId === t.id ? (
-                  <input
-                    type="text"
-                    value={newThreadName}
-                    onChange={(e) => setNewThreadName(e.target.value)}
-                    onBlur={() => {
-                      if (newThreadName.trim()) {
-                        updateThreadName(t.id, newThreadName);
-                      } else {
-                        setEditingThreadId(null);
-                        setNewThreadName('');
+            {threads.length === 0 ? (
+              <div className="text-center py-8 px-4">
+                <MessageSquare className="w-12 h-12 text-[#E6E9EF] dark:text-[#334155] mx-auto mb-3" />
+                <p className="text-sm text-[#737373] dark:text-[#94a3b8]">No threads yet</p>
+              </div>
+            ) : (
+              threads.map((t) => {
+                const lastMessage = t.messages[t.messages.length - 1];
+                const lastMessagePreview = lastMessage 
+                  ? (lastMessage.content.length > 40 
+                      ? lastMessage.content.substring(0, 40) + '...' 
+                      : lastMessage.content)
+                  : 'No messages yet';
+                
+                const formatRelativeTime = (timestamp: number) => {
+                  const date = new Date(timestamp);
+                  const now = new Date();
+                  const diffMs = now.getTime() - date.getTime();
+                  const diffMins = Math.floor(diffMs / 60000);
+                  const diffHours = Math.floor(diffMs / 3600000);
+                  const diffDays = Math.floor(diffMs / 86400000);
+
+                  if (diffMins < 1) return 'Just now';
+                  if (diffMins < 60) return `${diffMins}m`;
+                  if (diffHours < 24) return `${diffHours}h`;
+                  if (diffDays < 7) return `${diffDays}d`;
+                  return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+                };
+
+                const lastMessageTime = lastMessage 
+                  ? formatRelativeTime(lastMessage.timestamp)
+                  : '';
+
+                return (
+                  <div
+                    key={t.id}
+                    className={`
+                      relative group mb-2 p-3 rounded-lg cursor-pointer transition-all
+                      ${activeThreadId === t.id
+                        ? 'bg-[#E6F0FF] dark:bg-[#153A73] border border-[#1F4AA8] dark:border-[#4C86FF]'
+                        : 'bg-[#F8F9FB] dark:bg-[#0f172a] active:bg-[#E6E9EF] dark:active:bg-[#334155]'
                       }
+                    `}
+                    onClick={() => {
+                      setActiveThreadId(t.id);
+                      setShowMobileThreads(false);
+                      setShowThreadMenu(null);
                     }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        if (newThreadName.trim()) {
-                          updateThreadName(t.id, newThreadName);
-                        }
-                      } else if (e.key === 'Escape') {
-                        setEditingThreadId(null);
-                        setNewThreadName('');
-                      }
-                    }}
-                    className="w-full px-2 py-1 text-sm bg-white dark:bg-[#1e293b] border border-[#1F4AA8] dark:border-[#4C86FF] rounded focus:outline-none"
-                    autoFocus
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                ) : (
-                  <>
-                    <div className="flex items-center justify-between">
+                  >
+                    <div className="flex items-center justify-between mb-1">
                       <p className={`text-sm font-medium truncate flex-1 ${activeThreadId === t.id ? 'text-[#1F4AA8] dark:text-[#4C86FF]' : 'text-[#2E2E2E] dark:text-[#e2e8f0]'}`}>
                         {t.name}
                       </p>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowThreadMenu(showThreadMenu === t.id ? null : t.id);
-                        }}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white dark:hover:bg-[#0f172a] rounded"
-                      >
-                        <MoreVertical className="w-4 h-4 text-[#737373] dark:text-[#94a3b8]" />
-                      </button>
+                      {lastMessageTime && (
+                        <p className="text-xs text-[#737373] dark:text-[#94a3b8] ml-2 flex-shrink-0">
+                          {lastMessageTime}
+                        </p>
+                      )}
                     </div>
-                    {showThreadMenu === t.id && (
-                      <div className="absolute right-0 top-full mt-1 bg-white dark:bg-[#1e293b] border border-[#E6E9EF] dark:border-[#334155] rounded-lg shadow-lg z-50 min-w-[120px]">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setEditingThreadId(t.id);
-                            setNewThreadName(t.name);
-                            setShowThreadMenu(null);
-                          }}
-                          className="w-full px-3 py-2 text-left text-sm text-[#2E2E2E] dark:text-[#e2e8f0] hover:bg-[#F8F9FB] dark:hover:bg-[#0f172a] flex items-center space-x-2"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                          <span>Rename</span>
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteThread(t.id);
-                          }}
-                          className="w-full px-3 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-[#F8F9FB] dark:hover:bg-[#0f172a] flex items-center space-x-2"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                          <span>Delete</span>
-                        </button>
-                      </div>
+                    {lastMessage && (
+                      <p className={`text-xs truncate ${
+                        activeThreadId === t.id 
+                          ? 'text-[#153A73] dark:text-[#94a3b8]' 
+                          : 'text-[#737373] dark:text-[#94a3b8]'
+                      }`}>
+                        {lastMessage.sender === 'user' ? 'You: ' : 'Lumi: '}
+                        {lastMessagePreview}
+                      </p>
                     )}
                     <p className="text-xs text-[#737373] dark:text-[#94a3b8] mt-1">
-                      {t.messages.length} messages
+                      {t.messages.length} {t.messages.length === 1 ? 'message' : 'messages'}
                     </p>
-                  </>
-                )}
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+
+        {/* Desktop Threads Sidebar */}
+        <div className="w-64 bg-white dark:bg-[#1e293b] border-r border-[#E6E9EF] dark:border-[#334155] flex flex-col flex-shrink-0 hidden lg:flex">
+          <div className="p-4 border-b border-[#E6E9EF] dark:border-[#334155]">
+            <button
+              onClick={createNewThread}
+              className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-[#1F4AA8] dark:bg-[#4C86FF] text-white rounded-lg hover:bg-[#153A73] dark:hover:bg-[#1F4AA8] transition-colors text-sm font-medium shadow-sm hover:shadow-md"
+            >
+              <Plus className="w-4 h-4" />
+              <span>New Thread</span>
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto p-2">
+            {threads.length === 0 ? (
+              <div className="text-center py-8 px-4">
+                <MessageSquare className="w-12 h-12 text-[#E6E9EF] dark:text-[#334155] mx-auto mb-3" />
+                <p className="text-sm text-[#737373] dark:text-[#94a3b8]">No threads yet</p>
+                <p className="text-xs text-[#737373] dark:text-[#94a3b8] mt-1">Create your first thread</p>
               </div>
-            ))}
+            ) : threads.length === 0 && isLoading ? (
+              <>
+                <ThreadSkeleton />
+                <ThreadSkeleton />
+                <ThreadSkeleton />
+              </>
+            ) : (
+              threads.map((t) => {
+                const lastMessage = t.messages[t.messages.length - 1];
+                const lastMessagePreview = lastMessage 
+                  ? (lastMessage.content.length > 50 
+                      ? lastMessage.content.substring(0, 50) + '...' 
+                      : lastMessage.content)
+                  : 'No messages yet';
+                
+                const formatRelativeTime = (timestamp: number) => {
+                  const date = new Date(timestamp);
+                  const now = new Date();
+                  const diffMs = now.getTime() - date.getTime();
+                  const diffMins = Math.floor(diffMs / 60000);
+                  const diffHours = Math.floor(diffMs / 3600000);
+                  const diffDays = Math.floor(diffMs / 86400000);
+
+                  if (diffMins < 1) return 'Just now';
+                  if (diffMins < 60) return `${diffMins}m ago`;
+                  if (diffHours < 24) return `${diffHours}h ago`;
+                  if (diffDays < 7) return `${diffDays}d ago`;
+                  return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+                };
+
+                const lastMessageTime = lastMessage 
+                  ? formatRelativeTime(lastMessage.timestamp)
+                  : '';
+
+                return (
+                  <div
+                    key={t.id}
+                    className={`
+                      relative group mb-2 p-3 rounded-lg cursor-pointer transition-all
+                      ${activeThreadId === t.id
+                        ? 'bg-[#E6F0FF] dark:bg-[#153A73] border border-[#1F4AA8] dark:border-[#4C86FF]'
+                        : 'bg-[#F8F9FB] dark:bg-[#0f172a] hover:bg-[#E6E9EF] dark:hover:bg-[#334155]'
+                      }
+                    `}
+                    onClick={() => {
+                      setActiveThreadId(t.id);
+                      setShowThreadMenu(null);
+                    }}
+                  >
+                    {editingThreadId === t.id ? (
+                      <input
+                        type="text"
+                        value={newThreadName}
+                        onChange={(e) => setNewThreadName(e.target.value)}
+                        onBlur={() => {
+                          if (newThreadName.trim()) {
+                            updateThreadName(t.id, newThreadName);
+                          } else {
+                            setEditingThreadId(null);
+                            setNewThreadName('');
+                          }
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            if (newThreadName.trim()) {
+                              updateThreadName(t.id, newThreadName);
+                            }
+                          } else if (e.key === 'Escape') {
+                            setEditingThreadId(null);
+                            setNewThreadName('');
+                          }
+                        }}
+                        className="w-full px-2 py-1 text-sm bg-white dark:bg-[#1e293b] border border-[#1F4AA8] dark:border-[#4C86FF] rounded focus:outline-none"
+                        autoFocus
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    ) : (
+                      <>
+                        <div className="flex items-center justify-between mb-1">
+                          <p className={`text-sm font-medium truncate flex-1 ${activeThreadId === t.id ? 'text-[#1F4AA8] dark:text-[#4C86FF]' : 'text-[#2E2E2E] dark:text-[#e2e8f0]'}`}>
+                            {t.name}
+                          </p>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowThreadMenu(showThreadMenu === t.id ? null : t.id);
+                            }}
+                            className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white dark:hover:bg-[#0f172a] rounded flex-shrink-0"
+                          >
+                            <MoreVertical className="w-4 h-4 text-[#737373] dark:text-[#94a3b8]" />
+                          </button>
+                        </div>
+                        
+                        {/* Last Message Preview */}
+                        {lastMessage && (
+                          <p className={`text-xs truncate mb-1 ${
+                            activeThreadId === t.id 
+                              ? 'text-[#153A73] dark:text-[#94a3b8]' 
+                              : 'text-[#737373] dark:text-[#94a3b8]'
+                          }`}>
+                            {lastMessage.sender === 'user' ? 'You: ' : 'Lumi: '}
+                            {lastMessagePreview}
+                          </p>
+                        )}
+                        
+                        {/* Footer with message count and time */}
+                        <div className="flex items-center justify-between mt-1">
+                          <p className="text-xs text-[#737373] dark:text-[#94a3b8]">
+                            {t.messages.length} {t.messages.length === 1 ? 'message' : 'messages'}
+                          </p>
+                          {lastMessageTime && (
+                            <p className="text-xs text-[#737373] dark:text-[#94a3b8]">
+                              {lastMessageTime}
+                            </p>
+                          )}
+                        </div>
+
+                        {showThreadMenu === t.id && (
+                          <div className="absolute right-0 top-full mt-1 bg-white dark:bg-[#1e293b] border border-[#E6E9EF] dark:border-[#334155] rounded-lg shadow-lg z-50 min-w-[120px]">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setEditingThreadId(t.id);
+                                setNewThreadName(t.name);
+                                setShowThreadMenu(null);
+                              }}
+                              className="w-full px-3 py-2 text-left text-sm text-[#2E2E2E] dark:text-[#e2e8f0] hover:bg-[#F8F9FB] dark:hover:bg-[#0f172a] flex items-center space-x-2"
+                            >
+                              <Edit2 className="w-4 h-4" />
+                              <span>Rename</span>
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteThread(t.id);
+                              }}
+                              className="w-full px-3 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-[#F8F9FB] dark:hover:bg-[#0f172a] flex items-center space-x-2"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                              <span>Delete</span>
+                            </button>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
 
@@ -465,24 +644,40 @@ const CaseCompetitionChat: React.FC = () => {
             style={{ paddingBottom: uploadedFiles.length > 0 ? '180px' : '140px' }}
           >
             {activeThread?.messages.map((msg) => (
-              <MessageBubble key={msg.id} message={msg} />
+              <MessageBubble 
+                key={msg.id} 
+                message={msg}
+                canEdit={msg.sender === Sender.USER}
+                canDelete={msg.sender === Sender.USER}
+                onEdit={async (messageId, newContent) => {
+                  // Update message in thread
+                  setThreads(prev => prev.map(t => 
+                    t.id === activeThreadId 
+                      ? { 
+                          ...t, 
+                          messages: t.messages.map(m => 
+                            m.id === messageId ? { ...m, content: newContent } : m
+                          )
+                        }
+                      : t
+                  ));
+                  // TODO: Save to database
+                }}
+                onDelete={async (messageId) => {
+                  // Remove message from thread
+                  setThreads(prev => prev.map(t => 
+                    t.id === activeThreadId 
+                      ? { 
+                          ...t, 
+                          messages: t.messages.filter(m => m.id !== messageId)
+                        }
+                      : t
+                  ));
+                  // TODO: Delete from database
+                }}
+              />
             ))}
-            {isLoading && (
-              <div className="flex w-full justify-start mb-6">
-                <div className="flex max-w-[85%] flex-row">
-                  <div className="flex-shrink-0 h-8 w-8 rounded-full bg-[#1F4AA8] text-white mr-3 flex items-center justify-center text-[10px] font-semibold">
-                    LUMI
-                  </div>
-                  <div className="bg-white border border-[#E6E9EF] py-4 px-5 rounded-2xl rounded-tl-none shadow-sm flex items-center">
-                    <span className="flex space-x-1.5">
-                      <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                      <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                      <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
+            {isLoading && <MessageSkeleton isBot={true} />}
             <div ref={messagesEndRef} className="h-1" />
           </div>
 
@@ -600,7 +795,8 @@ const CaseCompetitionChat: React.FC = () => {
               </div>
             </div>
           </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
