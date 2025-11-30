@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Message, Sender } from '../types';
-import CaseMap from './CaseMap';
-import ProgressTracker from './ProgressTracker';
 import DataChartsPanel from './DataChartsPanel';
 import HypothesisInsights from './HypothesisInsights';
 import FinalRecommendation from './FinalRecommendation';
 
-interface CaseAnalysisDashboardProps {
+interface GeneralAssistantDashboardProps {
   messages: Message[];
   threadName: string;
 }
@@ -25,71 +23,25 @@ interface Recommendation {
   nextStep?: string;
 }
 
-const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages, threadName }) => {
-  const [activeNodeId, setActiveNodeId] = useState<string>('');
-  const [currentStep, setCurrentStep] = useState<number>(0);
+const GeneralAssistantDashboard: React.FC<GeneralAssistantDashboardProps> = ({ messages, threadName }) => {
   const [hypotheses, setHypotheses] = useState<Hypothesis[]>([]);
   const [recommendation, setRecommendation] = useState<Recommendation>({});
   const [chartData, setChartData] = useState<any[]>([]);
 
-  const progressSteps = [
-    { id: 'clarify', label: 'Clarify Case' },
-    { id: 'structure', label: 'Structure' },
-    { id: 'analysis', label: 'Analysis' },
-    { id: 'synthesis', label: 'Synthesis' },
-    { id: 'next-steps', label: 'Next Steps' },
-  ];
-
-  // Analyze messages to update dashboard
   useEffect(() => {
     analyzeMessages();
   }, [messages]);
 
   const analyzeMessages = () => {
-    const userMessages = messages.filter(m => m.sender === Sender.USER);
     const botMessages = messages.filter(m => m.sender === Sender.BOT);
-    
-    // Determine current step based on conversation flow
-    if (userMessages.length === 0) {
-      setCurrentStep(0);
-    } else if (userMessages.length <= 2) {
-      setCurrentStep(1);
-    } else if (userMessages.length <= 5) {
-      setCurrentStep(2);
-    } else if (userMessages.length <= 8) {
-      setCurrentStep(3);
-    } else {
-      setCurrentStep(4);
-    }
-
-    // Extract active node from user messages
-    const lastUserMessage = userMessages[userMessages.length - 1];
-    if (lastUserMessage) {
-      const content = lastUserMessage.content.toLowerCase();
-      if (content.includes('market') || content.includes('thị trường')) {
-        setActiveNodeId('market');
-      } else if (content.includes('customer') || content.includes('khách hàng')) {
-        setActiveNodeId('customer');
-      } else if (content.includes('product') || content.includes('sản phẩm')) {
-        setActiveNodeId('product');
-      } else if (content.includes('financial') || content.includes('tài chính')) {
-        setActiveNodeId('financials');
-      } else if (content.includes('risk') || content.includes('rủi ro')) {
-        setActiveNodeId('risk');
-      } else if (content.includes('problem') || content.includes('vấn đề')) {
-        setActiveNodeId('problem');
-      } else if (content.includes('recommend') || content.includes('đề xuất')) {
-        setActiveNodeId('recommendation');
-      }
-    }
 
     // Extract hypotheses from bot messages
     const newHypotheses: Hypothesis[] = [];
     botMessages.forEach((msg, index) => {
       const content = msg.content;
-      // Look for hypothesis patterns
-      if (content.includes('giả thuyết') || content.includes('hypothesis') || 
-          content.includes('insight') || content.includes('key point')) {
+      // Look for key points or insights
+      if (content.includes('key point') || content.includes('insight') || 
+          content.includes('important') || content.includes('note')) {
         const lines = content.split('\n').filter(line => 
           line.includes('•') || line.includes('-') || line.match(/^\d+\./)
         );
@@ -115,11 +67,10 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
     }
 
     // Extract recommendation from final messages
-    if (botMessages.length > 0 && currentStep >= 3) {
+    if (botMessages.length > 0) {
       const lastBotMessage = botMessages[botMessages.length - 1];
       const content = lastBotMessage.content;
       
-      // Try to extract structured recommendation
       const recMatch = content.match(/recommendation[:\s]+([^\n]+)/i);
       const reasonsMatch = content.match(/reason[s]?[:\s]+([^\n]+)/i);
       const riskMatch = content.match(/risk[s]?[:\s]+([^\n]+)/i);
@@ -133,17 +84,16 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
       });
     }
 
-    // Extract data for charts (look for numbers and segments)
+    // Extract data for charts
     const dataMatches: any[] = [];
     botMessages.forEach(msg => {
       const content = msg.content;
-      // Look for patterns like "Segment A: 400, Segment B: 300"
-      const segmentMatches = content.matchAll(/(\w+)\s*(?:segment|market|product)?[:\s]+(\d+)/gi);
+      const segmentMatches = content.matchAll(/(\w+)[:\s]+(\d+)/gi);
       for (const match of segmentMatches) {
         dataMatches.push({
           name: match[1],
           value: parseInt(match[2]),
-          revenue: parseInt(match[2]) * 3, // Estimate
+          revenue: parseInt(match[2]) * 3,
         });
       }
     });
@@ -179,49 +129,33 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
         <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xl font-semibold text-[#1F4AA8]">
-              Case Analysis Dashboard
+              Assistant Dashboard
             </h2>
-            <div className="flex items-center space-x-2 bg-[#1F4AA8] text-white px-4 py-2 rounded-xl">
-              <span className="font-semibold text-base">{Math.min(100, (currentStep + 1) * 20)}%</span>
-            </div>
           </div>
-          <p className="text-sm text-[#737373]">Track progress and analyze each case-solving step</p>
+          <p className="text-sm text-[#737373]">Track insights and key information from your conversation</p>
         </div>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Case Map */}
-          <div className="lg:col-span-1">
-            <CaseMap 
-              activeNodeId={activeNodeId} 
-              onNodeClick={(nodeId) => setActiveNodeId(nodeId)}
-            />
-          </div>
-
-          {/* Middle Column - Progress & Hypothesis */}
-          <div className="lg:col-span-1 space-y-6">
-            <ProgressTracker steps={progressSteps.map((step, index) => ({
-              ...step,
-              status: index <= currentStep ? (index === currentStep ? 'in-progress' : 'completed') : 'pending'
-            }))} currentStep={currentStep} />
-            
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left Column - Hypothesis & Insights */}
+          <div className="space-y-6">
             <HypothesisInsights
               hypotheses={hypotheses}
               onAddHypothesis={handleAddHypothesis}
               onTogglePin={handleTogglePin}
               onRemove={handleRemoveHypothesis}
             />
+            
+            <FinalRecommendation recommendation={recommendation} />
           </div>
 
-          {/* Right Column - Data Charts & Recommendation */}
-          <div className="lg:col-span-1 space-y-6">
+          {/* Right Column - Data Charts */}
+          <div>
             <DataChartsPanel 
               data={chartData.length > 0 ? chartData : undefined}
               chartType="bar"
               title="Data & Charts"
             />
-            
-            <FinalRecommendation recommendation={recommendation} />
           </div>
         </div>
       </div>
@@ -229,4 +163,5 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
   );
 };
 
-export default CaseAnalysisDashboard;
+export default GeneralAssistantDashboard;
+

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Send, Upload, FileText, X, ArrowLeft, MessageSquare } from 'lucide-react';
+import { Send, Upload, FileText, X, ArrowLeft, MessageSquare, BarChart3 } from 'lucide-react';
 import SettingsMenu from './SettingsMenu';
 import { sendCaseMessage } from '../services/caseCompetitionService';
 import { 
@@ -12,6 +12,7 @@ import MessageBubble from './MessageBubble';
 import BizCaseLogo from './BizCaseLogo';
 import MinimalButton from './MinimalButton';
 import MinimalInput from './MinimalInput';
+import GeneralAssistantDashboard from './GeneralAssistantDashboard';
 import { Message, Sender, MessageType } from '../types';
 
 const GeneralAssistantChat: React.FC = () => {
@@ -23,6 +24,7 @@ const GeneralAssistantChat: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(true);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -198,13 +200,23 @@ const GeneralAssistantChat: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center space-x-3">
+            <MinimalButton
+              variant={showDashboard ? 'primary' : 'ghost'}
+              size="sm"
+              onClick={() => setShowDashboard(!showDashboard)}
+              icon={BarChart3}
+            >
+              <span className="sr-only">Toggle Dashboard</span>
+            </MinimalButton>
             {user && <SettingsMenu user={user} />}
           </div>
         </div>
       </header>
 
-      {/* Chat Panel */}
-      <div className="flex-1 flex flex-col bg-white relative overflow-hidden">
+      {/* Main Content */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Chat Panel */}
+        <div className="flex-1 flex flex-col bg-white relative overflow-hidden">
         {/* Messages */}
         <div 
           className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-6"
@@ -295,6 +307,30 @@ const GeneralAssistantChat: React.FC = () => {
             </p>
           </div>
         </div>
+
+        {/* Dashboard Panel */}
+        {showDashboard && (
+          <div className="w-[600px] border-l border-[#E6E9EF] bg-white flex flex-col">
+            <div className="p-4 border-b border-[#E6E9EF] bg-[#F8F9FB] flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-[#1F4AA8] flex items-center gap-2">
+                <BarChart3 className="w-4 h-4" />
+                Assistant Dashboard
+              </h3>
+              <button
+                onClick={() => setShowDashboard(false)}
+                className="p-1 hover:bg-[#E6E9EF] rounded transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden">
+              <GeneralAssistantDashboard 
+                messages={thread?.messages || []} 
+                threadName={thread?.name || 'General Assistant'}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
