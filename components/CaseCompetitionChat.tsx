@@ -23,6 +23,7 @@ import MinimalButton from './MinimalButton';
 import MinimalInput from './MinimalInput';
 import { useToast } from '../contexts/ToastContext';
 import { notifyNewMessage } from '../utils/notifications';
+import DatabaseStatus from './DatabaseStatus';
 import { Message, Sender, MessageType } from '../types';
 
 const CaseCompetitionChat: React.FC = () => {
@@ -386,6 +387,7 @@ const CaseCompetitionChat: React.FC = () => {
             >
               <span className="sr-only">Toggle Dashboard</span>
             </MinimalButton>
+            <DatabaseStatus />
             {user && <SettingsMenu user={user} />}
           </div>
         </div>
