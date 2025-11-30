@@ -3,8 +3,9 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { 
   Target, TrendingUp, BookOpen, CheckCircle2, 
-  Clock, Award, BarChart3, Brain, Lightbulb, FileText
+  Clock, Award, BarChart3, Lightbulb, FileText
 } from 'lucide-react';
+import BizCaseLogo from './BizCaseLogo';
 import { 
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
@@ -25,11 +26,11 @@ const LearningDashboard: React.FC = () => {
   ];
 
   const caseTypes = [
-    { name: 'Market Entry', completed: 8, total: 10, color: '#10b981' },
-    { name: 'Pricing Strategy', completed: 6, total: 10, color: '#3b82f6' },
-    { name: 'Growth Strategy', completed: 7, total: 10, color: '#f59e0b' },
-    { name: 'Operations', completed: 5, total: 10, color: '#ef4444' },
-    { name: 'M&A', completed: 4, total: 10, color: '#8b5cf6' },
+    { name: 'Market Entry', completed: 8, total: 10, color: '#1e3a8a' },
+    { name: 'Pricing Strategy', completed: 6, total: 10, color: '#1e40af' },
+    { name: 'Growth Strategy', completed: 7, total: 10, color: '#2563eb' },
+    { name: 'Operations', completed: 5, total: 10, color: '#3b82f6' },
+    { name: 'M&A', completed: 4, total: 10, color: '#60a5fa' },
   ];
 
   const skillBreakdown = [
@@ -45,7 +46,7 @@ const LearningDashboard: React.FC = () => {
       type: 'strength',
       title: 'Strong in Market Entry Cases',
       description: 'You\'ve completed 8/10 market entry cases with an average score of 88%',
-      icon: <Award className="w-5 h-5 text-green-600" />
+      icon: <Award className="w-5 h-5 text-[#1e3a8a]" />
     },
     {
       type: 'improvement',
@@ -74,12 +75,11 @@ const LearningDashboard: React.FC = () => {
                 className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
                 onClick={() => navigate('/')}
               >
-                <Brain className="w-6 h-6 text-green-600" />
-                <h1 className="text-2xl font-bold text-gray-900">Lumi</h1>
+                <BizCaseLogo size="md" showText={false} />
               </div>
               <div className="h-6 w-px bg-gray-200"></div>
               <div>
-                <h2 className="text-xl font-semibold text-gray-700">Learning Dashboard</h2>
+                <h2 className="text-xl font-semibold text-[#1e3a8a]">Learning Dashboard</h2>
                 <p className="text-sm text-gray-500">Theo dõi lộ trình học và tư duy giải case</p>
               </div>
             </div>
@@ -101,27 +101,27 @@ const LearningDashboard: React.FC = () => {
               onClick={() => setActiveTab('overview')}
               className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
                 activeTab === 'overview'
-                  ? 'border-green-600 text-green-600'
+                  ? 'border-[#1e3a8a] text-[#1e3a8a]'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
-              Overview
+              Tổng quan
             </button>
             <button
               onClick={() => setActiveTab('progress')}
               className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
                 activeTab === 'progress'
-                  ? 'border-green-600 text-green-600'
+                  ? 'border-[#1e3a8a] text-[#1e3a8a]'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
-              Progress
+              Tiến độ
             </button>
             <button
               onClick={() => setActiveTab('insights')}
               className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
                 activeTab === 'insights'
-                  ? 'border-green-600 text-green-600'
+                  ? 'border-[#1e3a8a] text-[#1e3a8a]'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -143,11 +143,11 @@ const LearningDashboard: React.FC = () => {
                     <p className="text-sm text-gray-500 mb-1">Total Cases</p>
                     <p className="text-3xl font-bold text-gray-900">28</p>
                   </div>
-                  <div className="p-3 bg-green-100 rounded-lg">
-                    <FileText className="w-6 h-6 text-green-600" />
+                  <div className="p-3 bg-[#1e3a8a] rounded-lg">
+                    <FileText className="w-6 h-6 text-white" />
                   </div>
                 </div>
-                <p className="text-xs text-green-600 mt-2">+5 this week</p>
+                <p className="text-xs text-[#1e3a8a] mt-2">+5 tuần này</p>
               </div>
 
               <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
@@ -160,7 +160,7 @@ const LearningDashboard: React.FC = () => {
                     <TrendingUp className="w-6 h-6 text-blue-600" />
                   </div>
                 </div>
-                <p className="text-xs text-green-600 mt-2">+12% improvement</p>
+                <p className="text-xs text-[#1e3a8a] mt-2">+12% cải thiện</p>
               </div>
 
               <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
@@ -192,9 +192,9 @@ const LearningDashboard: React.FC = () => {
 
             {/* Progress Chart */}
             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                <TrendingUp className="w-5 h-5 mr-2 text-green-600" />
-                Learning Progress
+              <h3 className="text-lg font-semibold text-[#1e3a8a] mb-4 flex items-center">
+                <TrendingUp className="w-5 h-5 mr-2 text-[#1e3a8a]" />
+                Tiến độ học tập
               </h3>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={learningProgress}>
@@ -205,17 +205,17 @@ const LearningDashboard: React.FC = () => {
                     contentStyle={{ backgroundColor: '#fff', borderColor: '#e5e7eb', borderRadius: '8px' }}
                   />
                   <Legend />
-                  <Line type="monotone" dataKey="cases" stroke="#10b981" strokeWidth={2} name="Cases Completed" />
-                  <Line type="monotone" dataKey="score" stroke="#3b82f6" strokeWidth={2} name="Average Score" />
+                  <Line type="monotone" dataKey="cases" stroke="#1e3a8a" strokeWidth={2} name="Cases Completed" />
+                  <Line type="monotone" dataKey="score" stroke="#1e40af" strokeWidth={2} name="Average Score" />
                 </LineChart>
               </ResponsiveContainer>
             </div>
 
             {/* Case Types Progress */}
             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                <Target className="w-5 h-5 mr-2 text-green-600" />
-                Case Types Progress
+              <h3 className="text-lg font-semibold text-[#1e3a8a] mb-4 flex items-center">
+                <Target className="w-5 h-5 mr-2 text-[#1e3a8a]" />
+                Tiến độ theo loại Case
               </h3>
               <div className="space-y-4">
                 {caseTypes.map((type, index) => (
@@ -244,9 +244,9 @@ const LearningDashboard: React.FC = () => {
           <div className="space-y-6">
             {/* Skill Breakdown */}
             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                <Brain className="w-5 h-5 mr-2 text-green-600" />
-                Skill Breakdown
+              <h3 className="text-lg font-semibold text-[#1e3a8a] mb-4 flex items-center">
+                <BarChart3 className="w-5 h-5 mr-2 text-[#1e3a8a]" />
+                Phân tích kỹ năng
               </h3>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={skillBreakdown}>
@@ -256,7 +256,7 @@ const LearningDashboard: React.FC = () => {
                   <Tooltip 
                     contentStyle={{ backgroundColor: '#fff', borderColor: '#e5e7eb', borderRadius: '8px' }}
                   />
-                  <Bar dataKey="score" fill="#10b981" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="score" fill="#1e3a8a" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -272,7 +272,7 @@ const LearningDashboard: React.FC = () => {
                       <p className="text-sm text-gray-500">{week.cases} cases completed</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-green-600">{week.score}%</p>
+                      <p className="font-bold text-[#1e3a8a]">{week.score}%</p>
                       <p className="text-xs text-gray-500">Average</p>
                     </div>
                   </div>
@@ -312,8 +312,8 @@ const LearningDashboard: React.FC = () => {
                     <p className="text-sm text-gray-600">Focus on operations strategy cases to improve your weakest area</p>
                   </div>
                 </div>
-                <div className="flex items-start space-x-3 p-4 bg-green-50 rounded-lg">
-                  <Target className="w-5 h-5 text-green-600 mt-0.5" />
+                <div className="flex items-start space-x-3 p-4 bg-blue-50 rounded-lg">
+                  <Target className="w-5 h-5 text-[#1e3a8a] mt-0.5" />
                   <div>
                     <p className="font-medium text-gray-900">Maintain Your Strengths</p>
                     <p className="text-sm text-gray-600">Continue practicing market entry cases to maintain your high performance</p>

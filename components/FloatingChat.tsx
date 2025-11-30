@@ -3,8 +3,10 @@ import { MessageCircle, X, Send, Minimize2 } from 'lucide-react';
 import { startCaseChat, sendCaseMessage } from '../services/caseCompetitionService';
 import { Message, Sender, MessageType } from '../types';
 import MessageBubble from './MessageBubble';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const FloatingChat: React.FC = () => {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -109,10 +111,10 @@ const FloatingChat: React.FC = () => {
     }`}>
       {/* Header */}
       <div className="bg-gradient-to-r from-[#1e3a8a] to-[#1e40af] text-white p-4 rounded-t-2xl flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
-          <span className="font-semibold">Lumi Assistant</span>
-        </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+            <span className="font-semibold">Lumi - BizCase Lab</span>
+          </div>
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setIsMinimized(!isMinimized)}
@@ -168,7 +170,7 @@ const FloatingChat: React.FC = () => {
                 type="text"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                placeholder="Ask Lumi anything..."
+                    placeholder="Hỏi Lumi bất cứ điều gì..."
                 className="flex-1 py-2.5 px-4 bg-gray-50 border border-gray-300 rounded-xl outline-none text-sm focus:ring-2 focus:ring-[#1e3a8a]/50 focus:border-[#1e3a8a] transition-all"
                 disabled={isLoading}
               />
