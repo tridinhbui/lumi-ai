@@ -1,26 +1,69 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Minimize2 } from 'lucide-react';
 import { startCaseChat, sendCaseMessage } from '../services/caseCompetitionService';
+import { 
+  createThread, getThreads, 
+  saveMessage, getMessages, updateThreadTimestamp 
+} from '../services/supabaseService';
+import { useAuth } from '../contexts/AuthContext';
 import { Message, Sender, MessageType } from '../types';
 import MessageBubble from './MessageBubble';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const FloatingChat: React.FC = () => {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [threadId, setThreadId] = useState<string | null>(null);
+  const [dbInitialized, setDbInitialized] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Load or create thread for floating chat
   useEffect(() => {
-    if (isOpen && !isInitialized) {
+    const loadFloatingThread = async () => {
+      if (!user?.email || !isOpen || dbInitialized) return;
+      
+      try {
+        const dbThreads = await getThreads(user.email);
+        let floatingThread = dbThreads.find(t => t.name === 'Floating Chat');
+        
+        if (!floatingThread) {
+          const newThreadId = await createThread(user.email, 'Floating Chat', 'general');
+          if (newThreadId) {
+            setThreadId(newThreadId);
+          }
+        } else {
+          setThreadId(floatingThread.id);
+          // Load existing messages
+          const existingMessages = await getMessages(floatingThread.id);
+          if (existingMessages.length > 0) {
+            setMessages(existingMessages);
+            setIsInitialized(true);
+          }
+        }
+        setDbInitialized(true);
+      } catch (error) {
+        console.error('Error loading floating chat thread:', error);
+        setDbInitialized(true);
+      }
+    };
+
+    if (isOpen && user) {
+      loadFloatingThread();
+    }
+  }, [isOpen, user, dbInitialized]);
+
+  useEffect(() => {
+    if (isOpen && !isInitialized && dbInitialized) {
       initializeChat();
     }
-  }, [isOpen]);
+  }, [isOpen, isInitialized, dbInitialized]);
 
   useEffect(() => {
     if (isOpen && !isMinimized) {
@@ -36,9 +79,15 @@ const FloatingChat: React.FC = () => {
   };
 
   const initializeChat = async () => {
+    // If we already have messages from database, skip initialization
+    if (messages.length > 0) {
+      setIsInitialized(true);
+      return;
+    }
+
     setIsLoading(true);
     try {
-      const welcomeMessage = await startCaseChat();
+      const welcomeMessage = await startCaseChat(threadId || undefined);
       const botMessage: Message = {
         id: Date.now().toString(),
         sender: Sender.BOT,
@@ -47,6 +96,12 @@ const FloatingChat: React.FC = () => {
         timestamp: Date.now(),
       };
       setMessages([botMessage]);
+      
+      // Save welcome message to database if thread exists
+      if (threadId) {
+        await saveMessage(threadId, botMessage);
+      }
+      
       setIsInitialized(true);
     } catch (error) {
       console.error('Error initializing chat:', error);
