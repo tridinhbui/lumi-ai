@@ -263,7 +263,7 @@ const LumiWorkspace: React.FC = () => {
               className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
               onClick={() => navigate('/')}
             >
-              <Brain className="w-6 h-6 text-[#1F4AA8]" />
+              <Brain className="w-6 h-6 text-[#153A73] icon-line-art" />
               <h1 className="font-semibold text-lg tracking-tight text-[#1F4AA8]">Lumi</h1>
               <span className="text-xs text-[#737373]">- BizCase Lab</span>
             </div>

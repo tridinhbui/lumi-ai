@@ -40,7 +40,7 @@ const Settings: React.FC = () => {
         <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-4 mb-6">
             <div className="p-3 bg-[#E6F0FF] rounded-xl">
-              <User className="w-5 h-5 text-[#1F4AA8]" />
+              <User className="w-5 h-5 text-[#153A73] icon-line-art" />
             </div>
             <div>
               <h2 className="text-xl font-semibold text-[#1F4AA8]">Account Information</h2>
@@ -65,7 +65,7 @@ const Settings: React.FC = () => {
         <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-4 mb-6">
             <div className="p-3 bg-[#E6F0FF] rounded-xl">
-              <Globe className="w-5 h-5 text-[#1F4AA8]" />
+              <Globe className="w-5 h-5 text-[#153A73] icon-line-art" />
             </div>
             <div>
               <h2 className="text-xl font-semibold text-[#1F4AA8]">Language</h2>
@@ -124,7 +124,7 @@ const Settings: React.FC = () => {
         <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-4 mb-6">
             <div className="p-3 bg-[#E6F0FF] rounded-xl">
-              <Bell className="w-5 h-5 text-[#1F4AA8]" />
+              <Bell className="w-5 h-5 text-[#153A73] icon-line-art" />
             </div>
             <div>
               <h2 className="text-xl font-semibold text-[#1F4AA8]">Notifications</h2>
@@ -177,7 +177,7 @@ const Settings: React.FC = () => {
         <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-4 mb-6">
             <div className="p-3 bg-[#E6F0FF] rounded-xl">
-              {darkMode ? <Moon className="w-5 h-5 text-[#1F4AA8]" /> : <Sun className="w-5 h-5 text-[#1F4AA8]" />}
+              {darkMode ? <Moon className="w-5 h-5 text-[#153A73] icon-line-art" /> : <Sun className="w-5 h-5 text-[#153A73] icon-line-art" />}
             </div>
             <div>
               <h2 className="text-xl font-semibold text-[#1F4AA8]">Appearance</h2>
@@ -210,7 +210,7 @@ const Settings: React.FC = () => {
         <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-4 mb-6">
             <div className="p-3 bg-[#E6F0FF] rounded-xl">
-              <Shield className="w-5 h-5 text-[#1F4AA8]" />
+              <Shield className="w-5 h-5 text-[#153A73] icon-line-art" />
             </div>
             <div>
               <h2 className="text-xl font-semibold text-[#1F4AA8]">Privacy & Security</h2>
@@ -234,7 +234,7 @@ const Settings: React.FC = () => {
         <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-4 mb-6">
             <div className="p-3 bg-[#E6F0FF] rounded-xl">
-              <HelpCircle className="w-5 h-5 text-[#1F4AA8]" />
+              <HelpCircle className="w-5 h-5 text-[#153A73] icon-line-art" />
             </div>
             <div>
               <h2 className="text-xl font-semibold text-[#1F4AA8]">Help & Support</h2>

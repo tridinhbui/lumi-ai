@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -18,6 +18,7 @@ const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const { language, setLanguage, t } = useLanguage();
   const [showAbout, setShowAbout] = React.useState(false);
+  const revealRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const quickStats = [
     { label: t('active_threads'), value: '5', icon: MessageSquare, change: '+2' },
@@ -53,10 +54,34 @@ const HomePage: React.FC = () => {
     { title: 'Consistency King', description: 'Chuỗi 7 ngày', progress: 7, target: 7 },
   ];
 
+  const [isScrolled, setIsScrolled] = React.useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+      
+      // Reveal on scroll
+      revealRefs.current.forEach((el) => {
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const isVisible = rect.top < window.innerHeight - 100;
+          if (isVisible) {
+            el.classList.add('revealed');
+          }
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check on mount
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#F8F9FB]">
       {/* Minimal Header */}
-      <header className="w-full bg-white border-b border-[#E6E9EF] sticky top-0 z-40">
+      <header className={`w-full bg-white border-b border-[#E6E9EF] sticky top-0 z-40 transition-all duration-200 ${isScrolled ? 'bg-[#F8F9FB]/90 backdrop-blur-md shadow-sm py-3' : 'py-4'}`}>
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div 
@@ -83,14 +108,14 @@ const HomePage: React.FC = () => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-12">
         {/* Welcome Section */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-[#1F4AA8] rounded-2xl mb-6 shadow-sm">
+        <div className="text-center mb-16 animate-slide-up">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-[#1F4AA8] rounded-2xl mb-6 shadow-sm animate-logo-fade">
             <Sparkles className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-5xl font-semibold text-[#1F4AA8] mb-4 tracking-tight">
+          <h1 className="text-5xl font-semibold text-[#1F4AA8] mb-4 tracking-tight animate-logo-text">
             {t('welcome_back')}, <span className="text-[#2E2E2E]">{user?.name?.split(' ')[0] || 'User'}</span>
           </h1>
-          <p className="text-lg text-[#737373] max-w-2xl mx-auto">
+          <p className="text-lg text-[#737373] max-w-2xl mx-auto animate-logo-text" style={{ animationDelay: '150ms' }}>
             {t('strategic_ai')} - Lumi, part of BizCase Lab
           </p>
         </div>
@@ -125,11 +150,12 @@ const HomePage: React.FC = () => {
           {quickStats.map((stat, index) => (
             <div 
               key={index} 
-              className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6 hover:shadow-md transition-all duration-200"
+              className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6 reveal-on-scroll minimal-card"
+              style={{ animationDelay: `${index * 50}ms` }}
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="p-3 bg-[#E6F0FF] rounded-xl">
-                  <stat.icon className="w-5 h-5 text-[#1F4AA8]" />
+                  <stat.icon className="w-5 h-5 text-[#1F4AA8] icon-line-art" />
                 </div>
                 <span className="text-xs font-semibold text-[#1F4AA8] bg-[#E6F0FF] px-2 py-1 rounded-lg">
                   {stat.change}
@@ -153,9 +179,12 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="mb-12">
+        <div 
+          ref={(el) => { revealRefs.current[1] = el; }}
+          className="mb-12 reveal-on-scroll"
+        >
           <h2 className="text-2xl font-semibold text-[#1F4AA8] mb-6 flex items-center">
-            <Zap className="w-5 h-5 mr-2 text-[#4C86FF]" />
+            <Zap className="w-5 h-5 mr-2 text-[#153A73] icon-line-art" />
             Quick Actions
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -163,11 +192,12 @@ const HomePage: React.FC = () => {
               <button
                 key={index}
                 onClick={action.action}
-                className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6 text-left hover:shadow-md transition-all duration-200 group"
+                className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6 text-left minimal-card group"
+                style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="p-3 bg-[#E6F0FF] rounded-xl group-hover:bg-[#1F4AA8] group-hover:text-white transition-colors">
-                    <action.icon className="w-5 h-5 text-[#1F4AA8] group-hover:text-white" />
+                    <action.icon className="w-5 h-5 text-[#153A73] group-hover:text-white icon-line-art" />
                   </div>
                   <ArrowRight className="w-5 h-5 text-[#737373] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                 </div>
@@ -225,9 +255,12 @@ const HomePage: React.FC = () => {
         <CaseLibrary />
 
         {/* Recent Activity */}
-        <div className="mt-12 bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
+        <div 
+          ref={(el) => { revealRefs.current[3] = el; }}
+          className="mt-12 bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6 reveal-on-scroll"
+        >
           <h2 className="text-2xl font-semibold text-[#1F4AA8] mb-6 flex items-center">
-            <Clock className="w-5 h-5 mr-2 text-[#4C86FF]" />
+            <Clock className="w-5 h-5 mr-2 text-[#153A73] icon-line-art" />
             {t('recent_activity')}
           </h2>
           <div className="space-y-3">

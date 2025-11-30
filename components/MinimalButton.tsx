@@ -25,10 +25,10 @@ const MinimalButton: React.FC<MinimalButtonProps> = ({
   const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variantStyles = {
-    primary: 'bg-[#1F4AA8] text-white hover:bg-[#153A73] focus:ring-[#1F4AA8] shadow-sm hover:shadow-md hover:-translate-y-0.5',
-    secondary: 'bg-white text-[#2E2E2E] border border-[#E6E9EF] hover:bg-[#F8F9FB] hover:border-[#4C86FF] focus:ring-[#1F4AA8]',
-    ghost: 'text-[#2E2E2E] hover:bg-[#F8F9FB] focus:ring-[#1F4AA8]',
-    accent: 'bg-[#4C86FF] text-white hover:bg-[#0057E7] focus:ring-[#4C86FF] shadow-sm hover:shadow-md hover:-translate-y-0.5',
+    primary: 'bg-[#1F4AA8] text-white hover:brightness-105 focus:ring-[#1F4AA8] shadow-sm hover:shadow-[0_4px_12px_rgba(31,74,168,0.25)] hover:ring-1 hover:ring-[#4C86FF] hover:-translate-y-0.5 transition-all duration-150',
+    secondary: 'bg-white text-[#2E2E2E] border border-[#E6E9EF] hover:bg-[#F8F9FB] hover:border-[#4C86FF] focus:ring-[#1F4AA8] transition-all duration-150',
+    ghost: 'text-[#2E2E2E] hover:bg-[#F8F9FB] focus:ring-[#1F4AA8] transition-all duration-150',
+    accent: 'bg-[#4C86FF] text-white hover:brightness-105 focus:ring-[#4C86FF] shadow-sm hover:shadow-[0_4px_12px_rgba(76,134,255,0.25)] hover:ring-1 hover:ring-[#4C86FF] hover:-translate-y-0.5 transition-all duration-150',
   };
   
   const sizeStyles = {

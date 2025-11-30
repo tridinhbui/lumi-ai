@@ -139,7 +139,7 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
         {/* Overall Progress */}
         <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
           <h3 className="text-base font-semibold text-[#1F4AA8] mb-5 flex items-center">
-            <TrendingUp className="w-4 h-4 mr-2 text-[#4C86FF]" />
+            <TrendingUp className="w-4 h-4 mr-2 text-[#153A73] icon-line-art" />
             Overall Progress
           </h3>
           <div className="space-y-3">
@@ -179,7 +179,7 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
         {/* Stage Performance Chart */}
         <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
           <h3 className="text-base font-semibold text-[#1F4AA8] mb-5 flex items-center">
-            <BarChart3 className="w-4 h-4 mr-2 text-[#4C86FF]" />
+            <BarChart3 className="w-4 h-4 mr-2 text-[#153A73] icon-line-art" />
             Stage Performance
           </h3>
           <ResponsiveContainer width="100%" height={250}>
@@ -213,7 +213,7 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
         {/* Skill Breakdown */}
         <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
           <h3 className="text-base font-semibold text-[#1F4AA8] mb-5 flex items-center">
-            <Zap className="w-4 h-4 mr-2 text-[#4C86FF]" />
+            <Zap className="w-4 h-4 mr-2 text-[#153A73] icon-line-art" />
             Skill Breakdown
           </h3>
           <ResponsiveContainer width="100%" height={250}>
@@ -240,7 +240,7 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
         {/* Answer Analysis */}
         <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
           <h3 className="text-base font-semibold text-[#1F4AA8] mb-5 flex items-center">
-            <Lightbulb className="w-4 h-4 mr-2 text-[#4C86FF]" />
+            <Lightbulb className="w-4 h-4 mr-2 text-[#153A73] icon-line-art" />
             Answer Analysis
           </h3>
           <div className="space-y-3">

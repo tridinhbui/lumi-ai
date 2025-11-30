@@ -114,7 +114,7 @@ const CaseLibrary: React.FC = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-semibold text-[#1F4AA8] flex items-center">
-            <BookOpen className="w-5 h-5 mr-2 text-[#4C86FF]" />
+            <BookOpen className="w-5 h-5 mr-2 text-[#153A73] icon-line-art" />
             {t('cases')}
           </h2>
           <p className="text-sm text-[#737373] mt-1">Practice with real-world business cases</p>

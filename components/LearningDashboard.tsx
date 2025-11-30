@@ -192,8 +192,8 @@ const LearningDashboard: React.FC = () => {
 
             {/* Progress Chart */}
             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center">
-                <TrendingUp className="w-5 h-5 mr-2 text-neutral-600" />
+              <h3 className="text-lg font-semibold text-[#1F4AA8] mb-4 flex items-center">
+                <TrendingUp className="w-5 h-5 mr-2 text-[#153A73] icon-line-art" />
                 Learning Progress
           </h3>
               <ResponsiveContainer width="100%" height={300}>
@@ -213,8 +213,8 @@ const LearningDashboard: React.FC = () => {
 
             {/* Case Types Progress */}
             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center">
-                <Target className="w-5 h-5 mr-2 text-neutral-600" />
+              <h3 className="text-lg font-semibold text-[#1F4AA8] mb-4 flex items-center">
+                <Target className="w-5 h-5 mr-2 text-[#153A73] icon-line-art" />
                 Case Type Progress
           </h3>
               <div className="space-y-4">
@@ -244,8 +244,8 @@ const LearningDashboard: React.FC = () => {
           <div className="space-y-6">
             {/* Skill Breakdown */}
             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center">
-                <BarChart3 className="w-5 h-5 mr-2 text-neutral-600" />
+              <h3 className="text-lg font-semibold text-[#1F4AA8] mb-4 flex items-center">
+                <BarChart3 className="w-5 h-5 mr-2 text-[#153A73] icon-line-art" />
                 Skill Breakdown
           </h3>
               <ResponsiveContainer width="100%" height={300}>

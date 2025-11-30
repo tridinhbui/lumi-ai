@@ -190,7 +190,7 @@ const GeneralAssistantChat: React.FC = () => {
             <BizCaseLogo size="sm" showText={false} />
             <div className="h-6 w-px bg-[#E6E9EF]"></div>
             <div className="flex items-center space-x-2">
-              <MessageSquare className="w-5 h-5 text-[#1F4AA8]" />
+              <MessageSquare className="w-5 h-5 text-[#153A73] icon-line-art" />
               <div>
                 <h1 className="text-sm font-semibold text-[#1F4AA8]">General Assistant</h1>
                 <p className="text-xs text-[#737373]">Lumi Assistant</p>
