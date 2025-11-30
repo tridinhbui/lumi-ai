@@ -173,8 +173,8 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
   };
 
   return (
-    <div className="h-full overflow-y-auto bg-[#F8F9FB] p-6">
-      <div className="space-y-6">
+    <div className="h-full overflow-y-auto bg-[#F8F9FB] p-4 lg:p-6">
+      <div className="space-y-4 lg:space-y-6">
         {/* Header */}
         <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
           <div className="flex items-center justify-between mb-3">
@@ -189,9 +189,9 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
         </div>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
           {/* Left Column - Case Map */}
-          <div className="lg:col-span-1">
+          <div className="xl:col-span-1">
             <CaseMap 
               activeNodeId={activeNodeId} 
               onNodeClick={(nodeId) => setActiveNodeId(nodeId)}
@@ -199,7 +199,7 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
           </div>
 
           {/* Middle Column - Progress & Hypothesis */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="xl:col-span-1 space-y-4 lg:space-y-6">
             <ProgressTracker steps={progressSteps.map((step, index) => ({
               ...step,
               status: index <= currentStep ? (index === currentStep ? 'in-progress' : 'completed') : 'pending'
@@ -214,7 +214,7 @@ const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages,
           </div>
 
           {/* Right Column - Data Charts & Recommendation */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="xl:col-span-1 space-y-4 lg:space-y-6">
             <DataChartsPanel 
               data={chartData.length > 0 ? chartData : undefined}
               chartType="bar"

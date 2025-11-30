@@ -34,15 +34,15 @@ const HypothesisInsights: React.FC<HypothesisInsightsProps> = ({
   const unpinnedHypotheses = hypotheses.filter(h => !h.isPinned);
 
   return (
-    <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
-      <h3 className="text-base font-semibold text-[#1F4AA8] mb-4 flex items-center">
+    <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-4 lg:p-6">
+      <h3 className="text-sm lg:text-base font-semibold text-[#1F4AA8] mb-3 lg:mb-4 flex items-center">
         <Lightbulb className="w-4 h-4 text-[#153A73] icon-line-art mr-2" />
         Hypothesis & Key Insights
       </h3>
 
       {/* Pinned Items */}
       {pinnedHypotheses.length > 0 && (
-        <div className="mb-4 space-y-2">
+        <div className="mb-3 lg:mb-4 space-y-2">
           {pinnedHypotheses.map((hypothesis) => (
             <div
               key={hypothesis.id}
@@ -75,7 +75,7 @@ const HypothesisInsights: React.FC<HypothesisInsightsProps> = ({
 
       {/* Unpinned Items */}
       {unpinnedHypotheses.length > 0 && (
-        <div className="mb-4 space-y-2">
+        <div className="mb-3 lg:mb-4 space-y-2">
           {unpinnedHypotheses.map((hypothesis) => (
             <div
               key={hypothesis.id}

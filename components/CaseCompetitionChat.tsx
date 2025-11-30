@@ -213,9 +213,9 @@ const CaseCompetitionChat: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* Chat Panel */}
-        <div className={`flex-1 flex flex-col bg-white relative overflow-hidden transition-all duration-300 ${showDashboard ? 'mr-0' : ''}`}>
+        <div className={`flex-1 flex flex-col bg-white relative overflow-hidden transition-all duration-300 ${showDashboard ? 'lg:mr-0' : ''}`}>
           {/* Messages */}
           <div 
             className="flex-1 overflow-y-auto px-6 py-8 space-y-6"
@@ -264,7 +264,7 @@ const CaseCompetitionChat: React.FC = () => {
           )}
 
           {/* Input Area */}
-          <div className="w-full bg-white border-t border-[#E6E9EF] p-6 absolute bottom-0 left-0 right-0 z-20">
+          <div className="w-full bg-white border-t border-[#E6E9EF] p-4 lg:p-6 absolute bottom-0 left-0 right-0 z-20">
             <div className="max-w-4xl mx-auto">
               <form onSubmit={handleSendMessage} className="flex items-end gap-3">
                 <div className="flex-1 min-w-0">

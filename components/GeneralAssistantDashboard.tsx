@@ -123,22 +123,22 @@ const GeneralAssistantDashboard: React.FC<GeneralAssistantDashboardProps> = ({ m
   };
 
   return (
-    <div className="h-full overflow-y-auto bg-[#F8F9FB] p-6">
-      <div className="space-y-6">
+    <div className="h-full overflow-y-auto bg-[#F8F9FB] p-4 lg:p-6">
+      <div className="space-y-4 lg:space-y-6">
         {/* Header */}
-        <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
+        <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-4 lg:p-6">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl font-semibold text-[#1F4AA8]">
+            <h2 className="text-lg lg:text-xl font-semibold text-[#1F4AA8]">
               Assistant Dashboard
             </h2>
           </div>
-          <p className="text-sm text-[#737373]">Track insights and key information from your conversation</p>
+          <p className="text-xs lg:text-sm text-[#737373]">Track insights and key information from your conversation</p>
         </div>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
           {/* Left Column - Hypothesis & Insights */}
-          <div className="space-y-6">
+          <div className="space-y-4 lg:space-y-6">
             <HypothesisInsights
               hypotheses={hypotheses}
               onAddHypothesis={handleAddHypothesis}

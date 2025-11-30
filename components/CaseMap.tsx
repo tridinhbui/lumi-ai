@@ -154,8 +154,8 @@ const CaseMap: React.FC<CaseMapProps> = ({ activeNodeId, onNodeClick }) => {
   };
 
   return (
-    <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6 h-full overflow-y-auto">
-      <h3 className="text-base font-semibold text-[#1F4AA8] mb-4 flex items-center">
+    <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-4 lg:p-6 h-full overflow-y-auto">
+      <h3 className="text-sm lg:text-base font-semibold text-[#1F4AA8] mb-3 lg:mb-4 flex items-center">
         <div className="w-2 h-2 bg-[#153A73] rounded-full mr-2" />
         Case Map
       </h3>

@@ -214,12 +214,12 @@ const GeneralAssistantChat: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* Chat Panel */}
         <div className="flex-1 flex flex-col bg-white relative overflow-hidden">
         {/* Messages */}
         <div 
-          className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-6"
+          className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-4 lg:space-y-6"
           style={{ paddingBottom: uploadedFiles.length > 0 ? '180px' : '120px' }}
         >
           {thread?.messages.map((msg) => (
@@ -265,7 +265,7 @@ const GeneralAssistantChat: React.FC = () => {
         )}
 
         {/* Input Area */}
-        <div className="w-full bg-white border-t border-[#E6E9EF] p-6 absolute bottom-0 left-0 right-0 z-20">
+        <div className="w-full bg-white border-t border-[#E6E9EF] p-4 lg:p-6 absolute bottom-0 left-0 right-0 z-20">
           <div className="max-w-4xl mx-auto">
             <form onSubmit={handleSendMessage} className="flex items-end gap-3">
               <div className="flex-1 min-w-0">
@@ -311,7 +311,7 @@ const GeneralAssistantChat: React.FC = () => {
 
         {/* Dashboard Panel */}
         {showDashboard && (
-          <div className="w-[600px] border-l border-[#E6E9EF] bg-white flex flex-col">
+          <div className="w-full lg:w-[800px] xl:w-[900px] border-l border-[#E6E9EF] bg-white flex flex-col">
             <div className="p-4 border-b border-[#E6E9EF] bg-[#F8F9FB] flex items-center justify-between">
               <h3 className="text-sm font-semibold text-[#1F4AA8] flex items-center gap-2">
                 <BarChart3 className="w-4 h-4" />
