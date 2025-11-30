@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { 
-  ArrowLeft, Target, TrendingUp, BookOpen, CheckCircle2, 
+  Target, TrendingUp, BookOpen, CheckCircle2, 
   Clock, Award, BarChart3, Brain, Lightbulb, FileText
 } from 'lucide-react';
 import { 
