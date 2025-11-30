@@ -4,6 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { Send, Upload, FileText, X, Brain, MessageSquare, Plus, Trash2 } from 'lucide-react';
 import SettingsMenu from './SettingsMenu';
 import { startCaseChat, sendCaseMessage } from '../services/caseCompetitionService';
+import { 
+  createThread, getThreads, deleteThread, 
+  saveMessage, getMessages, updateThreadTimestamp 
+} from '../services/supabaseService';
 import MessageBubble from './MessageBubble';
 import { Message, Sender, MessageType } from '../types';
 
@@ -15,40 +19,92 @@ interface Thread {
 }
 
 const LumiWorkspace: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   
-  const [threads, setThreads] = useState<Thread[]>([
-    {
-      id: '1',
-      name: 'Case Competition',
-      messages: [],
-      mode: 'case-competition'
-    },
-    {
-      id: '2',
-      name: 'General Assistant',
-      messages: [],
-      mode: 'general'
-    }
-  ]);
-  
-  const [activeThreadId, setActiveThreadId] = useState<string>('1');
+  const [threads, setThreads] = useState<Thread[]>([]);
+  const [activeThreadId, setActiveThreadId] = useState<string>('');
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isInitialized, setIsInitialized] = useState<Record<string, boolean>>({});
+  const [isLoadingThreads, setIsLoadingThreads] = useState(true);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const activeThread = threads.find(t => t.id === activeThreadId) || threads[0];
+  const activeThread = threads.find(t => t.id === activeThreadId);
 
+  // Load threads from database on mount
   useEffect(() => {
-    if (!isInitialized[activeThreadId] && activeThread) {
-      initializeThread(activeThreadId);
+    loadThreads();
+  }, [user]);
+
+  // Load messages when thread changes
+  useEffect(() => {
+    if (activeThreadId && activeThread) {
+      loadThreadMessages(activeThreadId);
     }
   }, [activeThreadId]);
+
+  const loadThreads = async () => {
+    if (!user?.email) return;
+    
+    setIsLoadingThreads(true);
+    try {
+      const dbThreads = await getThreads(user.email);
+      
+      if (dbThreads.length === 0) {
+        // Create default threads if none exist
+        const thread1Id = await createThread(user.email, 'Case Competition', 'case-competition');
+        const thread2Id = await createThread(user.email, 'General Assistant', 'general');
+        
+        const defaultThreads: Thread[] = [
+          { id: thread1Id || '1', name: 'Case Competition', messages: [], mode: 'case-competition' },
+          { id: thread2Id || '2', name: 'General Assistant', messages: [], mode: 'general' },
+        ];
+        setThreads(defaultThreads);
+        setActiveThreadId(defaultThreads[0].id);
+      } else {
+        const formattedThreads: Thread[] = dbThreads.map(t => ({
+          id: t.id,
+          name: t.name,
+          messages: [],
+          mode: t.mode,
+        }));
+        setThreads(formattedThreads);
+        setActiveThreadId(formattedThreads[0].id);
+      }
+    } catch (error) {
+      console.error('Error loading threads:', error);
+    } finally {
+      setIsLoadingThreads(false);
+    }
+  };
+
+  const loadThreadMessages = async (threadId: string) => {
+    if (isInitialized[threadId]) return;
+    
+    setIsLoading(true);
+    try {
+      const messages = await getMessages(threadId);
+      
+      if (messages.length === 0) {
+        // Initialize with welcome message if no messages
+        await initializeThread(threadId);
+      } else {
+        setThreads(prev => prev.map(t => 
+          t.id === threadId ? { ...t, messages } : t
+        ));
+        setIsInitialized(prev => ({ ...prev, [threadId]: true }));
+      }
+    } catch (error) {
+      console.error('Error loading messages:', error);
+      await initializeThread(threadId);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     scrollToBottom();
@@ -71,6 +127,9 @@ const LumiWorkspace: React.FC = () => {
         content: welcomeMessage,
         timestamp: Date.now(),
       };
+      
+      // Save to database
+      await saveMessage(threadId, botMessage);
       
       setThreads(prev => prev.map(t => 
         t.id === threadId 
@@ -96,7 +155,7 @@ const LumiWorkspace: React.FC = () => {
 
   const handleSendMessage = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if ((!inputText.trim() && uploadedFiles.length === 0) || isLoading) return;
+    if ((!inputText.trim() && uploadedFiles.length === 0) || isLoading || !activeThreadId) return;
 
     const userMsg = inputText.trim();
     setInputText('');
@@ -108,6 +167,10 @@ const LumiWorkspace: React.FC = () => {
       content: userMsg || `Uploaded ${uploadedFiles.length} file(s)`,
       timestamp: Date.now(),
     };
+
+    // Save user message to database
+    await saveMessage(activeThreadId, userMessage);
+    await updateThreadTimestamp(activeThreadId);
 
     setThreads(prev => prev.map(t => 
       t.id === activeThreadId 
@@ -127,6 +190,10 @@ const LumiWorkspace: React.FC = () => {
         timestamp: Date.now(),
       };
       
+      // Save bot message to database
+      await saveMessage(activeThreadId, botMessage);
+      await updateThreadTimestamp(activeThreadId);
+      
       setThreads(prev => prev.map(t => 
         t.id === activeThreadId 
           ? { ...t, messages: [...t.messages, botMessage] }
@@ -145,6 +212,7 @@ const LumiWorkspace: React.FC = () => {
         content: 'Sorry, I encountered an error. Please try again.',
         timestamp: Date.now(),
       };
+      await saveMessage(activeThreadId, errorMessage);
       setThreads(prev => prev.map(t => 
         t.id === activeThreadId 
           ? { ...t, messages: [...t.messages, errorMessage] }
@@ -156,23 +224,32 @@ const LumiWorkspace: React.FC = () => {
   };
 
 
-  const createNewThread = () => {
-    const newThread: Thread = {
-      id: Date.now().toString(),
-      name: `Thread ${threads.length + 1}`,
-      messages: [],
-      mode: 'case-competition'
-    };
-    setThreads(prev => [...prev, newThread]);
-    setActiveThreadId(newThread.id);
+  const createNewThread = async () => {
+    if (!user?.email) return;
+    
+    const threadId = await createThread(user.email, `Thread ${threads.length + 1}`, 'case-competition');
+    if (threadId) {
+      const newThread: Thread = {
+        id: threadId,
+        name: `Thread ${threads.length + 1}`,
+        messages: [],
+        mode: 'case-competition'
+      };
+      setThreads(prev => [...prev, newThread]);
+      setActiveThreadId(threadId);
+    }
   };
 
-  const deleteThread = (threadId: string) => {
+  const handleDeleteThread = async (threadId: string) => {
     if (threads.length <= 1) return; // Keep at least one thread
-    setThreads(prev => prev.filter(t => t.id !== threadId));
-    if (activeThreadId === threadId) {
-      const remainingThreads = threads.filter(t => t.id !== threadId);
-      setActiveThreadId(remainingThreads[0]?.id || '1');
+    
+    const success = await deleteThread(threadId);
+    if (success) {
+      setThreads(prev => prev.filter(t => t.id !== threadId));
+      if (activeThreadId === threadId) {
+        const remainingThreads = threads.filter(t => t.id !== threadId);
+        setActiveThreadId(remainingThreads[0]?.id || '');
+      }
     }
   };
 
@@ -182,7 +259,10 @@ const LumiWorkspace: React.FC = () => {
       <header className="w-full bg-white border-b border-gray-200 z-30 h-16 flex-shrink-0">
         <div className="w-full h-full px-4 lg:px-6 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-2">
+            <div 
+              className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => navigate('/')}
+            >
               <Brain className="w-6 h-6 text-green-600" />
               <h1 className="font-semibold text-lg tracking-tight text-gray-900">Lumi</h1>
             </div>
@@ -227,7 +307,7 @@ const LumiWorkspace: React.FC = () => {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        deleteThread(thread.id);
+                        handleDeleteThread(thread.id);
                       }}
                       className="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-red-600 transition-all"
                     >

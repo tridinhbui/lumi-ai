@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 import Login from './components/Login';
+import HomePage from './components/HomePage';
 import CaseInterview from './components/CaseInterview';
 import ChatbotCaseCompetition from './components/ChatbotCaseCompetition';
 import LumiWorkspace from './components/LumiWorkspace';
@@ -16,7 +17,15 @@ const App: React.FC = () => {
       <Routes>
         <Route 
           path="/" 
-          element={isAuthenticated ? <Navigate to="/lumi" replace /> : <Login />} 
+          element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} 
+        />
+        <Route 
+          path="/home" 
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          } 
         />
         <Route 
           path="/lumi" 
