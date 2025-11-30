@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Send, Upload, FileText, X, ArrowLeft, MessageSquare, BarChart3, Plus, MoreVertical, Trash2, Edit2 } from 'lucide-react';
@@ -14,16 +14,20 @@ import MessageBubble from './MessageBubble';
 import MessageSkeleton from './MessageSkeleton';
 import ThreadSkeleton from './ThreadSkeleton';
 import BizCaseLogo from './BizCaseLogo';
-import CaseAnalysisDashboard from './CaseAnalysisDashboard';
+import LazyDashboard from './LazyDashboard';
 import ThreadSummaryCard from './ThreadSummaryCard';
 import { getThreadSummary } from '../services/threadSummarizer';
+import { extractMessageMetadata, updateMessageMetadata } from '../services/messageMetadata';
 import MinimalButton from './MinimalButton';
 import MinimalInput from './MinimalInput';
+import { useToast } from '../contexts/ToastContext';
+import { notifyNewMessage } from '../utils/notifications';
 import { Message, Sender, MessageType } from '../types';
 
 const CaseCompetitionChat: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { showSuccess, showError } = useToast();
   
   const [threads, setThreads] = useState<{ id: string; name: string; messages: Message[] }[]>([]);
   const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
@@ -242,7 +246,7 @@ const CaseCompetitionChat: React.FC = () => {
     setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSendMessage = async (e?: React.FormEvent) => {
+  const handleSendMessage = useCallback(async (e?: React.FormEvent) => {
     e?.preventDefault();
     if ((!inputText.trim() && uploadedFiles.length === 0) || isLoading || !activeThreadId) return;
 
@@ -289,6 +293,16 @@ const CaseCompetitionChat: React.FC = () => {
       ));
       await saveMessage(activeThreadId, botMessage);
       await updateThreadTimestamp(activeThreadId);
+
+      // Show success toast
+      showSuccess('Message sent successfully');
+
+      // Send browser notification if user is not on the page
+      if (document.hidden) {
+        await notifyNewMessage('Lumi', response.substring(0, 100), () => {
+          window.focus();
+        });
+      }
 
       // Extract and save metadata for bot message
       const botMetadata = await extractMessageMetadata(botMessage);
@@ -769,7 +783,8 @@ const CaseCompetitionChat: React.FC = () => {
                     <ThreadSummaryCard summary={threadSummary} />
                   </div>
                 )}
-                <CaseAnalysisDashboard 
+                <LazyDashboard
+                  type="case"
                   messages={activeThread?.messages || []} 
                   threadName={activeThread?.name || ''}
                   uploadedFiles={uploadedFiles}
@@ -816,11 +831,12 @@ const CaseCompetitionChat: React.FC = () => {
                 )}
                 {/* Dashboard */}
                 <div className="flex-1 overflow-hidden">
-                  <CaseAnalysisDashboard 
-                    messages={activeThread?.messages || []} 
-                    threadName={activeThread?.name || ''}
-                    uploadedFiles={uploadedFiles}
-                  />
+                <LazyDashboard
+                  type="case"
+                  messages={activeThread?.messages || []} 
+                  threadName={activeThread?.name || ''}
+                  uploadedFiles={uploadedFiles}
+                />
                 </div>
               </div>
             </div>

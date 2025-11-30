@@ -1,6 +1,7 @@
 import { GoogleGenAI, Chat, GenerateContentResponse } from "@google/genai";
 import { getConversationHistory, messagesToGeminiFormat } from './memoryService';
 import { getMessages } from './supabaseService';
+import { retry, retryWithErrorHandling } from '../utils/retry';
 
 const CASE_COMPETITION_SYSTEM_INSTRUCTION = `You are Lumi, a strategic AI assistant for case competition. Your role is to analyze cases from CEO and consulting perspectives, and help users build structured case solutions.
 
@@ -168,54 +169,57 @@ export const sendCaseMessage = async (
   uploadedFiles?: File[],
   threadId?: string
 ): Promise<string> => {
-  try {
-    let session: Chat;
+  return retryWithErrorHandling(
+    async () => {
+      let session: Chat;
 
-    if (threadId) {
-      // Use thread-specific session with persistent history
-      session = await getOrCreateSession(threadId);
-    } else {
-      // Legacy: use global session
-      if (!chatSessions.has('legacy')) {
-        const ai = getClient();
-        session = ai.chats.create({
-          model: 'gemini-2.5-flash',
-          config: {
-            systemInstruction: CASE_COMPETITION_SYSTEM_INSTRUCTION,
-            temperature: 0.7,
-          },
-        });
-        chatSessions.set('legacy', session);
+      if (threadId) {
+        // Use thread-specific session with persistent history
+        session = await getOrCreateSession(threadId);
       } else {
-        session = chatSessions.get('legacy')!;
+        // Legacy: use global session
+        if (!chatSessions.has('legacy')) {
+          const ai = getClient();
+          session = ai.chats.create({
+            model: 'gemini-2.5-flash',
+            config: {
+              systemInstruction: CASE_COMPETITION_SYSTEM_INSTRUCTION,
+              temperature: 0.7,
+            },
+          });
+          chatSessions.set('legacy', session);
+        } else {
+          session = chatSessions.get('legacy')!;
+        }
       }
-    }
 
-    // If files are uploaded, process them
-    if (uploadedFiles && uploadedFiles.length > 0) {
-      // For now, we'll send text description of files
-      // In production, you'd want to extract text from PDFs/images
-      const fileInfo = uploadedFiles.map(f => `File: ${f.name} (${f.type})`).join('\n');
-      userMessage = `${userMessage}\n\nUploaded files:\n${fileInfo}`;
-    }
+      // If files are uploaded, process them
+      if (uploadedFiles && uploadedFiles.length > 0) {
+        // For now, we'll send text description of files
+        // In production, you'd want to extract text from PDFs/images
+        const fileInfo = uploadedFiles.map(f => `File: ${f.name} (${f.type})`).join('\n');
+        userMessage = `${userMessage}\n\nUploaded files:\n${fileInfo}`;
+      }
 
-    const response: GenerateContentResponse = await session.sendMessage({ 
-      message: userMessage 
-    });
-    const text = response.text || "I didn't catch that. Could you rephrase?";
-    // Remove markdown formatting to prevent hypertext rendering
-    return text.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*(.*?)\*/g, '$1').replace(/#{1,6}\s/g, '').replace(/\[(.*?)\]\(.*?\)/g, '$1');
-  } catch (error: any) {
-    console.error("Gemini Error:", error);
-    const errorMessage = error?.message || 'Unknown error';
-    if (errorMessage.includes('API key') || errorMessage.includes('API_KEY')) {
-      return "Error: API key not found or invalid. Please check your VITE_GEMINI_API_KEY in .env.local file.";
+      const response: GenerateContentResponse = await session.sendMessage({ 
+        message: userMessage 
+      });
+      const text = response.text || "I didn't catch that. Could you rephrase?";
+      // Remove markdown formatting to prevent hypertext rendering
+      return text.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*(.*?)\*/g, '$1').replace(/#{1,6}\s/g, '').replace(/\[(.*?)\]\(.*?\)/g, '$1');
+    },
+    {
+      maxRetries: 3,
+      errorMessage: 'Failed to send message. Please check your connection and try again.',
+      retryCondition: (error: any) => {
+        const errorMessage = error?.message || '';
+        // Retry on network errors, 5xx, and rate limits
+        return !errorMessage.includes('API key') && 
+               !errorMessage.includes('API_KEY') &&
+               !errorMessage.includes('invalid');
+      },
     }
-    if (errorMessage.includes('quota') || errorMessage.includes('limit')) {
-      return "API quota exceeded. Please try again later.";
-    }
-    return `Connection error: ${errorMessage}. Please try again.`;
-  }
+  );
 };
 
 export const extractInsightsFromText = async (text: string): Promise<any> => {

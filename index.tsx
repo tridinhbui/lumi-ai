@@ -4,6 +4,8 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthProvider } from './contexts/AuthContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { DarkModeProvider } from './contexts/DarkModeContext';
+import { ToastProvider } from './contexts/ToastContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import App from './App';
 
 const rootElement = document.getElementById('root');
@@ -17,14 +19,18 @@ const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '336038131508-
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <DarkModeProvider>
-        <LanguageProvider>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </LanguageProvider>
-      </DarkModeProvider>
-    </GoogleOAuthProvider>
+    <ErrorBoundary>
+      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+        <DarkModeProvider>
+          <LanguageProvider>
+            <ToastProvider>
+              <AuthProvider>
+                <App />
+              </AuthProvider>
+            </ToastProvider>
+          </LanguageProvider>
+        </DarkModeProvider>
+      </GoogleOAuthProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
