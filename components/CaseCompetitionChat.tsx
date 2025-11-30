@@ -38,6 +38,7 @@ const CaseCompetitionChat: React.FC = () => {
   const [editingThreadId, setEditingThreadId] = useState<string | null>(null);
   const [newThreadName, setNewThreadName] = useState('');
   const [threadSummary, setThreadSummary] = useState<any>(null);
+  const [showMobileThreads, setShowMobileThreads] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -748,11 +749,40 @@ const CaseCompetitionChat: React.FC = () => {
 
         {/* Dashboard Panel */}
         {showDashboard && (
-          <div 
-            ref={dashboardRef}
-            className="absolute lg:relative inset-0 lg:inset-auto bg-white flex flex-col z-30 lg:z-auto"
-            style={{ width: window.innerWidth >= 1024 ? `${dashboardWidth}px` : '100%' }}
-          >
+          <>
+            {/* Mobile Dashboard Overlay */}
+            <div 
+              className="lg:hidden fixed inset-0 bg-white dark:bg-[#1e293b] flex flex-col z-30"
+            >
+              <div className="p-4 border-b border-[#E6E9EF] dark:border-[#334155] flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-[#1F4AA8] dark:text-[#4C86FF]">Dashboard</h3>
+                <button
+                  onClick={() => setShowDashboard(false)}
+                  className="p-2 hover:bg-[#F8F9FB] dark:hover:bg-[#0f172a] rounded-lg active:scale-95"
+                >
+                  <X className="w-5 h-5 text-[#737373] dark:text-[#94a3b8]" />
+                </button>
+              </div>
+              <div className="flex-1 overflow-hidden">
+                {threadSummary && (
+                  <div className="p-4 border-b border-[#E6E9EF] dark:border-[#334155]">
+                    <ThreadSummaryCard summary={threadSummary} />
+                  </div>
+                )}
+                <CaseAnalysisDashboard 
+                  messages={activeThread?.messages || []} 
+                  threadName={activeThread?.name || ''}
+                  uploadedFiles={uploadedFiles}
+                />
+              </div>
+            </div>
+
+            {/* Desktop Dashboard Panel */}
+            <div 
+              ref={dashboardRef}
+              className="hidden lg:flex absolute lg:relative inset-0 lg:inset-auto bg-white dark:bg-[#1e293b] flex flex-col z-30 lg:z-auto"
+              style={{ width: window.innerWidth >= 1024 ? `${dashboardWidth}px` : '100%' }}
+            >
             {/* Resize Handle */}
             <div
               className="hidden lg:block absolute left-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-[#1F4AA8] transition-colors z-10"
@@ -762,9 +792,9 @@ const CaseCompetitionChat: React.FC = () => {
               }}
             />
             
-            <div className="border-l border-[#E6E9EF] h-full flex flex-col">
-              <div className="p-4 border-b border-[#E6E9EF] bg-[#F8F9FB] flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-[#1F4AA8] flex items-center gap-2">
+            <div className="border-l border-[#E6E9EF] dark:border-[#334155] h-full flex flex-col">
+              <div className="p-4 border-b border-[#E6E9EF] dark:border-[#334155] bg-[#F8F9FB] dark:bg-[#0f172a] flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-[#1F4AA8] dark:text-[#4C86FF] flex items-center gap-2">
                   <BarChart3 className="w-4 h-4" />
                   Analysis Dashboard
                 </h3>

@@ -9,6 +9,7 @@ import {
   saveMessage, getMessages, updateThreadTimestamp 
 } from '../services/supabaseService';
 import MessageBubble from './MessageBubble';
+import MessageSkeleton from './MessageSkeleton';
 import BizCaseLogo from './BizCaseLogo';
 import MinimalButton from './MinimalButton';
 import MinimalInput from './MinimalInput';
@@ -268,9 +269,28 @@ const GeneralAssistantChat: React.FC = () => {
           className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-4 lg:space-y-6"
           style={{ paddingBottom: uploadedFiles.length > 0 ? '180px' : '120px' }}
         >
-          {thread?.messages.map((msg) => (
-            <MessageBubble key={msg.id} message={msg} />
-          ))}
+            {thread?.messages.map((msg) => (
+              <MessageBubble 
+                key={msg.id} 
+                message={msg}
+                canEdit={msg.sender === Sender.USER}
+                canDelete={msg.sender === Sender.USER}
+                onEdit={async (messageId, newContent) => {
+                  setThread(prev => prev ? {
+                    ...prev,
+                    messages: prev.messages.map(m => 
+                      m.id === messageId ? { ...m, content: newContent } : m
+                    )
+                  } : null);
+                }}
+                onDelete={async (messageId) => {
+                  setThread(prev => prev ? {
+                    ...prev,
+                    messages: prev.messages.filter(m => m.id !== messageId)
+                  } : null);
+                }}
+              />
+            ))}
           {isLoading && (
             <div className="flex w-full justify-start mb-6">
               <div className="flex max-w-[85%] flex-row">
