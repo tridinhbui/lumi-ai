@@ -8,6 +8,8 @@ import ChatbotCaseCompetition from './components/ChatbotCaseCompetition';
 import LumiWorkspace from './components/LumiWorkspace';
 import LearningDashboard from './components/LearningDashboard';
 import Settings from './components/Settings';
+import CaseCompetitionChat from './components/CaseCompetitionChat';
+import GeneralAssistantChat from './components/GeneralAssistantChat';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App: React.FC = () => {
@@ -65,6 +67,22 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <Settings />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/case-competition" 
+          element={
+            <ProtectedRoute>
+              <CaseCompetitionChat />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/general-assistant" 
+          element={
+            <ProtectedRoute>
+              <GeneralAssistantChat />
             </ProtectedRoute>
           } 
         />

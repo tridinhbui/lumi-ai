@@ -306,8 +306,9 @@ const HomePageThreads: React.FC = () => {
               <h3 className="font-semibold">General Assistant</h3>
             </div>
             <button
-              onClick={() => navigate('/lumi')}
+              onClick={() => navigate('/general-assistant')}
               className="p-1 hover:bg-white/20 rounded transition-colors"
+              title="Mở toàn màn hình"
             >
               <ArrowRight className="w-4 h-4" />
             </button>
