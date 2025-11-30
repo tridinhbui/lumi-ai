@@ -16,13 +16,6 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  // Mock user for bypassing Google login
-  const mockUser: User = {
-    name: 'Demo User',
-    email: 'demo@medidrone.com',
-    picture: 'https://ui-avatars.com/api/?name=Demo+User&background=10b981&color=fff&size=128'
-  };
-
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -30,10 +23,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
-    } else {
-      // Auto-login with mock user (bypass Google login)
-      setUser(mockUser);
-      localStorage.setItem('user', JSON.stringify(mockUser));
     }
   }, []);
 
@@ -43,13 +32,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const logout = () => {
-    // On logout, auto-login again with mock user
-    setUser(mockUser);
-    localStorage.setItem('user', JSON.stringify(mockUser));
+    setUser(null);
+    localStorage.removeItem('user');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: true }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

@@ -4,15 +4,35 @@ import { useAuth } from './contexts/AuthContext';
 import Login from './components/Login';
 import CaseInterview from './components/CaseInterview';
 import ChatbotCaseCompetition from './components/ChatbotCaseCompetition';
+import LumiWorkspace from './components/LumiWorkspace';
+import LearningDashboard from './components/LearningDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+
   return (
     <Router>
       <Routes>
         <Route 
           path="/" 
-          element={<Navigate to="/case-interview" replace />} 
+          element={isAuthenticated ? <Navigate to="/lumi" replace /> : <Login />} 
+        />
+        <Route 
+          path="/lumi" 
+          element={
+            <ProtectedRoute>
+              <LumiWorkspace />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute>
+              <LearningDashboard />
+            </ProtectedRoute>
+          } 
         />
         <Route 
           path="/case-interview" 
@@ -30,7 +50,7 @@ const App: React.FC = () => {
             </ProtectedRoute>
           } 
         />
-        <Route path="*" element={<Navigate to="/case-interview" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
