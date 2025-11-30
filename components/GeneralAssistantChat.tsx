@@ -311,7 +311,7 @@ const GeneralAssistantChat: React.FC = () => {
 
         {/* Dashboard Panel */}
         {showDashboard && (
-          <div className="w-full lg:w-[800px] xl:w-[900px] border-l border-[#E6E9EF] bg-white flex flex-col">
+          <div className="absolute lg:relative inset-0 lg:inset-auto w-full lg:w-[800px] xl:w-[900px] border-l border-[#E6E9EF] bg-white flex flex-col z-30 lg:z-auto">
             <div className="p-4 border-b border-[#E6E9EF] bg-[#F8F9FB] flex items-center justify-between">
               <h3 className="text-sm font-semibold text-[#1F4AA8] flex items-center gap-2">
                 <BarChart3 className="w-4 h-4" />

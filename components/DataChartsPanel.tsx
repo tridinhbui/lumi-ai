@@ -32,16 +32,17 @@ const DataChartsPanel: React.FC<DataChartsPanelProps> = ({
   const renderChart = () => {
     if (currentChartType === 'bar') {
       return (
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={250}>
           <BarChart data={sampleData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#E6E9EF" />
-            <XAxis dataKey="name" stroke="#737373" />
-            <YAxis stroke="#737373" />
+            <XAxis dataKey="name" stroke="#737373" fontSize={12} />
+            <YAxis stroke="#737373" fontSize={12} />
             <Tooltip 
               contentStyle={{ 
                 backgroundColor: '#fff', 
                 borderColor: '#E6E9EF', 
-                borderRadius: '8px' 
+                borderRadius: '8px',
+                fontSize: '12px'
               }}
             />
             <Bar dataKey="value" fill="#1F4AA8" radius={[8, 8, 0, 0]} />
@@ -53,16 +54,17 @@ const DataChartsPanel: React.FC<DataChartsPanelProps> = ({
 
     if (currentChartType === 'line') {
       return (
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={250}>
           <LineChart data={sampleData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#E6E9EF" />
-            <XAxis dataKey="name" stroke="#737373" />
-            <YAxis stroke="#737373" />
+            <XAxis dataKey="name" stroke="#737373" fontSize={12} />
+            <YAxis stroke="#737373" fontSize={12} />
             <Tooltip 
               contentStyle={{ 
                 backgroundColor: '#fff', 
                 borderColor: '#E6E9EF', 
-                borderRadius: '8px' 
+                borderRadius: '8px',
+                fontSize: '12px'
               }}
             />
             <Line type="monotone" dataKey="value" stroke="#1F4AA8" strokeWidth={2} />
@@ -74,7 +76,7 @@ const DataChartsPanel: React.FC<DataChartsPanelProps> = ({
 
     if (currentChartType === 'pie') {
       return (
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={250}>
           <PieChart>
             <Pie
               data={sampleData}
@@ -82,7 +84,7 @@ const DataChartsPanel: React.FC<DataChartsPanelProps> = ({
               cy="50%"
               labelLine={false}
               label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              outerRadius={80}
+              outerRadius={70}
               fill="#8884d8"
               dataKey="value"
             >
