@@ -220,7 +220,12 @@ export const saveMessage = async (threadId: string, message: Message): Promise<b
       throw error;
     }
     
-    console.log('Message saved to Supabase successfully:', message.id);
+    console.log('✅ Message saved to Supabase successfully:', {
+      messageId: message.id,
+      threadId: threadId,
+      sender: message.sender,
+      contentLength: message.content.length
+    });
     return true;
   } catch (error: any) {
     console.error('Error saving message to Supabase:', error);

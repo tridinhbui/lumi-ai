@@ -145,12 +145,9 @@ const CaseCompetitionChat: React.FC = () => {
         }));
         setThreads(formattedThreads);
         const firstThreadId = formattedThreads[0].id;
-        setActiveThreadId(firstThreadId);
         console.log('Loaded threads, active thread:', firstThreadId);
-        // Immediately load messages for the first thread
-        if (firstThreadId) {
-          loadThreadMessages(firstThreadId);
-        }
+        // Set active thread first, then load messages
+        setActiveThreadId(firstThreadId);
       }
     } catch (error) {
       console.error('Error loading threads:', error);
@@ -159,29 +156,33 @@ const CaseCompetitionChat: React.FC = () => {
 
   const loadThreadMessages = async (threadId: string) => {
     if (isInitialized[threadId]) {
-      console.log('Thread already initialized:', threadId);
+      console.log('Thread already initialized, skipping:', threadId);
       return;
     }
     
-    console.log('Loading messages for thread:', threadId);
+    console.log('🔄 Loading messages for thread:', threadId);
     setIsLoading(true);
     try {
       const messages = await getMessages(threadId);
-      console.log('Loaded messages from database:', messages.length, 'for thread:', threadId);
+      console.log('📥 Loaded', messages.length, 'messages from database for thread:', threadId);
       
       if (messages.length === 0) {
-        console.log('No messages found, initializing thread:', threadId);
+        console.log('⚠️ No messages found, initializing new thread:', threadId);
         await initializeThread(threadId);
       } else {
-        console.log('Restoring messages to UI:', messages.length);
+        console.log('✅ Restoring', messages.length, 'messages to UI');
+        console.log('Messages preview:', messages.slice(0, 3).map(m => ({ id: m.id, sender: m.sender, content: m.content.substring(0, 50) })));
+        
         setThreads(prev => prev.map(t => 
           t.id === threadId ? { ...t, messages } : t
         ));
         setIsInitialized(prev => ({ ...prev, [threadId]: true }));
+        console.log('✅ Messages restored successfully');
       }
     } catch (error) {
-      console.error('Error loading messages:', error);
+      console.error('❌ Error loading messages:', error);
       console.error('Error details:', error);
+      // Try to initialize anyway
       await initializeThread(threadId);
     } finally {
       setIsLoading(false);
@@ -291,10 +292,13 @@ const CaseCompetitionChat: React.FC = () => {
     ));
     
     // Save user message to database
+    console.log('💾 Saving user message to database:', userMessage.id, 'thread:', activeThreadId);
     const userMessageSaved = await saveMessage(activeThreadId, userMessage);
     if (!userMessageSaved) {
       showError('Failed to save message. Please check your connection.');
-      console.error('Failed to save user message:', userMessage.id);
+      console.error('❌ Failed to save user message:', userMessage.id);
+    } else {
+      console.log('✅ User message saved successfully:', userMessage.id);
     }
     
     // Extract and save metadata for user message
@@ -324,10 +328,13 @@ const CaseCompetitionChat: React.FC = () => {
       ));
       
       // Save bot message to database
+      console.log('💾 Saving bot message to database:', botMessage.id, 'thread:', activeThreadId);
       const botMessageSaved = await saveMessage(activeThreadId, botMessage);
       if (!botMessageSaved) {
         showError('Failed to save bot response. Please check your connection.');
-        console.error('Failed to save bot message:', botMessage.id);
+        console.error('❌ Failed to save bot message:', botMessage.id);
+      } else {
+        console.log('✅ Bot message saved successfully:', botMessage.id);
       }
       
       // Update thread timestamp
