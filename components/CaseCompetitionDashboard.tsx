@@ -61,7 +61,7 @@ const CaseCompetitionDashboard: React.FC<CaseCompetitionDashboardProps> = ({ dat
                 <Tooltip 
                   contentStyle={{ backgroundColor: '#fff', borderColor: '#e5e7eb', borderRadius: '8px' }}
                 />
-                <Bar dataKey="value" fill="#10b981" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="value" fill="#1e3a8a" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -119,7 +119,7 @@ const CaseCompetitionDashboard: React.FC<CaseCompetitionDashboardProps> = ({ dat
       <div className="bg-white border-b border-gray-200 p-3 lg:p-4 flex-shrink-0">
         <div className="flex items-center justify-between mb-2 lg:mb-3">
           <h2 className="text-base lg:text-lg font-bold text-gray-900 flex items-center">
-            <BarChart3 className="w-4 h-4 lg:w-5 lg:h-5 mr-2 text-green-600" />
+            <BarChart3 className="w-4 h-4 lg:w-5 lg:h-5 mr-2 text-[#1e3a8a]" />
             <span className="hidden sm:inline">Case Analysis Dashboard</span>
             <span className="sm:hidden">Dashboard</span>
           </h2>
@@ -131,7 +131,7 @@ const CaseCompetitionDashboard: React.FC<CaseCompetitionDashboardProps> = ({ dat
             onClick={() => setActiveTab('charts')}
             className={`px-3 lg:px-4 py-1.5 lg:py-2 text-xs lg:text-sm font-medium rounded-lg transition-colors whitespace-nowrap flex-shrink-0 ${
               activeTab === 'charts'
-                ? 'bg-green-100 text-green-700'
+                ? 'bg-blue-100 text-[#1e3a8a]'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -141,7 +141,7 @@ const CaseCompetitionDashboard: React.FC<CaseCompetitionDashboardProps> = ({ dat
             onClick={() => setActiveTab('map')}
             className={`px-3 lg:px-4 py-1.5 lg:py-2 text-xs lg:text-sm font-medium rounded-lg transition-colors whitespace-nowrap flex-shrink-0 ${
               activeTab === 'map'
-                ? 'bg-green-100 text-green-700'
+                ? 'bg-blue-100 text-[#1e3a8a]'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -152,7 +152,7 @@ const CaseCompetitionDashboard: React.FC<CaseCompetitionDashboardProps> = ({ dat
             onClick={() => setActiveTab('insights')}
             className={`px-3 lg:px-4 py-1.5 lg:py-2 text-xs lg:text-sm font-medium rounded-lg transition-colors whitespace-nowrap flex-shrink-0 ${
               activeTab === 'insights'
-                ? 'bg-green-100 text-green-700'
+                ? 'bg-blue-100 text-[#1e3a8a]'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -184,14 +184,14 @@ const CaseCompetitionDashboard: React.FC<CaseCompetitionDashboardProps> = ({ dat
               {mapData.map((point, index) => (
                 <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center space-x-3">
-                    <MapPin className="w-5 h-5 text-green-600" />
+                    <MapPin className="w-5 h-5 text-[#1e3a8a]" />
                     <div>
                       <p className="text-sm font-medium text-gray-900">{point.label}</p>
                       <p className="text-xs text-gray-500">{point.location}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-bold text-green-600">{point.value}</p>
+                    <p className="text-sm font-bold text-[#1e3a8a]">{point.value}</p>
                     <p className="text-xs text-gray-500">Score</p>
                   </div>
                 </div>
@@ -212,7 +212,7 @@ const CaseCompetitionDashboard: React.FC<CaseCompetitionDashboardProps> = ({ dat
               data.insights.map((insight, index) => (
                 <div key={index} className="bg-white rounded-lg p-4 border border-gray-200">
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
+                    <div className="w-6 h-6 bg-blue-100 text-[#1e3a8a] rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
                       {index + 1}
                     </div>
                     <p className="text-sm text-gray-700">{insight}</p>

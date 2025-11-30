@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Send, Upload, FileText, X, LogOut, ArrowLeft, Brain, BarChart3, LayoutGrid, File } from 'lucide-react';
+import { Send, Upload, FileText, X, LogOut, ArrowLeft, BarChart3, LayoutGrid, File } from 'lucide-react';
+import BizCaseLogo from './BizCaseLogo';
 import { startCaseChat, sendCaseMessage, extractInsightsFromText } from '../services/caseCompetitionService';
 import CaseCompetitionDashboard, { DashboardData } from './CaseCompetitionDashboard';
 import PDFViewer from './PDFViewer';
@@ -206,12 +207,12 @@ const ChatbotCaseCompetition: React.FC = () => {
               className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
               onClick={() => navigate('/')}
             >
-              <Brain className="w-6 h-6 text-green-600" />
-              <h1 className="font-semibold text-lg tracking-tight text-gray-900">Lumi</h1>
+              <BizCaseLogo size="sm" showText={false} />
             </div>
             <div className="h-6 w-px bg-gray-200 mx-2"></div>
             <div>
-              <p className="text-sm text-gray-500 uppercase tracking-wide">Strategic AI Assistant</p>
+              <h1 className="font-semibold text-sm tracking-tight text-[#1e3a8a]">Lumi - BizCase Lab</h1>
+              <p className="text-[10px] text-gray-500 uppercase tracking-wide">Strategic AI Assistant</p>
             </div>
           </div>
           <div className="flex items-center space-x-4">
@@ -247,7 +248,7 @@ const ChatbotCaseCompetition: React.FC = () => {
             {isLoading && (
               <div className="flex w-full justify-start mb-6">
                 <div className="flex max-w-[85%] flex-row">
-                  <div className="flex-shrink-0 h-8 w-8 rounded-full bg-green-800 text-white mr-3 flex items-center justify-center text-[10px] font-bold">
+                  <div className="flex-shrink-0 h-8 w-8 rounded-full bg-[#1e3a8a] text-white mr-3 flex items-center justify-center text-[10px] font-bold">
                     LUMI
                   </div>
                   <div className="bg-white border border-gray-100 py-4 px-5 rounded-2xl rounded-tl-none shadow-sm flex items-center">
@@ -301,14 +302,14 @@ const ChatbotCaseCompetition: React.FC = () => {
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     placeholder="Nhập câu hỏi về case, upload slide/PDF để phân tích..."
-                    className="w-full py-3 px-4 bg-gray-50 border border-gray-300 rounded-xl outline-none text-gray-800 placeholder-gray-400 text-sm lg:text-base focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all"
+                    className="w-full py-3 px-4 bg-gray-50 border border-gray-300 rounded-xl outline-none text-gray-800 placeholder-gray-400 text-sm lg:text-base focus:ring-2 focus:ring-[#1e3a8a]/50 focus:border-[#1e3a8a] transition-all"
                     disabled={isLoading}
                   />
                 </div>
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex-shrink-0 p-3 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                  className="flex-shrink-0 p-3 text-gray-600 hover:text-[#1e3a8a] hover:bg-blue-50 rounded-lg transition-colors"
                   title="Upload file"
                 >
                   <Upload size={20} />
@@ -319,7 +320,7 @@ const ChatbotCaseCompetition: React.FC = () => {
                   className={`flex-shrink-0 p-3 rounded-lg transition-colors ${
                     (!inputText.trim() && uploadedFiles.length === 0) || isLoading
                       ? 'text-gray-300 bg-gray-100 cursor-not-allowed'
-                      : 'text-white bg-green-600 hover:bg-green-700'
+                      : 'text-white bg-[#1e3a8a] hover:bg-[#1e40af]'
                   }`}
                 >
                   <Send size={20} />
@@ -341,7 +342,7 @@ const ChatbotCaseCompetition: React.FC = () => {
                 onClick={() => setRightPanelView('dashboard')}
                 className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center space-x-2 ${
                   rightPanelView === 'dashboard'
-                    ? 'bg-green-100 text-green-700'
+                    ? 'bg-blue-100 text-[#1e3a8a]'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
@@ -353,7 +354,7 @@ const ChatbotCaseCompetition: React.FC = () => {
                 disabled={!selectedPDF}
                 className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center space-x-2 ${
                   rightPanelView === 'pdf'
-                    ? 'bg-green-100 text-green-700'
+                    ? 'bg-blue-100 text-[#1e3a8a]'
                     : selectedPDF
                     ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     : 'bg-gray-50 text-gray-400 cursor-not-allowed'
@@ -362,7 +363,7 @@ const ChatbotCaseCompetition: React.FC = () => {
                 <File size={16} />
                 <span>PDF Viewer</span>
                 {selectedPDF && (
-                  <span className="ml-1 text-xs bg-green-500 text-white px-1.5 py-0.5 rounded">
+                  <span className="ml-1 text-xs bg-[#1e3a8a] text-white px-1.5 py-0.5 rounded">
                     {uploadedFiles.filter(f => f.type === 'application/pdf').length}
                   </span>
                 )}
