@@ -18,6 +18,7 @@ import LazyDashboard from './LazyDashboard';
 import ThreadSummaryCard from './ThreadSummaryCard';
 import { getThreadSummary } from '../services/threadSummarizer';
 import { extractMessageMetadata, updateMessageMetadata } from '../services/messageMetadata';
+import { logDatabaseStatus } from '../utils/dbHealthCheck';
 import MinimalButton from './MinimalButton';
 import MinimalInput from './MinimalInput';
 import { useToast } from '../contexts/ToastContext';
@@ -50,6 +51,8 @@ const CaseCompetitionChat: React.FC = () => {
 
   useEffect(() => {
     loadThreads();
+    // Check database health on mount
+    logDatabaseStatus();
   }, [user]);
 
   useEffect(() => {
@@ -179,7 +182,10 @@ const CaseCompetitionChat: React.FC = () => {
         timestamp: Date.now(),
       };
       
-      await saveMessage(threadId, botMessage);
+      const saved = await saveMessage(threadId, botMessage);
+      if (!saved) {
+        console.error('Failed to save welcome message:', botMessage.id);
+      }
       setThreads(prev => prev.map(t => 
         t.id === threadId ? { ...t, messages: [botMessage] } : t
       ));
@@ -264,7 +270,13 @@ const CaseCompetitionChat: React.FC = () => {
     setThreads(prev => prev.map(t => 
       t.id === activeThreadId ? { ...t, messages: [...t.messages, userMessage] } : t
     ));
-    await saveMessage(activeThreadId, userMessage);
+    
+    // Save user message to database
+    const userMessageSaved = await saveMessage(activeThreadId, userMessage);
+    if (!userMessageSaved) {
+      showError('Failed to save message. Please check your connection.');
+      console.error('Failed to save user message:', userMessage.id);
+    }
     
     // Extract and save metadata for user message
     const userMetadata = await extractMessageMetadata(userMessage);
@@ -291,7 +303,15 @@ const CaseCompetitionChat: React.FC = () => {
       setThreads(prev => prev.map(t => 
         t.id === activeThreadId ? { ...t, messages: [...t.messages, botMessage] } : t
       ));
-      await saveMessage(activeThreadId, botMessage);
+      
+      // Save bot message to database
+      const botMessageSaved = await saveMessage(activeThreadId, botMessage);
+      if (!botMessageSaved) {
+        showError('Failed to save bot response. Please check your connection.');
+        console.error('Failed to save bot message:', botMessage.id);
+      }
+      
+      // Update thread timestamp
       await updateThreadTimestamp(activeThreadId);
 
       // Show success toast
@@ -311,21 +331,26 @@ const CaseCompetitionChat: React.FC = () => {
       // Auto-summarize thread if needed (every 20 messages)
       const currentMessages = threads.find(t => t.id === activeThreadId)?.messages || [];
       if (currentMessages.length > 0 && currentMessages.length % 20 === 0) {
-        const summary = await autoSummarizeThread(activeThreadId);
-        if (summary) {
-          await saveThreadSummary(summary);
+        try {
+          const summary = await getThreadSummary(activeThreadId);
+          if (summary) {
+            setThreadSummary(summary);
+          }
+        } catch (error) {
+          console.error('Error summarizing thread:', error);
         }
       }
 
       if (uploadedFiles.length > 0) {
         setUploadedFiles([]);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error sending message:', error);
+      showError(error?.message || 'Failed to send message. Please try again.');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [activeThreadId, inputText, uploadedFiles, isLoading, showSuccess, showError, threads]);
 
   return (
     <div className="h-screen flex flex-col bg-[#F8F9FB] overflow-hidden">

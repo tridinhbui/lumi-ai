@@ -50,19 +50,26 @@ export const initializeDatabase = async () => {
 // Thread operations
 export const createThread = async (userId: string, name: string, mode: 'case-competition' | 'general'): Promise<string | null> => {
   if (!supabase) {
+    console.warn('Supabase not configured. Creating thread in localStorage fallback.');
     // Fallback to localStorage
-    const threadId = Date.now().toString();
-    const threads = JSON.parse(localStorage.getItem('chat_threads') || '[]');
-    threads.push({
-      id: threadId,
-      user_id: userId,
-      name,
-      mode,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    });
-    localStorage.setItem('chat_threads', JSON.stringify(threads));
-    return threadId;
+    try {
+      const threadId = Date.now().toString();
+      const threads = JSON.parse(localStorage.getItem('chat_threads') || '[]');
+      threads.push({
+        id: threadId,
+        user_id: userId,
+        name,
+        mode,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+      localStorage.setItem('chat_threads', JSON.stringify(threads));
+      console.log('Thread created in localStorage:', threadId);
+      return threadId;
+    } catch (error) {
+      console.error('Error creating thread in localStorage:', error);
+      return null;
+    }
   }
 
   try {
@@ -78,11 +85,41 @@ export const createThread = async (userId: string, name: string, mode: 'case-com
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase error creating thread:', error);
+      console.error('Error details:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+      });
+      throw error;
+    }
+    
+    console.log('Thread created in Supabase successfully:', data.id);
     return data.id;
-  } catch (error) {
-    console.error('Error creating thread:', error);
-    return null;
+  } catch (error: any) {
+    console.error('Error creating thread in Supabase:', error);
+    
+    // Try localStorage fallback if Supabase fails
+    try {
+      const threadId = Date.now().toString();
+      const threads = JSON.parse(localStorage.getItem('chat_threads') || '[]');
+      threads.push({
+        id: threadId,
+        user_id: userId,
+        name,
+        mode,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+      localStorage.setItem('chat_threads', JSON.stringify(threads));
+      console.warn('Thread created in localStorage fallback due to Supabase error');
+      return threadId;
+    } catch (fallbackError) {
+      console.error('Fallback create also failed:', fallbackError);
+      return null;
+    }
   }
 };
 
@@ -139,23 +176,30 @@ export const deleteThread = async (threadId: string): Promise<boolean> => {
 // Message operations
 export const saveMessage = async (threadId: string, message: Message): Promise<boolean> => {
   if (!supabase) {
+    console.warn('Supabase not configured. Saving to localStorage fallback.');
     // Fallback to localStorage
-    const messages = JSON.parse(localStorage.getItem('chat_messages') || '[]');
-    messages.push({
-      id: message.id,
-      thread_id: threadId,
-      sender: message.sender,
-      content: message.content,
-      message_type: message.type,
-      timestamp: message.timestamp,
-      created_at: new Date().toISOString(),
-    });
-    localStorage.setItem('chat_messages', JSON.stringify(messages));
-    return true;
+    try {
+      const messages = JSON.parse(localStorage.getItem('chat_messages') || '[]');
+      messages.push({
+        id: message.id,
+        thread_id: threadId,
+        sender: message.sender,
+        content: message.content,
+        message_type: message.type,
+        timestamp: message.timestamp,
+        created_at: new Date().toISOString(),
+      });
+      localStorage.setItem('chat_messages', JSON.stringify(messages));
+      console.log('Message saved to localStorage:', message.id);
+      return true;
+    } catch (error) {
+      console.error('Error saving to localStorage:', error);
+      return false;
+    }
   }
 
   try {
-    const { error } = await supabase.from('chat_messages').insert({
+    const { data, error } = await supabase.from('chat_messages').insert({
       id: message.id,
       thread_id: threadId,
       sender: message.sender,
@@ -163,13 +207,50 @@ export const saveMessage = async (threadId: string, message: Message): Promise<b
       message_type: message.type,
       timestamp: message.timestamp,
       created_at: new Date().toISOString(),
-    });
+    }).select();
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase error saving message:', error);
+      console.error('Error details:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+      });
+      throw error;
+    }
+    
+    console.log('Message saved to Supabase successfully:', message.id);
     return true;
-  } catch (error) {
-    console.error('Error saving message:', error);
-    return false;
+  } catch (error: any) {
+    console.error('Error saving message to Supabase:', error);
+    console.error('Message data:', {
+      id: message.id,
+      thread_id: threadId,
+      sender: message.sender,
+      content_length: message.content.length,
+      message_type: message.type,
+    });
+    
+    // Try localStorage fallback if Supabase fails
+    try {
+      const messages = JSON.parse(localStorage.getItem('chat_messages') || '[]');
+      messages.push({
+        id: message.id,
+        thread_id: threadId,
+        sender: message.sender,
+        content: message.content,
+        message_type: message.type,
+        timestamp: message.timestamp,
+        created_at: new Date().toISOString(),
+      });
+      localStorage.setItem('chat_messages', JSON.stringify(messages));
+      console.warn('Message saved to localStorage fallback due to Supabase error');
+      return true;
+    } catch (fallbackError) {
+      console.error('Fallback save also failed:', fallbackError);
+      return false;
+    }
   }
 };
 
@@ -404,6 +485,127 @@ export const getThreadSummary = async (threadId: string): Promise<ThreadSummary 
   } catch (error) {
     console.error('Error fetching thread summary:', error);
     return null;
+  }
+};
+
+// Message metadata operations
+export interface MessageMetadata {
+  has_attachment?: boolean;
+  attachment_type?: string;
+  frameworks_mentioned?: string[];
+  charts_suggested?: string[];
+  is_key_insight?: boolean;
+  is_question?: boolean;
+  is_decision?: boolean;
+  tags?: string[];
+  sentiment?: 'positive' | 'neutral' | 'negative';
+  complexity?: 'low' | 'medium' | 'high';
+}
+
+export const updateMessageMetadata = async (
+  messageId: string,
+  metadata: MessageMetadata
+): Promise<boolean> => {
+  if (!supabase) {
+    console.warn('Supabase not configured. Metadata saved to localStorage fallback.');
+    try {
+      const messages = JSON.parse(localStorage.getItem('chat_messages') || '[]');
+      const messageIndex = messages.findIndex((m: any) => m.id === messageId);
+      if (messageIndex >= 0) {
+        messages[messageIndex].metadata = metadata;
+        localStorage.setItem('chat_messages', JSON.stringify(messages));
+        console.log('Message metadata saved to localStorage:', messageId);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Error saving metadata to localStorage:', error);
+      return false;
+    }
+  }
+
+  try {
+    const { error } = await supabase
+      .from('chat_messages')
+      .update({
+        metadata: metadata,
+      })
+      .eq('id', messageId);
+
+    if (error) {
+      console.error('Supabase error updating message metadata:', error);
+      console.error('Error details:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+      });
+      throw error;
+    }
+
+    console.log('Message metadata updated in Supabase:', messageId);
+    return true;
+  } catch (error: any) {
+    console.error('Error updating message metadata:', error);
+    
+    // Try localStorage fallback
+    try {
+      const messages = JSON.parse(localStorage.getItem('chat_messages') || '[]');
+      const messageIndex = messages.findIndex((m: any) => m.id === messageId);
+      if (messageIndex >= 0) {
+        messages[messageIndex].metadata = metadata;
+        localStorage.setItem('chat_messages', JSON.stringify(messages));
+        console.warn('Message metadata saved to localStorage fallback');
+        return true;
+      }
+    } catch (fallbackError) {
+      console.error('Fallback save also failed:', fallbackError);
+    }
+    
+    return false;
+  }
+};
+
+export const getMessagesByTag = async (
+  threadId: string,
+  tag: string
+): Promise<Message[]> => {
+  if (!supabase) {
+    // Fallback: localStorage
+    const messages = JSON.parse(localStorage.getItem('chat_messages') || '[]');
+    const threadMessages = messages
+      .filter((m: any) => m.thread_id === threadId && m.metadata?.tags?.includes(tag))
+      .sort((a: any, b: any) => a.timestamp - b.timestamp);
+    
+    return threadMessages.map((m: any) => ({
+      id: m.id,
+      sender: m.sender as 'user' | 'bot',
+      type: m.message_type as any,
+      content: m.content,
+      timestamp: m.timestamp,
+    }));
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('chat_messages')
+      .select('*')
+      .eq('thread_id', threadId)
+      .contains('metadata->tags', [tag])
+      .order('timestamp', { ascending: true });
+
+    if (error) throw error;
+    
+    return (data || []).map((m: ChatMessage) => ({
+      id: m.id,
+      sender: m.sender as 'user' | 'bot',
+      type: m.message_type as any,
+      content: m.content,
+      timestamp: m.timestamp,
+    }));
+  } catch (error) {
+    console.error('Error fetching messages by tag:', error);
+    return [];
   }
 };
 

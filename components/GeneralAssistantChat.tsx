@@ -19,6 +19,7 @@ import { Message, Sender, MessageType } from '../types';
 const GeneralAssistantChat: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { showError } = useToast();
   
   const [thread, setThread] = useState<{ id: string; name: string; messages: Message[] } | null>(null);
   const [inputText, setInputText] = useState('');
@@ -35,6 +36,8 @@ const GeneralAssistantChat: React.FC = () => {
 
   useEffect(() => {
     loadThread();
+    // Check database health on mount
+    logDatabaseStatus();
   }, [user]);
 
   useEffect(() => {
@@ -145,7 +148,10 @@ const GeneralAssistantChat: React.FC = () => {
         timestamp: Date.now(),
       };
       
-      await saveMessage(thread.id, botMessage);
+      const saved = await saveMessage(thread.id, botMessage);
+      if (!saved) {
+        console.error('Failed to save welcome message:', botMessage.id);
+      }
       setThread(prev => prev ? { ...prev, messages: [botMessage] } : null);
       setIsInitialized(true);
     } catch (error) {
@@ -159,7 +165,10 @@ const GeneralAssistantChat: React.FC = () => {
         content: fallbackMessage,
         timestamp: Date.now(),
       };
-      await saveMessage(thread.id, botMessage);
+      const saved = await saveMessage(thread.id, botMessage);
+      if (!saved) {
+        console.error('Failed to save fallback welcome message:', botMessage.id);
+      }
       setThread(prev => prev ? { ...prev, messages: [botMessage] } : null);
       setIsInitialized(true);
     } finally {
@@ -191,8 +200,13 @@ const GeneralAssistantChat: React.FC = () => {
       timestamp: Date.now(),
     };
 
-    setThread(prev => prev ? { ...prev, messages: [...prev.messages, userMessage] } : null);
-    await saveMessage(thread.id, userMessage);
+      setThread(prev => prev ? { ...prev, messages: [...prev.messages, userMessage] } : null);
+      
+      // Save user message to database
+      const userMessageSaved = await saveMessage(thread.id, userMessage);
+      if (!userMessageSaved) {
+        console.error('Failed to save user message:', userMessage.id);
+      }
     setIsLoading(true);
 
     try {
@@ -208,7 +222,14 @@ const GeneralAssistantChat: React.FC = () => {
       };
 
       setThread(prev => prev ? { ...prev, messages: [...prev.messages, botMessage] } : null);
-      await saveMessage(thread.id, botMessage);
+      
+      // Save bot message to database
+      const botMessageSaved = await saveMessage(thread.id, botMessage);
+      if (!botMessageSaved) {
+        console.error('Failed to save bot message:', botMessage.id);
+      }
+      
+      // Update thread timestamp
       await updateThreadTimestamp(thread.id);
 
       if (uploadedFiles.length > 0) {
