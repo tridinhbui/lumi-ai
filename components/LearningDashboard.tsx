@@ -46,7 +46,7 @@ const LearningDashboard: React.FC = () => {
       type: 'strength',
       title: 'Strong in Market Entry Cases',
       description: 'You\'ve completed 8/10 market entry cases with an average score of 88%',
-      icon: <Award className="w-5 h-5 text-neutral-600" />
+      icon: <Award className="w-5 h-5 text-[#153A73] icon-line-art" />
     },
     {
       type: 'improvement',
@@ -137,56 +137,56 @@ const LearningDashboard: React.FC = () => {
           <div className="space-y-6">
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-[#E6E9EF] minimal-card">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500 mb-1">Total Cases</p>
-                    <p className="text-3xl font-bold text-gray-900">28</p>
+                    <p className="text-sm text-[#737373] mb-1">Total Cases</p>
+                    <p className="text-3xl font-bold text-[#1F4AA8]">28</p>
                   </div>
-                  <div className="p-3 bg-[#1e3a8a] rounded-lg">
-                    <FileText className="w-6 h-6 text-white" />
+                  <div className="p-3 bg-[#E6F0FF] rounded-lg">
+                    <FileText className="w-6 h-6 text-[#1F4AA8]" />
                   </div>
                 </div>
-                <p className="text-xs text-[#1e3a8a] mt-2">+5 tuần này</p>
+                <p className="text-xs text-[#1F4AA8] mt-2">+5 this week</p>
               </div>
 
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-[#E6E9EF] minimal-card">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500 mb-1">Average Score</p>
-                    <p className="text-3xl font-bold text-gray-900">86%</p>
+                    <p className="text-sm text-[#737373] mb-1">Average Score</p>
+                    <p className="text-3xl font-bold text-[#1F4AA8]">86%</p>
                   </div>
-                  <div className="p-3 bg-blue-100 rounded-lg">
-                    <TrendingUp className="w-6 h-6 text-blue-600" />
+                  <div className="p-3 bg-[#E6F0FF] rounded-lg">
+                    <TrendingUp className="w-6 h-6 text-[#1F4AA8]" />
                   </div>
                 </div>
-                <p className="text-xs text-[#1e3a8a] mt-2">+12% cải thiện</p>
+                <p className="text-xs text-[#1F4AA8] mt-2">+12% improvement</p>
               </div>
 
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-[#E6E9EF] minimal-card">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500 mb-1">Completed</p>
-                    <p className="text-3xl font-bold text-gray-900">30</p>
+                    <p className="text-sm text-[#737373] mb-1">Completed</p>
+                    <p className="text-3xl font-bold text-[#1F4AA8]">30</p>
                   </div>
-                  <div className="p-3 bg-purple-100 rounded-lg">
-                    <CheckCircle2 className="w-6 h-6 text-purple-600" />
+                  <div className="p-3 bg-[#E6F0FF] rounded-lg">
+                    <CheckCircle2 className="w-6 h-6 text-[#1F4AA8]" />
                   </div>
                 </div>
-                <p className="text-xs text-gray-500 mt-2">Out of 50 cases</p>
+                <p className="text-xs text-[#737373] mt-2">Out of 50 cases</p>
               </div>
 
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-[#E6E9EF] minimal-card">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500 mb-1">Study Hours</p>
-                    <p className="text-3xl font-bold text-gray-900">42h</p>
+                    <p className="text-sm text-[#737373] mb-1">Study Hours</p>
+                    <p className="text-3xl font-bold text-[#1F4AA8]">42h</p>
                   </div>
-                  <div className="p-3 bg-orange-100 rounded-lg">
-                    <Clock className="w-6 h-6 text-orange-600" />
+                  <div className="p-3 bg-[#E6F0FF] rounded-lg">
+                    <Clock className="w-6 h-6 text-[#1F4AA8]" />
                   </div>
                 </div>
-                <p className="text-xs text-gray-500 mt-2">This month</p>
+                <p className="text-xs text-[#737373] mt-2">This month</p>
               </div>
             </div>
 

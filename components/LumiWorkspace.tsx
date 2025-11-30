@@ -301,8 +301,8 @@ const LumiWorkspace: React.FC = () => {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2 flex-1 min-w-0">
-                    <MessageSquare className="w-4 h-4 text-neutral-600 flex-shrink-0" />
-                    <span className="text-sm font-medium text-gray-900 truncate">{thread.name}</span>
+                    <MessageSquare className="w-4 h-4 text-[#153A73] icon-line-art flex-shrink-0" />
+                    <span className="text-sm font-medium text-[#2E2E2E] truncate">{thread.name}</span>
                   </div>
                   {threads.length > 1 && (
                     <button
@@ -310,13 +310,13 @@ const LumiWorkspace: React.FC = () => {
                         e.stopPropagation();
                         handleDeleteThread(thread.id);
                       }}
-                      className="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-red-600 transition-all"
+                      className="opacity-0 group-hover:opacity-100 p-1 text-[#737373] hover:text-[#1F4AA8] transition-all"
                     >
                       <Trash2 size={14} />
                     </button>
                   )}
                 </div>
-                <div className="mt-1 text-xs text-neutral-500">
+                <div className="mt-1 text-xs text-[#737373]">
                   {thread.messages.length} messages
                 </div>
               </div>
