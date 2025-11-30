@@ -197,7 +197,7 @@ const HomePage: React.FC = () => {
                 {language === 'vi' ? 'Blog' : 'Blog'}
               </a>
               <button
-                onClick={() => navigate('/case-competition')}
+                onClick={() => navigate('/login')}
                 className="px-4 py-2 bg-[#1F4AA8] text-white rounded-xl hover:bg-[#153A73] transition-all text-sm font-medium shadow-sm hover:shadow-md"
               >
                 {language === 'vi' ? 'Bắt Đầu' : 'Get Started'}
@@ -244,7 +244,7 @@ const HomePage: React.FC = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
-                  onClick={() => navigate('/case-competition')}
+                  onClick={() => navigate('/login')}
                   className="px-8 py-4 bg-white text-[#1F4AA8] rounded-xl font-semibold hover:bg-[#F8F9FB] transition-all shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
                 >
                   <span>{language === 'vi' ? 'Bắt Đầu Ngay' : 'Get Started'}</span>
@@ -478,7 +478,7 @@ const HomePage: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={() => navigate('/case-competition')}
+              onClick={() => navigate('/login')}
               className="px-8 py-4 bg-white text-[#1F4AA8] rounded-xl font-semibold hover:bg-[#F8F9FB] transition-all shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
             >
               <span>{language === 'vi' ? 'Bắt Đầu Miễn Phí' : 'Start Free'}</span>

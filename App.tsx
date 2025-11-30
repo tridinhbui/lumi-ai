@@ -21,6 +21,10 @@ const App: React.FC = () => {
       <Routes>
         <Route 
           path="/" 
+          element={isAuthenticated ? <Navigate to="/home" replace /> : <HomePage />} 
+        />
+        <Route 
+          path="/login" 
           element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} 
         />
         <Route 
@@ -30,10 +34,6 @@ const App: React.FC = () => {
               <HomeDashboard />
             </ProtectedRoute>
           } 
-        />
-        <Route 
-          path="/landing" 
-          element={<HomePage />} 
         />
         <Route 
           path="/lumi" 
