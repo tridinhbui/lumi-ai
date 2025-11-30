@@ -13,6 +13,8 @@ import {
 import MessageBubble from './MessageBubble';
 import BizCaseLogo from './BizCaseLogo';
 import CaseAnalysisDashboard from './CaseAnalysisDashboard';
+import ThreadSummaryCard from './ThreadSummaryCard';
+import { getThreadSummary } from '../services/threadSummarizer';
 import MinimalButton from './MinimalButton';
 import MinimalInput from './MinimalInput';
 import { Message, Sender, MessageType } from '../types';
@@ -33,6 +35,7 @@ const CaseCompetitionChat: React.FC = () => {
   const [showThreadMenu, setShowThreadMenu] = useState<string | null>(null);
   const [editingThreadId, setEditingThreadId] = useState<string | null>(null);
   const [newThreadName, setNewThreadName] = useState('');
+  const [threadSummary, setThreadSummary] = useState<any>(null);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -46,7 +49,20 @@ const CaseCompetitionChat: React.FC = () => {
     if (activeThreadId && !isInitialized[activeThreadId]) {
       loadThreadMessages(activeThreadId);
     }
+    // Load thread summary when thread changes
+    if (activeThreadId) {
+      loadThreadSummary(activeThreadId);
+    }
   }, [activeThreadId]);
+
+  const loadThreadSummary = async (threadId: string) => {
+    try {
+      const summary = await getThreadSummary(threadId);
+      setThreadSummary(summary);
+    } catch (error) {
+      console.error('Error loading thread summary:', error);
+    }
+  };
 
   const activeThread = threads.find(t => t.id === activeThreadId);
 
@@ -242,6 +258,15 @@ const CaseCompetitionChat: React.FC = () => {
       t.id === activeThreadId ? { ...t, messages: [...t.messages, userMessage] } : t
     ));
     await saveMessage(activeThreadId, userMessage);
+    
+    // Extract and save metadata for user message
+    const userMetadata = await extractMessageMetadata(userMessage);
+    if (uploadedFiles.length > 0) {
+      userMetadata.has_attachment = true;
+      userMetadata.attachment_type = uploadedFiles.map(f => f.type).join(', ');
+    }
+    await updateMessageMetadata(userMessage.id, userMetadata);
+    
     setIsLoading(true);
 
     try {
@@ -261,6 +286,19 @@ const CaseCompetitionChat: React.FC = () => {
       ));
       await saveMessage(activeThreadId, botMessage);
       await updateThreadTimestamp(activeThreadId);
+
+      // Extract and save metadata for bot message
+      const botMetadata = await extractMessageMetadata(botMessage);
+      await updateMessageMetadata(botMessage.id, botMetadata);
+
+      // Auto-summarize thread if needed (every 20 messages)
+      const currentMessages = threads.find(t => t.id === activeThreadId)?.messages || [];
+      if (currentMessages.length > 0 && currentMessages.length % 20 === 0) {
+        const summary = await autoSummarizeThread(activeThreadId);
+        if (summary) {
+          await saveThreadSummary(summary);
+        }
+      }
 
       if (uploadedFiles.length > 0) {
         setUploadedFiles([]);
@@ -544,12 +582,21 @@ const CaseCompetitionChat: React.FC = () => {
                   <span className="sr-only">Close</span>
                 </MinimalButton>
               </div>
-              <div className="flex-1 overflow-hidden">
-                <CaseAnalysisDashboard 
-                  messages={activeThread?.messages || []} 
-                  threadName={activeThread?.name || ''}
-                  uploadedFiles={uploadedFiles}
-                />
+              <div className="flex-1 overflow-hidden flex flex-col">
+                {/* Thread Summary */}
+                {threadSummary && (
+                  <div className="p-4 border-b border-[#E6E9EF] dark:border-[#334155]">
+                    <ThreadSummaryCard summary={threadSummary} />
+                  </div>
+                )}
+                {/* Dashboard */}
+                <div className="flex-1 overflow-hidden">
+                  <CaseAnalysisDashboard 
+                    messages={activeThread?.messages || []} 
+                    threadName={activeThread?.name || ''}
+                    uploadedFiles={uploadedFiles}
+                  />
+                </div>
               </div>
             </div>
           </div>

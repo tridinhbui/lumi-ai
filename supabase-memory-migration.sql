@@ -118,3 +118,68 @@ CREATE TRIGGER sync_session_message_count_trigger
   FOR EACH ROW
   EXECUTE FUNCTION sync_session_message_count();
 
+-- Create thread_summaries table for Phase 2
+CREATE TABLE IF NOT EXISTS thread_summaries (
+  thread_id UUID PRIMARY KEY REFERENCES chat_threads(id) ON DELETE CASCADE,
+  key_topics TEXT[] DEFAULT '{}',
+  main_insights TEXT[] DEFAULT '{}',
+  decisions_made TEXT[] DEFAULT '{}',
+  important_facts JSONB DEFAULT '{}',
+  frameworks_used TEXT[] DEFAULT '{}',
+  last_summarized_at TIMESTAMPTZ DEFAULT NOW(),
+  message_count INT DEFAULT 0,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Create index for thread_summaries
+CREATE INDEX IF NOT EXISTS idx_thread_summaries_updated_at ON thread_summaries(updated_at DESC);
+
+-- Enable RLS
+ALTER TABLE thread_summaries ENABLE ROW LEVEL SECURITY;
+
+-- Create policies for thread_summaries
+CREATE POLICY "Users can view their own thread summaries"
+  ON thread_summaries FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM chat_threads 
+      WHERE chat_threads.id = thread_summaries.thread_id 
+      AND (chat_threads.user_id = auth.uid()::text OR chat_threads.user_id = current_setting('app.user_id', true))
+    )
+  );
+
+CREATE POLICY "Users can create their own thread summaries"
+  ON thread_summaries FOR INSERT
+  WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM chat_threads 
+      WHERE chat_threads.id = thread_summaries.thread_id 
+      AND (chat_threads.user_id = auth.uid()::text OR chat_threads.user_id = current_setting('app.user_id', true))
+    )
+  );
+
+CREATE POLICY "Users can update their own thread summaries"
+  ON thread_summaries FOR UPDATE
+  USING (
+    EXISTS (
+      SELECT 1 FROM chat_threads 
+      WHERE chat_threads.id = thread_summaries.thread_id 
+      AND (chat_threads.user_id = auth.uid()::text OR chat_threads.user_id = current_setting('app.user_id', true))
+    )
+  );
+
+-- Function to auto-update updated_at for thread_summaries
+CREATE OR REPLACE FUNCTION update_thread_summaries_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger to auto-update updated_at
+CREATE TRIGGER update_thread_summaries_timestamp
+  BEFORE UPDATE ON thread_summaries
+  FOR EACH ROW
+  EXECUTE FUNCTION update_thread_summaries_updated_at();
+

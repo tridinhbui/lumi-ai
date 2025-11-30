@@ -319,3 +319,91 @@ export const getSession = async (threadId: string): Promise<ChatSession | null> 
   }
 };
 
+// Thread summary operations
+export interface ThreadSummary {
+  thread_id: string;
+  key_topics: string[];
+  main_insights: string[];
+  decisions_made: string[];
+  important_facts: Record<string, any>;
+  frameworks_used: string[];
+  last_summarized_at: number;
+  message_count: number;
+}
+
+export const saveThreadSummary = async (summary: ThreadSummary): Promise<boolean> => {
+  if (!supabase) {
+    // Fallback: localStorage
+    const summaries = JSON.parse(localStorage.getItem('thread_summaries') || '[]');
+    const existingIndex = summaries.findIndex((s: ThreadSummary) => s.thread_id === summary.thread_id);
+    
+    if (existingIndex >= 0) {
+      summaries[existingIndex] = summary;
+    } else {
+      summaries.push(summary);
+    }
+    
+    localStorage.setItem('thread_summaries', JSON.stringify(summaries));
+    return true;
+  }
+
+  try {
+    const { error } = await supabase
+      .from('thread_summaries')
+      .upsert({
+        thread_id: summary.thread_id,
+        key_topics: summary.key_topics,
+        main_insights: summary.main_insights,
+        decisions_made: summary.decisions_made,
+        important_facts: summary.important_facts,
+        frameworks_used: summary.frameworks_used,
+        last_summarized_at: new Date(summary.last_summarized_at).toISOString(),
+        message_count: summary.message_count,
+        updated_at: new Date().toISOString(),
+      }, {
+        onConflict: 'thread_id',
+      });
+
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('Error saving thread summary:', error);
+    return false;
+  }
+};
+
+export const getThreadSummary = async (threadId: string): Promise<ThreadSummary | null> => {
+  if (!supabase) {
+    // Fallback: localStorage
+    const summaries = JSON.parse(localStorage.getItem('thread_summaries') || '[]');
+    const summary = summaries.find((s: ThreadSummary) => s.thread_id === threadId);
+    return summary || null;
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('thread_summaries')
+      .select('*')
+      .eq('thread_id', threadId)
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error;
+    
+    if (!data) return null;
+
+    return {
+      thread_id: data.thread_id,
+      key_topics: data.key_topics || [],
+      main_insights: data.main_insights || [],
+      decisions_made: data.decisions_made || [],
+      important_facts: data.important_facts || {},
+      frameworks_used: data.frameworks_used || [],
+      last_summarized_at: new Date(data.last_summarized_at).getTime(),
+      message_count: data.message_count || 0,
+    };
+  } catch (error) {
+    console.error('Error fetching thread summary:', error);
+    return null;
+  }
+};
+
