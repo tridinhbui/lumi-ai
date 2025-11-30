@@ -147,6 +147,7 @@ const SubscriptionPage: React.FC = () => {
                   language={language}
                 />
               </Elements>
+              </div>
             </div>
           </div>
 
