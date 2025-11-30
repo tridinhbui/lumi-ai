@@ -3,10 +3,12 @@ import { Message, Sender } from '../types';
 import DataChartsPanel from './DataChartsPanel';
 import HypothesisInsights from './HypothesisInsights';
 import FinalRecommendation from './FinalRecommendation';
+import PDFViewer from './PDFViewer';
 
 interface GeneralAssistantDashboardProps {
   messages: Message[];
   threadName: string;
+  uploadedFiles?: File[];
 }
 
 interface Hypothesis {
@@ -23,7 +25,7 @@ interface Recommendation {
   nextStep?: string;
 }
 
-const GeneralAssistantDashboard: React.FC<GeneralAssistantDashboardProps> = ({ messages, threadName }) => {
+const GeneralAssistantDashboard: React.FC<GeneralAssistantDashboardProps> = ({ messages, threadName, uploadedFiles = [] }) => {
   const [hypotheses, setHypotheses] = useState<Hypothesis[]>([]);
   const [recommendation, setRecommendation] = useState<Recommendation>({});
   const [chartData, setChartData] = useState<any[]>([]);
@@ -122,40 +124,52 @@ const GeneralAssistantDashboard: React.FC<GeneralAssistantDashboardProps> = ({ m
     setHypotheses(prev => prev.filter(h => h.id !== id));
   };
 
+  const pdfFile = uploadedFiles.find(file => file.type === 'application/pdf');
+
   return (
-    <div className="h-full overflow-y-auto bg-[#F8F9FB] p-4 lg:p-6">
-      <div className="space-y-4 lg:space-y-6">
-        {/* Header */}
-        <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-4 lg:p-6">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg lg:text-xl font-semibold text-[#1F4AA8]">
-              Assistant Dashboard
-            </h2>
-          </div>
-          <p className="text-xs lg:text-sm text-[#737373]">Track insights and key information from your conversation</p>
+    <div className="h-full overflow-hidden bg-[#F8F9FB] flex flex-col">
+      {/* PDF Viewer if PDF uploaded */}
+      {pdfFile && (
+        <div className="flex-1 min-h-0 border-b border-[#E6E9EF]">
+          <PDFViewer file={pdfFile} />
         </div>
+      )}
 
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
-          {/* Left Column - Hypothesis & Insights */}
-          <div className="space-y-4 lg:space-y-6">
-            <HypothesisInsights
-              hypotheses={hypotheses}
-              onAddHypothesis={handleAddHypothesis}
-              onTogglePin={handleTogglePin}
-              onRemove={handleRemoveHypothesis}
-            />
-            
-            <FinalRecommendation recommendation={recommendation} />
+      {/* Dashboard Content */}
+      <div className={`overflow-y-auto ${pdfFile ? 'h-96' : 'flex-1'} p-4 lg:p-6`}>
+        <div className="space-y-4 lg:space-y-6">
+          {/* Header */}
+          <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-4 lg:p-6">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-lg lg:text-xl font-semibold text-[#1F4AA8]">
+                Assistant Dashboard
+              </h2>
+            </div>
+            <p className="text-xs lg:text-sm text-[#737373]">Track insights and key information from your conversation</p>
           </div>
 
-          {/* Right Column - Data Charts */}
-          <div>
-            <DataChartsPanel 
-              data={chartData.length > 0 ? chartData : undefined}
-              chartType="bar"
-              title="Data & Charts"
-            />
+          {/* Main Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+            {/* Left Column - Hypothesis & Insights */}
+            <div className="space-y-4 lg:space-y-6">
+              <HypothesisInsights
+                hypotheses={hypotheses}
+                onAddHypothesis={handleAddHypothesis}
+                onTogglePin={handleTogglePin}
+                onRemove={handleRemoveHypothesis}
+              />
+              
+              <FinalRecommendation recommendation={recommendation} />
+            </div>
+
+            {/* Right Column - Data Charts */}
+            <div>
+              <DataChartsPanel 
+                data={chartData.length > 0 ? chartData : undefined}
+                chartType="bar"
+                title="Data & Charts"
+              />
+            </div>
           </div>
         </div>
       </div>

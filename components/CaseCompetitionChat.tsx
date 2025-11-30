@@ -25,9 +25,12 @@ const CaseCompetitionChat: React.FC = () => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
   const [showDashboard, setShowDashboard] = useState(true);
+  const [dashboardWidth, setDashboardWidth] = useState(800);
+  const [isResizing, setIsResizing] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dashboardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     loadThread();
@@ -42,6 +45,35 @@ const CaseCompetitionChat: React.FC = () => {
   useEffect(() => {
     scrollToBottom();
   }, [thread?.messages, isLoading]);
+
+  // Handle dashboard resize
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing) return;
+      const newWidth = window.innerWidth - e.clientX;
+      const minWidth = 400;
+      const maxWidth = window.innerWidth - 400;
+      setDashboardWidth(Math.max(minWidth, Math.min(maxWidth, newWidth)));
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+  }, [isResizing]);
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -310,23 +342,42 @@ const CaseCompetitionChat: React.FC = () => {
 
         {/* Dashboard Panel */}
         {showDashboard && (
-          <div className="absolute lg:relative inset-0 lg:inset-auto w-full lg:w-[800px] xl:w-[900px] border-l border-[#E6E9EF] bg-white flex flex-col z-30 lg:z-auto">
-            <div className="p-4 border-b border-[#E6E9EF] bg-[#F8F9FB] flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-[#1F4AA8] flex items-center gap-2">
-                <BarChart3 className="w-4 h-4" />
-                Analysis Dashboard
-              </h3>
-              <MinimalButton
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowDashboard(false)}
-                icon={X}
-              >
-                <span className="sr-only">Close</span>
-              </MinimalButton>
-            </div>
-            <div className="flex-1 overflow-hidden">
-              <CaseAnalysisDashboard messages={thread?.messages || []} threadName={thread?.name || ''} />
+          <div 
+            ref={dashboardRef}
+            className="absolute lg:relative inset-0 lg:inset-auto bg-white flex flex-col z-30 lg:z-auto"
+            style={{ width: window.innerWidth >= 1024 ? `${dashboardWidth}px` : '100%' }}
+          >
+            {/* Resize Handle */}
+            <div
+              className="hidden lg:block absolute left-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-[#1F4AA8] transition-colors z-10"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                setIsResizing(true);
+              }}
+            />
+            
+            <div className="border-l border-[#E6E9EF] h-full flex flex-col">
+              <div className="p-4 border-b border-[#E6E9EF] bg-[#F8F9FB] flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-[#1F4AA8] flex items-center gap-2">
+                  <BarChart3 className="w-4 h-4" />
+                  Analysis Dashboard
+                </h3>
+                <MinimalButton
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowDashboard(false)}
+                  icon={X}
+                >
+                  <span className="sr-only">Close</span>
+                </MinimalButton>
+              </div>
+              <div className="flex-1 overflow-hidden">
+                <CaseAnalysisDashboard 
+                  messages={thread?.messages || []} 
+                  threadName={thread?.name || ''}
+                  uploadedFiles={uploadedFiles}
+                />
+              </div>
             </div>
           </div>
         )}

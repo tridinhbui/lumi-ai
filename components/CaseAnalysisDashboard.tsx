@@ -5,10 +5,12 @@ import ProgressTracker from './ProgressTracker';
 import DataChartsPanel from './DataChartsPanel';
 import HypothesisInsights from './HypothesisInsights';
 import FinalRecommendation from './FinalRecommendation';
+import PDFViewer from './PDFViewer';
 
 interface CaseAnalysisDashboardProps {
   messages: Message[];
   threadName: string;
+  uploadedFiles?: File[];
 }
 
 interface Hypothesis {
@@ -25,7 +27,7 @@ interface Recommendation {
   nextStep?: string;
 }
 
-const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages, threadName }) => {
+const CaseAnalysisDashboard: React.FC<CaseAnalysisDashboardProps> = ({ messages, threadName, uploadedFiles = [] }) => {
   const [activeNodeId, setActiveNodeId] = useState<string>('');
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [hypotheses, setHypotheses] = useState<Hypothesis[]>([]);
