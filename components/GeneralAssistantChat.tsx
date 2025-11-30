@@ -307,6 +307,7 @@ const GeneralAssistantChat: React.FC = () => {
             </p>
           </div>
         </div>
+        </div>
 
         {/* Dashboard Panel */}
         {showDashboard && (
