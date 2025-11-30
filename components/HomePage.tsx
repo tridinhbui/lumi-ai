@@ -10,6 +10,7 @@ import {
 import SettingsMenu from './SettingsMenu';
 import FloatingChat from './FloatingChat';
 import BizCaseLogo from './BizCaseLogo';
+import DarkModeToggle from './DarkModeToggle';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const HomePage: React.FC = () => {

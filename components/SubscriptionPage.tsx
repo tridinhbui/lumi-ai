@@ -12,6 +12,7 @@ import {
   CreditCard, Shield, Clock, ArrowRight
 } from 'lucide-react';
 import BizCaseLogo from './BizCaseLogo';
+import DarkModeToggle from './DarkModeToggle';
 import { useLanguage } from '../contexts/LanguageContext';
 import SettingsMenu from './SettingsMenu';
 import { useAuth } from '../contexts/AuthContext';
@@ -34,9 +35,9 @@ const SubscriptionPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F8F9FB]">
+    <div className="min-h-screen bg-[#F8F9FB] dark:bg-[#0f172a]">
       {/* Header */}
-      <header className={`w-full bg-white border-b border-[#E6E9EF] sticky top-0 z-40 transition-all duration-200 ${isScrolled ? 'bg-[#F8F9FB]/90 backdrop-blur-md shadow-sm py-3' : 'py-4'}`}>
+      <header className={`w-full bg-white dark:bg-[#1e293b] border-b border-[#E6E9EF] dark:border-[#334155] sticky top-0 z-40 transition-all duration-200 ${isScrolled ? 'bg-[#F8F9FB]/90 dark:bg-[#0f172a]/90 backdrop-blur-md shadow-sm py-3' : 'py-4'}`}>
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div 
@@ -46,9 +47,10 @@ const SubscriptionPage: React.FC = () => {
               <BizCaseLogo size="md" showText={true} />
             </div>
             <div className="flex items-center space-x-3">
+              <DarkModeToggle />
               <button
                 onClick={() => setLanguage(language === 'vi' ? 'en' : 'vi')}
-                className="flex items-center space-x-2 px-3 py-2 bg-[#1F4AA8] text-white rounded-xl hover:bg-[#153A73] transition-all text-sm font-medium shadow-sm hover:shadow-md"
+                className="flex items-center space-x-2 px-3 py-2 bg-[#1F4AA8] dark:bg-[#4C86FF] text-white rounded-xl hover:bg-[#153A73] dark:hover:bg-[#1F4AA8] transition-all text-sm font-medium shadow-sm hover:shadow-md"
               >
                 <Globe className="w-4 h-4" />
                 <span>{language === 'vi' ? 'VI' : 'EN'}</span>
@@ -70,34 +72,53 @@ const SubscriptionPage: React.FC = () => {
           <span>{language === 'vi' ? 'Quay lại' : 'Back'}</span>
         </button>
 
-        {/* Hero Section */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#1F4AA8] to-[#153A73] rounded-2xl mb-6 shadow-lg">
-            <Sparkles className="w-10 h-10 text-white" />
+        {/* Hero Section with Highlight */}
+        <div className="relative mb-12">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1F4AA8] via-[#4C86FF] to-[#1F4AA8] rounded-3xl opacity-10 dark:opacity-20 blur-3xl"></div>
+          <div className="relative bg-gradient-to-br from-[#1F4AA8] to-[#153A73] rounded-3xl p-12 text-white shadow-2xl">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl mb-6 shadow-lg">
+                <Sparkles className="w-10 h-10 text-white" />
+              </div>
+              <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-4">
+                <span className="text-sm font-semibold">✨ {language === 'vi' ? 'Gói Premium' : 'Premium Plan'}</span>
+              </div>
+              <h1 className="text-4xl lg:text-6xl font-bold mb-4">
+                {language === 'vi' ? 'Nâng Cấp Tài Khoản' : 'Upgrade Your Account'}
+              </h1>
+              <p className="text-xl text-white/90 max-w-2xl mx-auto mb-6">
+                {language === 'vi'
+                  ? 'Mở khóa toàn bộ tính năng premium và nâng cao kỹ năng giải case của bạn'
+                  : 'Unlock all premium features and elevate your case-solving skills'}
+              </p>
+              <div className="flex items-center justify-center space-x-2 text-3xl font-bold">
+                <span>$20</span>
+                <span className="text-lg text-white/70">/{language === 'vi' ? 'tháng' : 'month'}</span>
+              </div>
+            </div>
           </div>
-          <h1 className="text-4xl lg:text-5xl font-semibold text-[#1F4AA8] mb-4">
-            {language === 'vi' ? 'Nâng Cấp Tài Khoản' : 'Upgrade Your Account'}
-          </h1>
-          <p className="text-xl text-[#737373] max-w-2xl mx-auto">
-            {language === 'vi'
-              ? 'Mở khóa toàn bộ tính năng premium và nâng cao kỹ năng giải case của bạn'
-              : 'Unlock all premium features and elevate your case-solving skills'}
-          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Pricing Card */}
           <div className="lg:col-span-2">
-            <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-8">
+            <div className="bg-white dark:bg-[#1e293b] border-2 border-[#1F4AA8] dark:border-[#4C86FF] rounded-2xl shadow-xl p-8 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#1F4AA8]/10 dark:bg-[#4C86FF]/10 rounded-full blur-2xl -mr-16 -mt-16"></div>
+              <div className="relative z-10">
               <div className="mb-8">
-                <h2 className="text-2xl font-semibold text-[#1F4AA8] mb-2">
+                <div className="inline-block bg-[#E6F0FF] dark:bg-[#1F4AA8]/20 px-3 py-1 rounded-full mb-4">
+                  <span className="text-sm font-semibold text-[#1F4AA8] dark:text-[#4C86FF]">
+                    {language === 'vi' ? '⭐ Gói Phổ Biến Nhất' : '⭐ Most Popular'}
+                  </span>
+                </div>
+                <h2 className="text-3xl font-bold text-[#1F4AA8] dark:text-[#4C86FF] mb-4">
                   {language === 'vi' ? 'Gói Premium' : 'Premium Plan'}
                 </h2>
-                <div className="flex items-baseline space-x-2">
-                  <span className="text-5xl font-bold text-[#1F4AA8]">$20</span>
-                  <span className="text-[#737373]">/{language === 'vi' ? 'tháng' : 'month'}</span>
+                <div className="flex items-baseline space-x-2 mb-2">
+                  <span className="text-6xl font-bold text-[#1F4AA8] dark:text-[#4C86FF]">$20</span>
+                  <span className="text-xl text-[#737373] dark:text-[#94a3b8]">/{language === 'vi' ? 'tháng' : 'month'}</span>
                 </div>
-                <p className="text-[#737373] mt-2">
+                <p className="text-[#737373] dark:text-[#94a3b8] mt-2">
                   {language === 'vi' ? 'Thanh toán hàng tháng, hủy bất cứ lúc nào' : 'Billed monthly, cancel anytime'}
                 </p>
               </div>
@@ -112,9 +133,9 @@ const SubscriptionPage: React.FC = () => {
                   language === 'vi' ? 'Learning path được cá nhân hóa' : 'Personalized learning paths',
                   language === 'vi' ? 'Priority support từ team' : 'Priority support from our team',
                 ].map((feature, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#1F4AA8] flex-shrink-0" />
-                    <span className="text-[#2E2E2E]">{feature}</span>
+                  <div key={index} className="flex items-center space-x-3 p-3 bg-[#F8F9FB] dark:bg-[#0f172a] rounded-xl">
+                    <CheckCircle2 className="w-5 h-5 text-[#1F4AA8] dark:text-[#4C86FF] flex-shrink-0" />
+                    <span className="text-[#2E2E2E] dark:text-[#e2e8f0] font-medium">{feature}</span>
                   </div>
                 ))}
               </div>
@@ -131,24 +152,24 @@ const SubscriptionPage: React.FC = () => {
 
           {/* Benefits Sidebar */}
           <div className="space-y-6">
-            <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-[#1F4AA8] mb-4 flex items-center">
-                <Shield className="w-5 h-5 mr-2 text-[#153A73]" />
+            <div className="bg-white dark:bg-[#1e293b] border border-[#E6E9EF] dark:border-[#334155] rounded-2xl shadow-sm p-6">
+              <h3 className="text-lg font-semibold text-[#1F4AA8] dark:text-[#4C86FF] mb-4 flex items-center">
+                <Shield className="w-5 h-5 mr-2 text-[#153A73] dark:text-[#1F4AA8]" />
                 {language === 'vi' ? 'Bảo Mật' : 'Security'}
               </h3>
-              <p className="text-sm text-[#737373]">
+              <p className="text-sm text-[#737373] dark:text-[#94a3b8]">
                 {language === 'vi'
                   ? 'Thanh toán được xử lý an toàn bởi Stripe. Chúng tôi không lưu trữ thông tin thẻ tín dụng của bạn.'
                   : 'Payments are securely processed by Stripe. We do not store your credit card information.'}
               </p>
             </div>
 
-            <div className="bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-[#1F4AA8] mb-4 flex items-center">
-                <Clock className="w-5 h-5 mr-2 text-[#153A73]" />
+            <div className="bg-white dark:bg-[#1e293b] border border-[#E6E9EF] dark:border-[#334155] rounded-2xl shadow-sm p-6">
+              <h3 className="text-lg font-semibold text-[#1F4AA8] dark:text-[#4C86FF] mb-4 flex items-center">
+                <Clock className="w-5 h-5 mr-2 text-[#153A73] dark:text-[#1F4AA8]" />
                 {language === 'vi' ? 'Hủy Bất Cứ Lúc Nào' : 'Cancel Anytime'}
               </h3>
-              <p className="text-sm text-[#737373]">
+              <p className="text-sm text-[#737373] dark:text-[#94a3b8]">
                 {language === 'vi'
                   ? 'Không có ràng buộc dài hạn. Hủy subscription của bạn bất cứ lúc nào trong settings.'
                   : 'No long-term commitment. Cancel your subscription anytime in settings.'}
@@ -290,7 +311,7 @@ const CheckoutForm: React.FC<{ priceId: string; language: string }> = ({ priceId
       <button
         type="submit"
         disabled={!stripe || isProcessing}
-        className="w-full px-6 py-4 bg-[#1F4AA8] text-white rounded-xl font-semibold hover:bg-[#153A73] transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+        className="w-full px-8 py-5 bg-gradient-to-r from-[#1F4AA8] to-[#4C86FF] dark:from-[#4C86FF] dark:to-[#1F4AA8] text-white rounded-xl font-bold text-lg hover:shadow-2xl transition-all shadow-xl hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center space-x-2"
       >
         {isProcessing ? (
           <>

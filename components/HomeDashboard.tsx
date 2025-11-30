@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import SettingsMenu from './SettingsMenu';
 import BizCaseLogo from './BizCaseLogo';
+import DarkModeToggle from './DarkModeToggle';
 import { useLanguage } from '../contexts/LanguageContext';
 import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
@@ -102,9 +103,9 @@ const HomeDashboard: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F8F9FB]">
+    <div className="min-h-screen bg-[#F8F9FB] dark:bg-[#0f172a]">
       {/* Header */}
-      <header className={`w-full bg-white border-b border-[#E6E9EF] sticky top-0 z-40 transition-all duration-200 ${isScrolled ? 'bg-[#F8F9FB]/90 backdrop-blur-md shadow-sm py-3' : 'py-4'}`}>
+      <header className={`w-full bg-white dark:bg-[#1e293b] border-b border-[#E6E9EF] dark:border-[#334155] sticky top-0 z-40 transition-all duration-200 ${isScrolled ? 'bg-[#F8F9FB]/90 dark:bg-[#0f172a]/90 backdrop-blur-md shadow-sm py-3' : 'py-4'}`}>
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div 
@@ -114,9 +115,10 @@ const HomeDashboard: React.FC = () => {
               <BizCaseLogo size="md" showText={true} />
             </div>
             <div className="flex items-center space-x-3">
+              <DarkModeToggle />
               <button
                 onClick={() => setLanguage(language === 'vi' ? 'en' : 'vi')}
-                className="flex items-center space-x-2 px-3 py-2 bg-[#1F4AA8] text-white rounded-xl hover:bg-[#153A73] transition-all text-sm font-medium shadow-sm hover:shadow-md"
+                className="flex items-center space-x-2 px-3 py-2 bg-[#1F4AA8] dark:bg-[#4C86FF] text-white rounded-xl hover:bg-[#153A73] dark:hover:bg-[#1F4AA8] transition-all text-sm font-medium shadow-sm hover:shadow-md"
               >
                 <Globe className="w-4 h-4" />
                 <span>{language === 'vi' ? 'VI' : 'EN'}</span>
@@ -129,15 +131,41 @@ const HomeDashboard: React.FC = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-12">
+        {/* Premium Banner */}
+        <div className="mb-8 bg-gradient-to-r from-[#1F4AA8] via-[#4C86FF] to-[#1F4AA8] rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all cursor-pointer group"
+          onClick={() => navigate('/subscription')}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-white mb-1">
+                  {language === 'vi' ? 'Nâng Cấp Lên Premium' : 'Upgrade to Premium'}
+                </h3>
+                <p className="text-white/90 text-sm">
+                  {language === 'vi' 
+                    ? 'Mở khóa tất cả tính năng với chỉ $20/tháng' 
+                    : 'Unlock all features for just $20/month'}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2 text-white group-hover:translate-x-1 transition-transform">
+              <span className="font-semibold">{language === 'vi' ? 'Xem ngay' : 'View Now'}</span>
+              <ArrowRight className="w-5 h-5" />
+            </div>
+          </div>
+        </div>
+
         {/* Hero Section */}
         <section className="text-center mb-16 animate-fade-in">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#1F4AA8] to-[#153A73] rounded-2xl mb-6 shadow-lg">
             <Sparkles className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-5xl font-semibold text-[#1F4AA8] mb-4 tracking-tight">
-            {language === 'vi' ? 'Chào mừng trở lại' : 'Welcome back'}, <span className="text-[#2E2E2E]">{user?.name?.split(' ')[0] || 'User'}</span>
+          <h1 className="text-5xl font-semibold text-[#1F4AA8] dark:text-[#4C86FF] mb-4 tracking-tight">
+            {language === 'vi' ? 'Chào mừng trở lại' : 'Welcome back'}, <span className="text-[#2E2E2E] dark:text-[#e2e8f0]">{user?.name?.split(' ')[0] || 'User'}</span>
           </h1>
-          <p className="text-xl text-[#737373] max-w-2xl mx-auto">
+          <p className="text-xl text-[#737373] dark:text-[#94a3b8] max-w-2xl mx-auto">
             {language === 'vi'
               ? 'Rèn luyện kỹ năng giải case với hướng dẫn có cấu trúc và coaching thông minh'
               : 'Sharpen your case skills with guided maps and smart coaching'}
@@ -150,7 +178,7 @@ const HomeDashboard: React.FC = () => {
             {/* Path 1: Case Interview Chatbot */}
             <div
               onClick={() => navigate('/case-competition')}
-              className="group relative bg-[#1F4AA8] text-white rounded-2xl p-8 cursor-pointer hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl overflow-hidden"
+              className="group relative bg-[#1F4AA8] dark:bg-[#153A73] text-white rounded-2xl p-8 cursor-pointer hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
               <div className="relative z-10">
@@ -175,7 +203,7 @@ const HomeDashboard: React.FC = () => {
             {/* Path 2: Case Tutor Guidance Chatbot */}
             <div
               onClick={() => navigate('/general-assistant')}
-              className="group relative bg-[#153A73] text-white rounded-2xl p-8 cursor-pointer hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl overflow-hidden"
+              className="group relative bg-[#153A73] dark:bg-[#1F4AA8] text-white rounded-2xl p-8 cursor-pointer hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
               <div className="relative z-10">
@@ -202,7 +230,7 @@ const HomeDashboard: React.FC = () => {
         {/* Learning Progress Panel */}
         <section 
           ref={(el) => { revealRefs.current[0] = el; }}
-          className="mb-16 bg-white border border-[#E6E9EF] rounded-2xl shadow-sm p-8 reveal-on-scroll"
+          className="mb-16 bg-white dark:bg-[#1e293b] border border-[#E6E9EF] dark:border-[#334155] rounded-2xl shadow-sm p-8 reveal-on-scroll"
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-semibold text-[#1F4AA8] flex items-center">
