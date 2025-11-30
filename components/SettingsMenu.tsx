@@ -71,7 +71,10 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ user }) => {
               <span>{t('dashboard')}</span>
             </button>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                navigate('/settings');
+                setIsOpen(false);
+              }}
               className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
             >
               <Settings className="w-4 h-4" />

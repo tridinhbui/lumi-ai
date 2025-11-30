@@ -7,6 +7,7 @@ import CaseInterview from './components/CaseInterview';
 import ChatbotCaseCompetition from './components/ChatbotCaseCompetition';
 import LumiWorkspace from './components/LumiWorkspace';
 import LearningDashboard from './components/LearningDashboard';
+import Settings from './components/Settings';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App: React.FC = () => {
@@ -56,6 +57,14 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <ChatbotCaseCompetition />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/settings" 
+          element={
+            <ProtectedRoute>
+              <Settings />
             </ProtectedRoute>
           } 
         />

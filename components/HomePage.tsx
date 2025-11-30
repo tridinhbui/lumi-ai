@@ -9,6 +9,7 @@ import {
 import SettingsMenu from './SettingsMenu';
 import FloatingChat from './FloatingChat';
 import CaseLibrary from './CaseLibrary';
+import HomePageThreads from './HomePageThreads';
 import BizCaseLogo from './BizCaseLogo';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -142,6 +143,15 @@ const HomePage: React.FC = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Chat Threads */}
+        <div className="mb-8">
+          <h3 className="text-2xl font-bold text-[#1e3a8a] mb-6 flex items-center">
+            <MessageSquare className="w-6 h-6 mr-2" />
+            Chat với Lumi
+          </h3>
+          <HomePageThreads />
         </div>
 
         {/* Quick Actions */}
