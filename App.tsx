@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useAuth } from './contexts/AuthContext';
 import Login from './components/Login';
 import HomePage from './components/HomePage';
+import HomeDashboard from './components/HomeDashboard';
 import CaseInterview from './components/CaseInterview';
 import ChatbotCaseCompetition from './components/ChatbotCaseCompetition';
 import LumiWorkspace from './components/LumiWorkspace';
@@ -26,9 +27,13 @@ const App: React.FC = () => {
           path="/home" 
           element={
             <ProtectedRoute>
-              <HomePage />
+              <HomeDashboard />
             </ProtectedRoute>
           } 
+        />
+        <Route 
+          path="/landing" 
+          element={<HomePage />} 
         />
         <Route 
           path="/lumi" 
